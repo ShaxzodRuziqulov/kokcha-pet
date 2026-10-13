@@ -12,6 +12,11 @@ const BASE_H = 280;
 const PET_SIZE = 150;                    // personaj qutisi (oynaning pastki o'rtasida)
 const SLEEP_AFTER_MS = 3 * 60 * 1000;    // klaviatura va sichqoncha shuncha vaqt tinch tursa — uxlaydi
 const BREAK_RESET_MS = 5 * 60 * 1000;    // shuncha dam olsangiz, eslatma hisobi noldan boshlanadi
+const AWAY_MS = 20 * 60 * 1000;          // shuncha yo'q bo'lsangiz, qaytganingizda kutib oladi
+const RANDOM_CHAT_MS = 8 * 60 * 1000;    // o'zi gapirishi oralig'i (taxminan)
+const PAUSE_MS = 3000;                   // yozishdan shuncha to'xtasangiz — gapirsa bo'ladi
+const DANCE_MS = 1800;
+const VK_CONTROL = 0x11;
 const WALK_SPEED = 2;                    // har qadamda necha piksel
 const WALK_TICK_MS = 20;
 const CURSOR_TICK_MS = 40;
@@ -19,7 +24,15 @@ const SIZES = { small: 0.75, medium: 1, large: 1.3 };
 const SIZE_LABELS = { small: 'Kichik', medium: "O'rta", large: 'Katta' };
 const BREAK_OPTIONS = [30, 45, 60, 0];   // daqiqa; 0 — o'chiq
 
-const DEFAULTS = { autoWalk: true, quiet: false, size: 'medium', breakMinutes: 45, position: null };
+const DEFAULTS = {
+  autoWalk: true,
+  quiet: false,
+  size: 'medium',
+  breakMinutes: 45,
+  position: null,
+  onboarded: false,   // birinchi ochilishdagi tanishtirish ko'rsatilganmi
+  lastSeenDay: null,  // "xayrli tong" kuniga bir marta
+};
 
 let settings = { ...DEFAULTS };
 let saveTimer = null;
@@ -32,7 +45,10 @@ let manualSleep = false;     // foydalanuvchi o'zi uxlatganmi
 let dragging = false;
 let dragFrom = null;
 let falling = false;
-let hovering = false;
+let hovering = false;        // kursor personaj ustida
+let capturing = false;       // oyna sichqonchani ushlayaptimi (Ctrl bosilsa — yo'q)
+let ghost = false;           // Ctrl bosilgan: personaj shaffof, orqasini bosish mumkin
+let danceUntil = 0;
 let userHidden = false;      // tray orqali yashirilgan
 let fullscreenHidden = false; // boshqa dastur to'liq ekranda
 
@@ -40,8 +56,12 @@ let walkTimer = null;
 let walkDir = 1;
 let fallTimer = null;
 let workStart = Date.now();  // dam olish eslatmasi hisobi
+let nextChat = Date.now() + RANDOM_CHAT_MS;
+let prevIdleMs = 0;
 let lastLook = '';
+let petTrack = { lastX: null, dir: 0, flips: [], cooldownUntil: 0 }; // silashni aniqlash
 let isFullscreenApp = null;  // Windows'da to'liq ekranni aniqlovchi funksiya
+let isCtrlDown = () => false;
 
 // ---- Sozlamalarni saqlash ----
 function settingsPath() {
@@ -215,8 +235,9 @@ function setUserHidden(hidden) {
   updateVisibility();
 }
 
-// To'liq ekranli dastur (video, o'yin, prezentatsiya) ochiq bo'lsa — yashirinadi
-function initFullscreenCheck() {
+// Windows funksiyalari: to'liq ekranni va Ctrl tugmasini aniqlash.
+// Yuklanmasa — bu ikki imkoniyat o'chadi, qolgani odatdagidek ishlaydi.
+function initNative() {
   if (process.platform !== 'win32') return;
   try {
     const koffi = require('koffi');
@@ -227,8 +248,12 @@ function initFullscreenCheck() {
       const out = [0];
       return query(out) === 0 && [2, 3, 4].includes(out[0]);
     };
+
+    const user32 = koffi.load('user32.dll');
+    const keyState = user32.func('short __stdcall GetAsyncKeyState(int vKey)');
+    isCtrlDown = () => (keyState(VK_CONTROL) & 0x8000) !== 0;
   } catch {
-    isFullscreenApp = null; // aniqlab bo'lmasa — oddiy holatda ishlayveradi
+    isFullscreenApp = null;
   }
 }
 
@@ -254,7 +279,8 @@ function stopWalk() {
 }
 
 function startWalk() {
-  if (state !== 'idle' || dragging || falling || hovering || !alive() || !win.isVisible()) return;
+  if (state !== 'idle' || dragging || falling || hovering || Date.now() < danceUntil) return;
+  if (!alive() || !win.isVisible()) return;
   walkDir = Math.random() < 0.5 ? -1 : 1;
   setState('walk');
 
@@ -346,41 +372,99 @@ function watchActivity() {
     const now = Date.now();
 
     if (idleMs < 2000) {
-      // Foydalanuvchi qaytdi — o'zi uxlab qolgan bo'lsa uyg'onadi
-      if (state === 'sleep' && !manualSleep) wakeUp('idle');
+      if (prevIdleMs >= AWAY_MS) {
+        // Uzoq yo'q edingiz — kutib oladi (kunning birinchi kelishida "xayrli tong")
+        const today = new Date().toDateString();
+        const reason = settings.lastSeenDay !== today ? 'morning' : 'back';
+        settings.lastSeenDay = today;
+        saveSettings();
+        if (state === 'sleep' && !manualSleep) wakeUp(reason);
+        else if (state !== 'sleep') send('welcome', reason);
+      } else if (state === 'sleep' && !manualSleep) {
+        // Foydalanuvchi qaytdi — o'zi uxlab qolgan bo'lsa uyg'onadi
+        wakeUp('idle');
+      }
     } else if (state !== 'sleep' && idleMs > SLEEP_AFTER_MS) {
       goToSleep(false);
     }
+    prevIdleMs = idleMs;
 
-    // Dam olish eslatmasi: faqat uzluksiz ishlagan vaqt sanaladi
+    const canTalk = state !== 'sleep' && win.isVisible();
+    const paused = idleMs >= PAUSE_MS; // yozayotgan paytingizda gapirmaydi
+
+    // Dam olish eslatmasi: faqat uzluksiz ishlagan vaqt sanaladi.
+    // Yozishdan to'xtashingizni kutadi, lekin 2 daqiqadan ortiq kechiktirmaydi.
     if (idleMs >= BREAK_RESET_MS) {
       workStart = now;
-    } else if (
-      settings.breakMinutes > 0 &&
-      now - workStart >= settings.breakMinutes * 60 * 1000 &&
-      state !== 'sleep' &&
-      win.isVisible()
-    ) {
-      send('say', 'break');
-      workStart = now;
+    } else if (settings.breakMinutes > 0 && canTalk) {
+      const due = now - workStart - settings.breakMinutes * 60 * 1000;
+      if (due >= 0 && (paused || due > 2 * 60 * 1000)) {
+        send('say', 'break');
+        workStart = now;
+      }
+    }
+
+    // O'zi gapirishi: faqat siz to'xtab turganingizda, jim rejimda emas
+    if (now >= nextChat && canTalk && state === 'idle' && paused && idleMs < SLEEP_AFTER_MS) {
+      if (!settings.quiet) send('say', 'random');
+      nextChat = now + RANDOM_CHAT_MS * (0.75 + Math.random() * 0.5);
     }
   }, 1000);
 }
 
-// ---- Kursor: personaj ustidami + ko'zlar kursorga qaraydi ----
+// Kursor personaj ustida u yoq-bu yoqqa yurgizilsa — "silash"
+function trackPetting(c, now) {
+  if (!hovering || dragging || ghost) {
+    petTrack.lastX = null;
+    petTrack.dir = 0;
+    return;
+  }
+  if (petTrack.lastX !== null) {
+    const d = c.x - petTrack.lastX;
+    if (Math.abs(d) >= 3) {
+      const dir = Math.sign(d);
+      if (petTrack.dir && dir !== petTrack.dir) petTrack.flips.push(now);
+      petTrack.dir = dir;
+    }
+  }
+  petTrack.lastX = c.x;
+  petTrack.flips = petTrack.flips.filter((t) => now - t < 1500);
+  if (petTrack.flips.length >= 3 && now > petTrack.cooldownUntil) {
+    send('petted');
+    petTrack.flips = [];
+    petTrack.cooldownUntil = now + 1200;
+  }
+}
+
+// ---- Kursor: personaj ustidami, Ctrl bosilganmi, silash, ko'zlar kursorga qaraydi ----
 function trackCursor() {
   setInterval(() => {
     if (!alive() || !win.isVisible()) return;
     const c = screen.getCursorScreenPoint();
     const r = petRect();
+    const now = Date.now();
 
-    const over = c.x >= r.x && c.x < r.x + r.w && c.y >= r.y && c.y < r.y + r.h;
-    if (over !== hovering && !dragging) {
-      hovering = over;
-      win.setIgnoreMouseEvents(!over);
-      send('hover', over);
-      if (over) stopWalk();
+    if (!dragging) {
+      const over = c.x >= r.x && c.x < r.x + r.w && c.y >= r.y && c.y < r.y + r.h;
+      const nextGhost = over && isCtrlDown(); // Ctrl — orqadagi narsani bosish uchun
+      const nextCapture = over && !nextGhost;
+
+      if (over !== hovering) {
+        hovering = over;
+        send('hover', over);
+        if (over) stopWalk();
+      }
+      if (nextGhost !== ghost) {
+        ghost = nextGhost;
+        send('ghost', ghost);
+      }
+      if (nextCapture !== capturing) {
+        capturing = nextCapture;
+        win.setIgnoreMouseEvents(!capturing);
+      }
     }
+
+    trackPetting(c, now);
 
     if (state !== 'sleep') {
       const dx = c.x - (r.x + r.w / 2);
@@ -424,10 +508,9 @@ function setAutoStart(on) {
   refreshTray();
 }
 
-// ---- Tray menyu ----
-function refreshTray() {
-  if (!tray) return;
-  tray.setContextMenu(Menu.buildFromTemplate([
+// ---- Menyu (tray va personaj ustida o'ng tugma — bir xil) ----
+function menuTemplate() {
+  return [
     { label: 'Gapir', enabled: state !== 'sleep' && !userHidden, click: () => send('say', 'random') },
     state === 'sleep'
       ? { label: "Uyg'ot", click: () => wakeUp('click') }
@@ -485,7 +568,12 @@ function refreshTray() {
     },
     { type: 'separator' },
     { label: 'Chiqish', click: () => app.quit() },
-  ]));
+  ];
+}
+
+function refreshTray() {
+  if (!tray) return;
+  tray.setContextMenu(Menu.buildFromTemplate(menuTemplate()));
 }
 
 function createTray() {
@@ -502,7 +590,23 @@ function createTray() {
 }
 
 // ---- Renderer bilan aloqa ----
-ipcMain.handle('get-init', () => ({ sprites: findCustomSprites(), quiet: settings.quiet }));
+ipcMain.handle('get-init', () => {
+  const firstRun = !settings.onboarded;
+  if (firstRun) {
+    settings.onboarded = true;
+    saveSettings();
+  }
+  return { sprites: findCustomSprites(), quiet: settings.quiet, firstRun };
+});
+
+ipcMain.on('pet-menu', () => {
+  if (alive()) Menu.buildFromTemplate(menuTemplate()).popup({ window: win });
+});
+
+ipcMain.on('pet-dance', () => {
+  danceUntil = Date.now() + DANCE_MS;
+  stopWalk();
+});
 
 ipcMain.on('drag-start', () => {
   if (!alive()) return;
@@ -547,9 +651,11 @@ if (!gotLock) {
   app.whenReady().then(() => {
     Menu.setApplicationMenu(null); // Ctrl+/- kabi standart zoom tugmalari o'chadi
     loadSettings();
+    settings.lastSeenDay = new Date().toDateString();
+    saveSettings();
     createWindow();
     createTray();
-    initFullscreenCheck();
+    initNative();
     watchFullscreen();
     watchActivity();
     trackCursor();

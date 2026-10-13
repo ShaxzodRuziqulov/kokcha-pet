@@ -5,15 +5,18 @@ Ish stolida, taskbar ustida yashaydigan kichik yordamchi.
 ## Nimalar qila oladi
 - **Yuradi:** har 8–18 soniyada ekran bo'ylab o'zi yurib qo'yadi, chetga yetsa burilib ketadi. Sichqoncha ustida tursa, yurmaydi.
 - **Uxlaydi:** klaviatura va sichqoncha 3 daqiqa tinch tursa, ko'zini yumib "Zzz" bilan uxlab qoladi. Qaytib kelsangiz, kerishib uyg'onadi.
-- **Gapiradi:** ustiga bossangiz sakrab gapiradi. Soatga qarab salomlashadi, vaqti-vaqti bilan o'zi ham gapiradi.
+- **Gapiradi:** ustiga bossangiz sakrab gapiradi. Soatga qarab salomlashadi. O'zi ham vaqti-vaqti bilan gapiradi, lekin faqat siz yozishdan to'xtaganingizda.
+- **Raqs tushadi:** ikki marta bossangiz.
+- **Silashni yaxshi ko'radi:** kursorni ustida u yoq-bu yoqqa yurgizsangiz, yurakchalar chiqadi.
+- **Jonli:** vaqti-vaqti bilan esnaydi, qo'l silkitadi. Uzoq yo'q bo'lsangiz, qaytganingizda kutib oladi.
 - **Dam olishni eslatadi:** uzluksiz ishlagan vaqtingizni sanaydi (5 daqiqadan uzoq tanaffusdan keyin hisob noldan boshlanadi).
 - **Kursorga qaraydi:** ko'zlari sichqonchangizni kuzatib turadi.
 - **Sudraladi:** ushlab istalgan joyga olib boring, qo'yib yuborsangiz taskbar ustiga tushadi.
-- **Xalaqit bermaydi:** shaffof joylar va gap pufakchasi orqali bemalol bosish mumkin. To'liq ekranli video, o'yin yoki prezentatsiya ochilsa, o'zi yashirinadi.
+- **Xalaqit bermaydi:** shaffof joylar va gap pufakchasi orqali bemalol bosish mumkin. Ko'kchaning orqasidagi narsani bosish uchun **Ctrl** ni bosib turing. To'liq ekranli video, o'yin yoki prezentatsiya ochilsa, o'zi yashirinadi.
 - **Eslab qoladi:** joylashuvi va sozlamalari qayta ochilganda saqlanib qoladi.
 
 ## Tray menyu
-Soat yonidagi belgini **chap tugma** bilan bossangiz, Ko'kcha gapiradi (yashirin bo'lsa ko'rinadi). **O'ng tugma** bilan menyu ochiladi:
+Ko'kchaning ustida yoki soat yonidagi belgida **o'ng tugma** bosilsa, menyu ochiladi. Belgini chap tugma bilan bossangiz, Ko'kcha gapiradi (yashirin bo'lsa ko'rinadi).
 
 | Band | Vazifasi |
 |---|---|

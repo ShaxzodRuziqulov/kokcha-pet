@@ -115,6 +115,7 @@ body.dragging .arm { transform: translateY(-10px); }
   pointer-events: none;
 }
 #sprite { object-fit: contain; }
+#mascot { overflow: visible; }  /* cho'zilganda barglar kesilmasin */
 
 #mascot .shadow { fill: rgba(0, 0, 0, 0.18); }
 #mascot .body-group { transform-origin: 80px 145px; }
@@ -179,3 +180,77 @@ body.sleep .body-group { animation: sleepy 3.6s ease-in-out infinite; }
 /* custom rasm uchun yengil animatsiya */
 body.idle #sprite  { animation: breathe 2.6s ease-in-out infinite; transform-origin: bottom; }
 body.walk #sprite  { animation: hop 0.45s ease-in-out infinite; transform-origin: bottom; }
+
+/* ---- Ctrl bosilganda — shaffof, orqasini bosish mumkin ---- */
+#pet { transition: transform 0.15s, opacity 0.15s; }
+body.ghost #pet { opacity: 0.3; }
+
+/* ---- Xursand (silashganda, raqsda) ---- */
+.eyes-happy { display: none; }
+body.happy:not(.sleep) .eyes-open,
+body.happy:not(.sleep) .eyes-closed { display: none; }
+body.happy:not(.sleep) .eyes-happy { display: inline; }
+body.happy .cheek { opacity: 1; }
+
+/* ---- Esnash ---- */
+body.yawn:not(.sleep):not(.happy) .eyes-open { display: none; }
+body.yawn:not(.sleep):not(.happy) .eyes-closed { display: inline; }
+body.yawn:not(.sleep) .mouth-smile { display: none; }
+body.yawn:not(.sleep) .mouth-open {
+  display: inline;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: yawn-mouth 1.8s ease-in-out;
+}
+body.yawn:not(.sleep) .body-group { animation: yawn-body 1.8s ease-in-out; }
+@keyframes yawn-mouth {
+  0%, 100% { transform: scale(0.6); }
+  30%, 70% { transform: scale(1.5, 1.9); }
+}
+@keyframes yawn-body {
+  0%, 100% { transform: scaleY(1); }
+  30%, 70% { transform: scaleY(1.05) scaleX(0.98); }
+}
+
+/* ---- Qo'l silkitish ---- */
+body.wave:not(.sleep) .arm-r {
+  transform-origin: 50% 20%;
+  animation: wave 1.6s ease-in-out;
+}
+@keyframes wave {
+  0%, 100% { transform: none; }
+  15%, 45%, 75% { transform: translate(4px, -20px) rotate(-30deg); }
+  30%, 60%      { transform: translate(4px, -20px) rotate(15deg); }
+}
+
+/* ---- Raqs (ikki marta bosilganda) ---- */
+#pet-inner.dance { animation: dance 1.7s ease-in-out; }
+@keyframes dance {
+  0%, 25%, 50%, 75%, 100% { transform: none; }
+  12.5%, 62.5% { transform: translate(-6px, -10px) rotate(-9deg); }
+  37.5%, 87.5% { transform: translate(6px, -10px) rotate(9deg); }
+}
+body.dancing .arm { animation: dance-arms 0.42s ease-in-out infinite alternate; }
+body.dancing .arm-r { animation-direction: alternate-reverse; }
+@keyframes dance-arms {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-14px); }
+}
+
+/* ---- Uchib chiqadigan yurakcha va notalar ---- */
+.particle {
+  position: absolute;
+  top: 150px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #f47a95;
+  pointer-events: none;
+  opacity: 0;
+  animation: rise 1.3s ease-out forwards;
+}
+body.dancing .particle { color: #4e8a66; }
+@keyframes rise {
+  0%   { opacity: 0; transform: translate(0, 0) scale(0.6); }
+  15%  { opacity: 1; transform: translate(0, -8px) scale(1); }
+  100% { opacity: 0; transform: translate(var(--dx), -80px) scale(0.9); }
+}
