@@ -48,7 +48,20 @@ npm run build
 Ko'kcha ustida o'ng tugma → **Personaj**:
 - **Tayyor personajlar:** Ko'kcha 🌱, Mushukcha 🐱, Kuchukcha 🐶, Pingvin 🐧. Hammasi to'liq animatsiyali.
 - **Rang:** har bir tayyor personajni 5 xil rangda qilish mumkin.
-- **O'z rasmim...:** kompyuterdan istalgan rasmni tanlang (PNG, GIF yoki WebP, foni shaffof bo'lsa chiroyli). Rasm dastur ichiga nusxalanadi, asl faylni o'chirsangiz ham qoladi.
+- **O'z rasmim...:** kompyuterdan istalgan rasmni tanlang (PNG, GIF, WebP yoki JPG). Rasm dastur ichiga nusxalanadi, asl faylni o'chirsangiz ham qoladi.
+
+### Personajning o'zi yordam beradi
+Rasm tanlayotganingizda personaj qanday rasm yaxshi chiqishini aytib turadi. Tanlaganingizdan keyin rasmni tekshiradi:
+
+| Tekshiruv | Natija |
+|---|---|
+| Atrofida bo'sh joy ko'p | o'zi qirqib oladi ✂️ |
+| Juda katta (600 px dan ortiq) | o'zi kichraytiradi |
+| Foni bor yoki JPG | ogohlantiradi va fonni olib tashlashni maslahat beradi |
+| Juda kichik (150 px dan kam) | xira ko'rinishini aytadi |
+| Juda cho'zinchoq | kvadratga yaqinini tanlashni maslahat beradi |
+
+**Eng yaxshi natija uchun:** foni shaffof PNG yoki GIF, kvadratga yaqin, kamida 256×256 piksel, personaj o'rtada va pastga tegib tursin.
 
 Har holat uchun alohida rasm qo'ymoqchi bo'lsangiz (ilg'or usul), quyidagi nomlar bilan saqlang:
 

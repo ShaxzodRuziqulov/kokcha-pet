@@ -24,6 +24,37 @@ const onboarding = () => [
   "Sozlamalar va boshqa personajlar — ustimda o'ng tugma ⚙️",
 ];
 
+// "O'z rasmim..." — rasm tanlanayotganda maslahatlar
+const IMAGE_TIPS = [
+  "Rasm tanlaymizmi? 🖼️ Eng yaxshisi — foni shaffof PNG.",
+  "Personaj rasmning o'rtasida, pastga tegib tursa — yerda turgandek ko'rinaman.",
+  "Kamida 256×256 piksel bo'lsa tiniq chiqaman. GIF bo'lsa — jonli!",
+];
+const IMAGE_CANCEL = "Mayli, keyinroq tanlarmiz 😊";
+const IMAGE_ERROR = "Voy, bu rasm bilan ishlay olmadim 😕 Boshqasini sinab ko'ramizmi?";
+
+// Rasm tekshirilgandan keyin — natijaga qarab maslahat
+function imageFeedback({ issues, cropped, w, h }) {
+  const lines = ["Yangi qiyofa! Qalay, yarashdimi? ✨"];
+  if (cropped) lines.push("Atrofidagi bo'sh joyni o'zim qirqib oldim ✂️");
+  if (issues.includes('gif')) lines.push("GIF ekan — jonli bo'ldim! 🎉");
+  if (issues.includes('background')) {
+    lines.push("Rasmda fon bor ekan — atrofimda to'rtburchak ko'rinadi 🙈");
+    lines.push("remove.bg saytida fonni bir bosishda olib tashlasa bo'ladi.");
+  }
+  if (issues.includes('jpg')) {
+    lines.push("JPG rasmda shaffof fon bo'lmaydi — atrofimda to'rtburchak ko'rinadi 🙈");
+    lines.push("Foni shaffof PNG tanlasangiz, ancha chiroyli chiqaman.");
+  }
+  if (issues.includes('small')) lines.push(`Rasm biroz kichik (${w}×${h}) — xira ko'rinishim mumkin. 256 pikseldan kattasi yaxshi.`);
+  if (issues.includes('shape')) lines.push("Rasm juda cho'zinchoq, shuning uchun kichik ko'rinaman. Kvadratga yaqini yaxshi.");
+
+  const problems = issues.filter((i) => i !== 'gif');
+  if (problems.length) lines.push("Boshqasini tanlash: o'ng tugma → Personaj → Boshqa rasm tanlash.");
+  else lines.push("Zo'r rasm tanladingiz! 👍");
+  return lines;
+}
+
 // Soatga qarab salomlashish
 function greeting() {
   const h = new Date().getHours();
@@ -163,11 +194,14 @@ function bubbleTime(text) {
   return Math.max(3000, 1800 + text.length * 55);
 }
 
-// Bir nechta gapni ketma-ket aytadi
+// Bir nechta gapni ketma-ket aytadi (yangisi boshlansa — eskisi to'xtaydi)
+let sayQueue = [];
 function sayAll(lines) {
+  sayQueue.forEach(clearTimeout);
+  sayQueue = [];
   let delay = 0;
   for (const line of lines) {
-    setTimeout(() => say(line), delay);
+    sayQueue.push(setTimeout(() => say(line), delay));
     delay += bubbleTime(line) + 400;
   }
 }
@@ -294,6 +328,9 @@ window.pet.on('petted', () => {
 window.pet.on('say', (kind) => {
   if (kind === 'break') say(BREAK_REMINDER);
   else if (kind === 'here') { play('boing', 450); say(HERE); }
+  else if (kind === 'image-tips') { mood('wave', 1600); sayAll(IMAGE_TIPS); }
+  else if (kind === 'image-cancel') sayAll([IMAGE_CANCEL]);
+  else if (kind === 'image-error') sayAll([IMAGE_ERROR]);
   else sayRandom();
 });
 
@@ -313,7 +350,8 @@ window.pet.on('appearance', (a) => {
   play('land', 350);
   mood('happy', 1400);
   burst(['✦', '✧', '★'], 5);
-  say(a.change === 'color' ? "Yangi rang! Yarashdimi? ✨" : `Salom! Endi men ${petName}man ✨`);
+  if (a.report) sayAll(imageFeedback(a.report));
+  else sayAll([a.change === 'color' ? "Yangi rang! Yarashdimi? ✨" : `Salom! Endi men ${petName}man ✨`]);
 });
 
 // Ko'zlar kursorga qaraydi
