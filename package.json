@@ -1,0 +1,36 @@
+{
+  "name": "kokcha-desktop-pet",
+  "version": "1.0.0",
+  "description": "Ish stolida yashaydigan kichik yordamchi (desktop pet)",
+  "main": "main.js",
+  "author": "Forbidd3n",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win portable"
+  },
+  "devDependencies": {
+    "electron": "^37.0.0",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "uz.forbidd3n.kokcha",
+    "productName": "Kokcha",
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer.js",
+      "index.html",
+      "style.css",
+      "assets/icon.png",
+      "assets/tray.png"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "assets/icon.png"
+    }
+  },
+  "dependencies": {
+    "koffi": "^2.16.3"
+  }
+}
