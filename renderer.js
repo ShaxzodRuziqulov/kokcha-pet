@@ -18,19 +18,19 @@ const WELCOME_BACK = "Qaytdingizmi? Sog'indim! 🌱";
 const PETTED = ["Hihi 😊", "Yana! Yana!", "Qitiq bo'lyapti-ku 😄", "Mm, yoqdi 💚"];
 
 // Birinchi ochilganda — qisqa tanishtirish
-const ONBOARDING = [
-  "Salom! Men Ko'kchaman 🌱 Endi shu yerda yashayman.",
+const onboarding = () => [
+  `Salom! Men ${petName}man 🌱 Endi shu yerda yashayman.`,
   "Meni sudrab ko'chirsangiz bo'ladi. Ctrl bosib tursangiz — orqamdagini bosasiz.",
-  "Sozlamalar uchun ustimda o'ng tugmani bosing ⚙️",
+  "Sozlamalar va boshqa personajlar — ustimda o'ng tugma ⚙️",
 ];
 
 // Soatga qarab salomlashish
 function greeting() {
   const h = new Date().getHours();
-  if (h >= 5 && h < 11) return "Xayrli tong! Men Ko'kchaman 🌱";
-  if (h >= 11 && h < 17) return "Salom! Men Ko'kchaman 🌱";
-  if (h >= 17 && h < 22) return "Xayrli kech! Men Ko'kchaman 🌱";
-  return "Hali ham ishlayapsizmi? Men Ko'kchaman 🌙";
+  if (h >= 5 && h < 11) return `Xayrli tong! Men ${petName}man 🌱`;
+  if (h >= 11 && h < 17) return `Salom! Men ${petName}man 🌱`;
+  if (h >= 17 && h < 22) return `Xayrli kech! Men ${petName}man 🌱`;
+  return `Hali ham ishlayapsizmi? Men ${petName}man 🌙`;
 }
 
 // Soatga qarab qo'shimcha gaplar
@@ -52,9 +52,11 @@ const bubble = document.getElementById('bubble');
 const bubbleText = document.getElementById('bubble-text');
 const sprite = document.getElementById('sprite');
 const mascot = document.getElementById('mascot');
-const pupils = document.getElementById('pupils');
+const bubbleName = document.getElementById('bubble-name');
 
 let sprites = {};
+let petName = "Ko'kcha";
+let character = null;
 let quiet = false;
 let state = 'idle';
 let talking = false;
@@ -69,6 +71,7 @@ function render() {
 
   const key = talking && sprites.talk ? 'talk' : state;
   const src = sprites[key] || sprites.idle;
+  body.classList.toggle('sprite-mode', !!src);
   if (src) {
     if (sprite.src !== src) sprite.src = src;
     sprite.classList.remove('hidden');
@@ -77,6 +80,21 @@ function render() {
     sprite.classList.add('hidden');
     mascot.classList.remove('hidden');
   }
+}
+
+// Personaj, rang yoki o'z rasmini qo'llaydi
+function applyAppearance(a) {
+  sprites = a.sprites || {};
+  petName = a.name;
+  bubbleName.textContent = a.name;
+  document.title = a.name;
+  body.dataset.char = a.character;
+  body.dataset.color = a.color;
+  if (a.character !== character && window.CHARACTERS[a.character]) {
+    mascot.innerHTML = window.CHARACTERS[a.character];
+  }
+  character = a.character;
+  render();
 }
 
 // Qisqa animatsiyani (boing, land, stretch) qayta ishga tushiradi
@@ -289,6 +307,15 @@ window.pet.on('hover', (over) => body.classList.toggle('hover', over));
 window.pet.on('ghost', (on) => body.classList.toggle('ghost', on));
 window.pet.on('settings', (s) => { quiet = s.quiet; });
 
+// Menyudan personaj yoki rang almashtirildi
+window.pet.on('appearance', (a) => {
+  applyAppearance(a);
+  play('land', 350);
+  mood('happy', 1400);
+  burst(['✦', '✧', '★'], 5);
+  say(a.change === 'color' ? "Yangi rang! Yarashdimi? ✨" : `Salom! Endi men ${petName}man ✨`);
+});
+
 // Ko'zlar kursorga qaraydi
 window.pet.on('look', ({ dx, dy }) => {
   const flip = body.classList.contains('dir-left') ? -1 : 1;
@@ -296,16 +323,17 @@ window.pet.on('look', ({ dx, dy }) => {
   const k = Math.min(1, dist / 200);   // yaqin bo'lsa — kamroq buriladi
   const ex = (dx / dist) * 4 * k * flip;
   const ey = (dy / dist) * 3 * k;
+  const pupils = document.getElementById('pupils');
+  if (!pupils) return;
   pupils.style.transform = `translate(${ex.toFixed(1)}px, ${ey.toFixed(1)}px)`;
 });
 
 // ---- Boshlash ----
 (async () => {
   const init = await window.pet.getInit();
-  sprites = init.sprites;
   quiet = init.quiet;
-  render();
+  applyAppearance(init);
   scheduleFidget();
-  if (init.firstRun) setTimeout(() => { mood('wave', 1600); sayAll(ONBOARDING); }, 600);
+  if (init.firstRun) setTimeout(() => { mood('wave', 1600); sayAll(onboarding()); }, 600);
   else if (!quiet) setTimeout(() => say(greeting()), 600);
 })();

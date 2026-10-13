@@ -22,6 +22,8 @@ Ko'kchaning ustida yoki soat yonidagi belgida **o'ng tugma** bosilsa, menyu ochi
 |---|---|
 | Gapir / Uxlat / Uyg'ot | — |
 | Yashirish / Ko'rsatish | vaqtincha olib turish |
+| Personaj | Ko'kcha, Mushukcha, Kuchukcha, Pingvin yoki **O'z rasmim...** |
+| Rang | asl rang, yashil, pushti, sariq, binafsha, ko'k |
 | O'zi yursin | avtomatik yurishni yoqish/o'chirish |
 | Jim rejim | o'zi gapirmaydi, faqat eslatmalar va bosilganda javob beradi |
 | O'lcham | Kichik / O'rta / Katta |
@@ -42,24 +44,26 @@ npm run build
 ```
 `dist/` papkasida bitta portable `Kokcha.exe` paydo bo'ladi. O'rnatish talab qilinmaydi.
 
-## O'z rasmlaringizni qo'yish
-Rasmlarni quyidagi nomlar bilan saqlang (PNG, GIF yoki WebP, foni shaffof bo'lsin):
+## Personajni almashtirish
+Ko'kcha ustida o'ng tugma → **Personaj**:
+- **Tayyor personajlar:** Ko'kcha 🌱, Mushukcha 🐱, Kuchukcha 🐶, Pingvin 🐧. Hammasi to'liq animatsiyali.
+- **Rang:** har bir tayyor personajni 5 xil rangda qilish mumkin.
+- **O'z rasmim...:** kompyuterdan istalgan rasmni tanlang (PNG, GIF yoki WebP, foni shaffof bo'lsa chiroyli). Rasm dastur ichiga nusxalanadi, asl faylni o'chirsangiz ham qoladi.
+
+Har holat uchun alohida rasm qo'ymoqchi bo'lsangiz (ilg'or usul), quyidagi nomlar bilan saqlang:
 
 | Fayl | Qachon ko'rinadi |
 |---|---|
-| `idle.png` | turganda (majburiy, qolganlari bo'lmasa shu ishlatiladi) |
+| `idle.png` | turganda (qolganlari bo'lmasa shu ishlatiladi) |
 | `walk.png` | yurganda (GIF bo'lsa yaxshi) |
 | `sleep.png` | uxlaganda |
 | `talk.png` | gapirganda |
 
-Qayerga qo'yish kerak:
-- `npm start` bilan ishlatsangiz: **`assets/custom/`** papkasiga
-- exe bilan ishlatsangiz: exe yonida **`custom/`** papka ochib, o'shanga
-
-Keyin dasturni qayta ishga tushiring. Rasm bo'lmasa, standart Ko'kcha ko'rinadi.
+Qayerga: `npm start` bilan — **`assets/custom/`**, exe bilan — exe yonidagi **`custom/`** papkaga. Keyin menyudan **O'z rasmim** ni tanlang.
 
 ## Sozlash
 - Gaplar: `renderer.js` boshidagi `PHRASES`, `greeting()`, `timePhrases()`
 - Uyqu vaqti, yurish tezligi, eslatma variantlari: `main.js` boshidagi `SLEEP_AFTER_MS`, `WALK_SPEED`, `BREAK_OPTIONS`
 - Sozlamalar fayli: `%APPDATA%/kokcha-desktop-pet/settings.json`
 - Ko'rinish va animatsiyalar: `style.css`
+- Personajlar (SVG): `characters.js`

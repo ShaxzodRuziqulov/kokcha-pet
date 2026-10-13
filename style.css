@@ -254,3 +254,49 @@ body.dancing .particle { color: #4e8a66; }
   15%  { opacity: 1; transform: translate(0, -8px) scale(1); }
   100% { opacity: 0; transform: translate(var(--dx), -80px) scale(0.9); }
 }
+
+/* ---- Personaj ranglari ---- */
+body {
+  --body: #7fd6c8;   /* Ko'kcha */
+  --line: #3a9e90;
+  --belly: #c9f1ea;
+}
+body[data-char="cat"]     { --body: #f6b26b; --line: #c27c2c; --belly: #fde3c4; }
+body[data-char="dog"]     { --body: #ecd0ac; --line: #a0703f; --belly: #f9eddf; --accent: #b9895a; }
+body[data-char="penguin"] { --body: #46546a; --line: #263040; --belly: #f7f9fb; --feet: #f5a623; }
+
+/* Foydalanuvchi tanlagan rang (asl rangdan ustun) */
+body[data-char][data-color="green"]  { --body: #9be0a6; --line: #3f9a55; --belly: #dcf5e0; --accent: #3f9a55; }
+body[data-char][data-color="pink"]   { --body: #f7b6c8; --line: #c96d89; --belly: #fde4ec; --accent: #c96d89; }
+body[data-char][data-color="yellow"] { --body: #f9da7a; --line: #c39a2e; --belly: #fdf2cc; --accent: #c39a2e; }
+body[data-char][data-color="purple"] { --body: #c6b3f2; --line: #7a5fc0; --belly: #ece5fc; --accent: #7a5fc0; }
+body[data-char][data-color="blue"]   { --body: #9cc8f5; --line: #4a82c2; --belly: #e1effd; --accent: #4a82c2; }
+
+#mascot .c-body   { fill: var(--body); stroke: var(--line); }
+#mascot .c-belly  { fill: var(--belly); }
+#mascot .c-feet   { fill: var(--feet, var(--line)); }
+#mascot .c-accent { fill: var(--accent, var(--line)); stroke: var(--line); }
+
+/* ---- O'z rasmi uxlaganda: xira tortadi, Zzz chiqadi ---- */
+#sprite-zzz {
+  display: none;
+  position: absolute;
+  right: 4px;
+  top: -6px;
+  color: #4e8a66;
+  font-weight: 700;
+  pointer-events: none;
+}
+body.sprite-mode.sleep #sprite-zzz { display: block; }
+#sprite-zzz i, #sprite-zzz span, #sprite-zzz b {
+  display: inline-block;
+  font-style: normal;
+  opacity: 0;
+  animation: float 2.4s ease-in-out infinite;
+}
+#sprite-zzz i    { font-size: 13px; }
+#sprite-zzz span { font-size: 16px; animation-delay: 0.6s; }
+#sprite-zzz b    { font-size: 20px; animation-delay: 1.2s; }
+body.sprite-mode.sleep #sprite { filter: saturate(0.6) brightness(0.92); animation: sleepy 3.6s ease-in-out infinite; transform-origin: bottom; }
+/* Pingvin tumshug'i uxlaganda ham ko'rinadi */
+body.sleep #mascot .beak { display: inline; }

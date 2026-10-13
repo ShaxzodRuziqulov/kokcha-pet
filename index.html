@@ -9,82 +9,22 @@
 </head>
 <body class="idle">
   <div id="bubble" class="hidden">
-    <div class="name">Ko'kcha</div>
+    <div class="name" id="bubble-name">Ko'kcha</div>
     <div id="bubble-text"></div>
   </div>
 
   <div id="pet">
    <div id="pet-inner">
-    <!-- Agar assets/custom/ ichida rasm bo'lsa, shu img ishlatiladi -->
+    <!-- "O'z rasmim" tanlansa, shu img ishlatiladi -->
     <img id="sprite" class="hidden" alt="" draggable="false" />
 
-    <!-- Standart original personaj (SVG) -->
-    <svg id="mascot" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
-      <!-- soya -->
-      <ellipse class="shadow" cx="80" cy="150" rx="40" ry="6" />
-
-      <g class="body-group">
-        <!-- barglar -->
-        <g class="sprout">
-          <path d="M80 38 C 80 26, 80 20, 80 14" stroke="#3f8f5a" stroke-width="4" fill="none" stroke-linecap="round"/>
-          <path d="M80 18 C 66 6, 52 10, 50 18 C 60 26, 72 24, 80 18 Z" fill="#6cc488"/>
-          <path d="M80 16 C 92 2, 108 4, 112 12 C 102 22, 90 22, 80 16 Z" fill="#86d69c"/>
-        </g>
-
-        <!-- tana -->
-        <path d="M80 36 C 120 36, 132 70, 132 100 C 132 130, 110 142, 80 142 C 50 142, 28 130, 28 100 C 28 70, 40 36, 80 36 Z"
-              fill="#7fd6c8" stroke="#3a9e90" stroke-width="3"/>
-        <!-- qorin -->
-        <ellipse cx="80" cy="112" rx="30" ry="22" fill="#c9f1ea"/>
-
-        <!-- qo'llar -->
-        <ellipse class="arm arm-l" cx="32" cy="104" rx="8" ry="12" fill="#7fd6c8" stroke="#3a9e90" stroke-width="3"/>
-        <ellipse class="arm arm-r" cx="128" cy="104" rx="8" ry="12" fill="#7fd6c8" stroke="#3a9e90" stroke-width="3"/>
-
-        <!-- oyoqlar -->
-        <ellipse class="foot foot-l" cx="62" cy="142" rx="12" ry="6" fill="#3a9e90"/>
-        <ellipse class="foot foot-r" cx="98" cy="142" rx="12" ry="6" fill="#3a9e90"/>
-
-        <!-- ochiq ko'zlar -->
-        <g class="eyes-open">
-          <!-- kursorga qarab siljiydi -->
-          <g id="pupils">
-            <ellipse cx="62" cy="80" rx="8" ry="10" fill="#23343a"/>
-            <ellipse cx="98" cy="80" rx="8" ry="10" fill="#23343a"/>
-            <circle cx="65" cy="76" r="3" fill="#fff"/>
-            <circle cx="101" cy="76" r="3" fill="#fff"/>
-          </g>
-        </g>
-        <!-- xursand ko'zlar (silashganda, raqsda) -->
-        <g class="eyes-happy">
-          <path d="M53 84 Q 62 72 71 84" stroke="#23343a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-          <path d="M89 84 Q 98 72 107 84" stroke="#23343a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-        </g>
-        <!-- yumuq ko'zlar -->
-        <g class="eyes-closed">
-          <path d="M53 82 Q 62 88 71 82" stroke="#23343a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-          <path d="M89 82 Q 98 88 107 82" stroke="#23343a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-        </g>
-
-        <!-- yonoqlar -->
-        <ellipse class="cheek" cx="48" cy="96" rx="7" ry="4" fill="#f4a6b4"/>
-        <ellipse class="cheek" cx="112" cy="96" rx="7" ry="4" fill="#f4a6b4"/>
-
-        <!-- og'iz -->
-        <path class="mouth-smile" d="M72 96 Q 80 104 88 96" stroke="#23343a" stroke-width="3" fill="none" stroke-linecap="round"/>
-        <ellipse class="mouth-open" cx="80" cy="99" rx="6" ry="5" fill="#23343a"/>
-      </g>
-
-      <!-- Zzz -->
-      <g class="zzz">
-        <text x="118" y="40" class="z z1">z</text>
-        <text x="130" y="26" class="z z2">z</text>
-        <text x="142" y="12" class="z z3">Z</text>
-      </g>
-    </svg>
+    <!-- Tayyor personaj (SVG) — characters.js dan qo'yiladi -->
+    <svg id="mascot" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg"></svg>
    </div>
+   <div id="sprite-zzz"><i>z</i><span>z</span><b>Z</b></div>
   </div>
 
+  <script src="characters.js"></script>
   <script src="renderer.js"></script>
 </body>
 </html>

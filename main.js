@@ -1,7 +1,7 @@
 // Kokcha — desktop pet (asosiy jarayon)
 // Bu yerda: oyna, harakat (yurish, sudrash, tushish), uyqu, eslatmalar, tray menyu, sozlamalar.
 
-const { app, BrowserWindow, screen, ipcMain, Tray, Menu, nativeImage, powerMonitor } = require('electron');
+const { app, BrowserWindow, screen, ipcMain, Tray, Menu, nativeImage, powerMonitor, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { pathToFileURL } = require('url');
@@ -24,12 +24,28 @@ const SIZES = { small: 0.75, medium: 1, large: 1.3 };
 const SIZE_LABELS = { small: 'Kichik', medium: "O'rta", large: 'Katta' };
 const BREAK_OPTIONS = [30, 45, 60, 0];   // daqiqa; 0 — o'chiq
 
+// Tayyor personajlar (ko'rinishi — characters.js) va ranglar (style.css)
+const CHARACTERS = { kokcha: "Ko'kcha", cat: 'Mushukcha', dog: 'Kuchukcha', penguin: 'Pingvin' };
+const CUSTOM_NAME = "Do'stcha";
+const COLORS = {
+  original: 'Asl rang',
+  green: 'Yashil',
+  pink: 'Pushti',
+  yellow: 'Sariq',
+  purple: 'Binafsha',
+  blue: "Ko'k",
+};
+const IMAGE_EXTS = ['png', 'gif', 'webp'];
+
 const DEFAULTS = {
   autoWalk: true,
   quiet: false,
   size: 'medium',
   breakMinutes: 45,
   position: null,
+  character: null,    // kokcha | cat | dog | penguin | custom
+  color: 'original',
+  customImage: null,  // "O'z rasmim" — userData ichidagi nusxa
   onboarded: false,   // birinchi ochilishdagi tanishtirish ko'rsatilganmi
   lastSeenDay: null,  // "xayrli tong" kuniga bir marta
 };
@@ -75,6 +91,11 @@ function loadSettings() {
     settings = { ...DEFAULTS };
   }
   if (!SIZES[settings.size]) settings.size = DEFAULTS.size;
+  if (!COLORS[settings.color]) settings.color = DEFAULTS.color;
+  if (!CHARACTERS[settings.character] && settings.character !== 'custom') {
+    // Avval custom/ papkaga rasm qo'yganlar uchun — o'sha rasm qoladi
+    settings.character = findCustomSprites().idle ? 'custom' : 'kokcha';
+  }
 }
 
 function saveSettings(now = false) {
@@ -168,12 +189,75 @@ function findCustomSprites() {
     for (const ext of ['png', 'gif', 'webp']) {
       const p = path.join(dir, `${s}.${ext}`);
       if (fs.existsSync(p)) {
-        sprites[s] = pathToFileURL(p).href;
+        sprites[s] = fileUrl(p);
         break;
       }
     }
   }
   return sprites;
+}
+
+function fileUrl(p) {
+  // ?v= — rasm almashtirilganda eski nusxa keshdan chiqmasligi uchun
+  return `${pathToFileURL(p).href}?v=${Math.round(fs.statSync(p).mtimeMs)}`;
+}
+
+// ---- Personaj ko'rinishi ----
+function appearance() {
+  let character = settings.character;
+  let sprites = {};
+  if (character === 'custom') {
+    sprites = findCustomSprites();
+    if (settings.customImage && fs.existsSync(settings.customImage)) sprites.idle = fileUrl(settings.customImage);
+    if (!sprites.idle) {
+      character = 'kokcha'; // rasm topilmasa — Ko'kcha
+      sprites = {};
+    }
+  }
+  const name = character === 'custom' ? CUSTOM_NAME : CHARACTERS[character];
+  return { character, color: settings.color, sprites, name };
+}
+
+function applyAppearance(change) {
+  const a = appearance();
+  send('appearance', { ...a, change });
+  if (tray) tray.setToolTip(a.name);
+  saveSettings();
+  refreshTray();
+}
+
+function setCharacter(character) {
+  settings.character = character;
+  applyAppearance('character');
+}
+
+function setColor(color) {
+  settings.color = color;
+  applyAppearance('color');
+}
+
+// "O'z rasmim..." — fayl tanlanadi va userData'ga nusxalanadi (asl fayl ko'chirilsa ham yo'qolmaydi)
+async function chooseImage() {
+  const res = await dialog.showOpenDialog({
+    title: "Personaj uchun rasm tanlang (foni shaffof PNG yoki GIF)",
+    properties: ['openFile'],
+    filters: [{ name: 'Rasmlar', extensions: IMAGE_EXTS }],
+  });
+  if (res.canceled || !res.filePaths.length) return refreshTray();
+
+  const src = res.filePaths[0];
+  const ext = path.extname(src).slice(1).toLowerCase();
+  const dir = app.getPath('userData');
+  try {
+    for (const e of IMAGE_EXTS) fs.rmSync(path.join(dir, `my-pet.${e}`), { force: true });
+    const dest = path.join(dir, `my-pet.${ext}`);
+    fs.copyFileSync(src, dest);
+    settings.customImage = dest;
+    setCharacter('custom');
+  } catch (err) {
+    dialog.showErrorBox("Rasmni o'rnatib bo'lmadi", String(err.message || err));
+    refreshTray();
+  }
 }
 
 // ---- Oyna ----
@@ -518,6 +602,36 @@ function menuTemplate() {
     { label: userHidden ? "Ko'rsatish" : 'Yashirish', click: () => setUserHidden(!userHidden) },
     { type: 'separator' },
     {
+      label: 'Personaj',
+      submenu: [
+        ...Object.entries(CHARACTERS).map(([key, label]) => ({
+          label,
+          type: 'radio',
+          checked: settings.character === key,
+          click: () => setCharacter(key),
+        })),
+        { type: 'separator' },
+        {
+          label: settings.customImage ? "O'z rasmim" : "O'z rasmim...",
+          type: 'radio',
+          checked: settings.character === 'custom',
+          click: () => (settings.customImage ? setCharacter('custom') : chooseImage()),
+        },
+        ...(settings.customImage ? [{ label: 'Boshqa rasm tanlash...', click: chooseImage }] : []),
+      ],
+    },
+    {
+      label: 'Rang',
+      enabled: settings.character !== 'custom',
+      submenu: Object.entries(COLORS).map(([key, label]) => ({
+        label,
+        type: 'radio',
+        checked: settings.color === key,
+        click: () => setColor(key),
+      })),
+    },
+    { type: 'separator' },
+    {
       label: "O'zi yursin",
       type: 'checkbox',
       checked: settings.autoWalk,
@@ -579,7 +693,7 @@ function refreshTray() {
 function createTray() {
   const icon = nativeImage.createFromPath(path.join(__dirname, 'assets', 'tray.png'));
   tray = new Tray(icon);
-  tray.setToolTip("Ko'kcha");
+  tray.setToolTip(appearance().name);
   // Chap tugma: yashirin bo'lsa ko'rsatadi, uxlayotgan bo'lsa uyg'otadi, aks holda gapiradi
   tray.on('click', () => {
     if (userHidden) setUserHidden(false);
@@ -596,7 +710,7 @@ ipcMain.handle('get-init', () => {
     settings.onboarded = true;
     saveSettings();
   }
-  return { sprites: findCustomSprites(), quiet: settings.quiet, firstRun };
+  return { ...appearance(), quiet: settings.quiet, firstRun };
 });
 
 ipcMain.on('pet-menu', () => {
