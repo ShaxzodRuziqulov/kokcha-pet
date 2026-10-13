@@ -33,7 +33,22 @@ Ko'kchaning ustida yoki soat yonidagi belgida **o'ng tugma** bosilsa, menyu ochi
 | Dam olish eslatmasi | har 30 / 45 / 60 daqiqada yoki o'chiq |
 | Windows bilan birga ishga tushsin | faqat exe holatida |
 
-## Ishga tushirish
+## O'rnatish
+[Releases](https://github.com/ShaxzodRuziqulov/kokcha-pet/releases/latest) sahifasidan yuklab oling:
+
+| Fayl | Kimga |
+|---|---|
+| **Kokcha-Setup-X.Y.Z.exe** | tavsiya etiladi — bir bosishda o'rnatiladi, ish stoli va Start menyuga yorliq qo'yadi, **o'zi yangilanib turadi** |
+| Kokcha-X.Y.Z-portable.exe | o'rnatmasdan ishlatish uchun; yangi versiya chiqsa aytadi, lekin o'zi yangilanmaydi |
+
+Hammasi bitta faylning ichida — internet, Node.js yoki boshqa narsa kerak emas.
+Windows SmartScreen "noma'lum dastur" desa: **Batafsil → Baribir ishga tushirish**.
+O'chirish: Windows **Sozlamalar → Ilovalar → Kokcha**.
+
+## Yangilanish
+O'rnatilgan dastur GitHub'dan yangi versiyani o'zi tekshiradi (ochilgandan 30 soniya keyin va har 6 soatda). Topsa — fonda yuklab oladi, personaj aytadi va dastur keyingi safar yopilganda o'zi yangilanadi. Darhol yangilash: o'ng tugma → **✨ Yangilash**.
+
+## Dasturchilar uchun
 Node.js 20+ kerak.
 
 ```bash
@@ -41,11 +56,33 @@ npm install
 npm start
 ```
 
-## Exe qilish
-```bash
-npm run build
+| Buyruq | Vazifasi |
+|---|---|
+| `npm start` | dasturlash rejimida ishga tushirish |
+| `npm run build` | `dist/` ga o'rnatuvchi va portable exe yig'ish |
+| `npm run release` | GitHub Release yaratib, fayllarni yuklash (tavsif — `CHANGELOG.md` dan) |
+
+Yangi versiya chiqarish: `package.json` dagi `version` ni oshiring → `CHANGELOG.md` ga bo'lim qo'shing → commit, `git tag vX.Y.Z`, push → `npm run build` → `npm run release`.
+
+### Tuzilma
 ```
-`dist/` papkasida bitta portable `Kokcha.exe` paydo bo'ladi. O'rnatish talab qilinmaydi.
+main.js              kirish nuqtasi
+src/main/            asosiy jarayon
+  context.js           umumiy holat va geometriya
+  settings.js          sozlamalar
+  window.js            personaj oynasi
+  appearance.js        personajlar, ranglar, "O'z rasmim"
+  motion.js            yurish, sakrash, oynalar ustida yurish, tirmashish
+  surfaces.js          ochiq oynalarning qirralarini topish (Windows)
+  activity.js          uyqu, eslatmalar, kursor, silash
+  native.js            to'liq ekran va Ctrl (Windows)
+  menu.js              menyu va tray
+  updater.js           avtomatik yangilanish
+  ipc.js               renderer bilan aloqa
+src/preload.js       xavfsiz ko'prik
+src/renderer/        ko'rinish: index.html, style.css, renderer.js, characters.js
+scripts/release.mjs  release chiqarish
+```
 
 ## Personajni almashtirish
 Ko'kcha ustida o'ng tugma → **Personaj**:
@@ -75,12 +112,11 @@ Har holat uchun alohida rasm qo'ymoqchi bo'lsangiz (ilg'or usul), quyidagi nomla
 | `sleep.png` | uxlaganda |
 | `talk.png` | gapirganda |
 
-Qayerga: `npm start` bilan — **`assets/custom/`**, exe bilan — exe yonidagi **`custom/`** papkaga. Keyin menyudan **O'z rasmim** ni tanlang.
+Qayerga: o'rnatilgan dasturda — **`%APPDATA%\kokcha-desktop-pet\custom\`**, portable exe'da — exe yonidagi **`custom\`**, `npm start` bilan — **`assets/custom/`**. Keyin menyudan **O'z rasmim** ni tanlang.
 
 ## Sozlash
-- Gaplar: `renderer.js` boshidagi `PHRASES`, `greeting()`, `timePhrases()`
-- Uyqu vaqti, yurish tezligi, eslatma variantlari: `main.js` boshidagi `SLEEP_AFTER_MS`, `WALK_SPEED`, `BREAK_OPTIONS`
+- Gaplar: `src/renderer/renderer.js` boshidagi `PHRASES`, `MOVE_PHRASES`, `greeting()`
+- Uyqu, eslatmalar: `src/main/activity.js` boshidagi `SLEEP_AFTER_MS`, `RANDOM_CHAT_MS`
+- Harakat tezligi, sakrash balandligi: `src/main/motion.js` boshidagi `WALK_SPEED`, `JUMP_REACH`
+- Ko'rinish va animatsiyalar: `src/renderer/style.css`, personajlar: `src/renderer/characters.js`
 - Sozlamalar fayli: `%APPDATA%/kokcha-desktop-pet/settings.json`
-- Ko'rinish va animatsiyalar: `style.css`
-- Personajlar (SVG): `characters.js`
-- Oynalarni aniqlash (Windows): `surfaces.js`

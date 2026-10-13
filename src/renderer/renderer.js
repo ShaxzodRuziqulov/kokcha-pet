@@ -369,6 +369,15 @@ window.pet.on('landed', () => play('land', 350));
 window.pet.on('hover', (over) => body.classList.toggle('hover', over));
 window.pet.on('ghost', (on) => body.classList.toggle('ghost', on));
 
+// Yangi versiya: o'rnatilganida — yuklab olindi, portable'da — chiqdi
+window.pet.on('update', ({ version, portable }) => {
+  mood('wave', 1600);
+  burst(['✦', '✧', '★'], 4);
+  sayAll(portable
+    ? [`Yangi versiya chiqdi (${version})! ✨`, "Yuklab olish: o'ng tugma → Yangi versiya."]
+    : [`Yangi versiya tayyor (${version})! ✨ Keyingi safar o'zi yangilanadi.`, "Hoziroq yangilash: o'ng tugma → Yangilash."]);
+});
+
 // Oyna ekran chetidan chiqib tursa — pufakcha ichkariga suriladi
 window.pet.on('bubble-shift', (px) => {
   bubble.style.left = `${10 + px}px`;
