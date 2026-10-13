@@ -1,6 +1,6 @@
 {
   "name": "kokcha-desktop-pet",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Ish stolida yashaydigan kichik yordamchi (desktop pet)",
   "main": "main.js",
   "author": "Forbidd3n",
@@ -21,6 +21,7 @@
       "preload.js",
       "renderer.js",
       "characters.js",
+      "surfaces.js",
       "index.html",
       "style.css",
       "assets/icon.png",

@@ -55,6 +55,18 @@ function imageFeedback({ issues, cropped, w, h }) {
   return lines;
 }
 
+// Harakat paytidagi gaplar (asosiy jarayon tanlaydi, qachon aytishni ham)
+const MOVE_PHRASES = {
+  sit: ["Biroz dam olay...", "Oyoqlarim charchadi 😌"],
+  lie: ["Hmm, biroz yotib turay", "Yumshoq ekan 😌"],
+  ledge: ["Oyoqlarimni osiltirib o'tiraman 😊", "Bu yerdan hammasi ko'rinadi!"],
+  perch: ["Bu yerdan hammasi ko'rinadi! 👀", "Men tepadaman! 😎"],
+  jump: ["Hop!", "Sakrayman!"],
+  climb: ["Tepaga chiqaman! 🧗", "Qani, yuqoriga!"],
+  hang: ["Voy, baland ekan!", "Endi qanday tushaman? 😅"],
+  drop: ["Uuuuu!", "Wiii! 🎢"],
+};
+
 // Soatga qarab salomlashish
 function greeting() {
   const h = new Date().getHours();
@@ -288,17 +300,26 @@ function scheduleFidget() {
   setTimeout(() => {
     const free = state === 'idle' && !talking && !body.classList.contains('hover');
     if (free) {
-      if (Math.random() < 0.5) mood('yawn', 1800);
-      else mood('wave', 1600);
+      const r = Math.random();
+      if (r < 0.35) mood('yawn', 1800);
+      else if (r < 0.6) mood('wave', 1600);
+      else mood('glance', 2600);
     }
     scheduleFidget();
-  }, 40000 + Math.random() * 50000);
+  }, 25000 + Math.random() * 35000);
 }
 
 // ---- Asosiy jarayondan kelgan xabarlar ----
-window.pet.on('state', ({ state: s, dir }) => {
+const POSES = ['stand', 'sit', 'ledge', 'lie', 'climb', 'hang', 'jump', 'fall'];
+
+window.pet.on('state', ({ state: s, dir, pose, side }) => {
   state = s;
-  body.classList.toggle('dir-left', s === 'walk' && dir < 0);
+  for (const p of POSES) body.classList.toggle(`pose-${p}`, p === pose);
+  body.classList.toggle('side-left', side === 'left');
+  body.classList.toggle('side-right', side === 'right');
+  // Yurganda, sakraganda va chekkada o'tirganda — harakat tomonga qaraydi
+  const faces = s === 'walk' || pose === 'jump' || pose === 'ledge';
+  body.classList.toggle('dir-left', faces && dir < 0);
   if (s === 'sleep') hideBubble(true);
   render();
 });
@@ -318,6 +339,7 @@ window.pet.on('petted', () => {
   burst(['♥'], 3);
   if (state === 'sleep') return; // uxlab yotgan bo'lsa ham yoqadi, lekin uyg'onmaydi
   mood('happy', 1500);
+  if (Math.random() < 0.3) play('hop', 600);
   const now = Date.now();
   if (now - lastPettedTalk > 10000) {
     lastPettedTalk = now;
@@ -328,6 +350,10 @@ window.pet.on('petted', () => {
 window.pet.on('say', (kind) => {
   if (kind === 'break') say(BREAK_REMINDER);
   else if (kind === 'here') { play('boing', 450); say(HERE); }
+  else if (MOVE_PHRASES[kind]) {
+    const list = MOVE_PHRASES[kind];
+    say(list[Math.floor(Math.random() * list.length)]);
+  }
   else if (kind === 'image-tips') { mood('wave', 1600); sayAll(IMAGE_TIPS); }
   else if (kind === 'image-cancel') sayAll([IMAGE_CANCEL]);
   else if (kind === 'image-error') sayAll([IMAGE_ERROR]);
@@ -342,6 +368,12 @@ window.pet.on('clicked', () => {
 window.pet.on('landed', () => play('land', 350));
 window.pet.on('hover', (over) => body.classList.toggle('hover', over));
 window.pet.on('ghost', (on) => body.classList.toggle('ghost', on));
+
+// Oyna ekran chetidan chiqib tursa — pufakcha ichkariga suriladi
+window.pet.on('bubble-shift', (px) => {
+  bubble.style.left = `${10 + px}px`;
+  bubble.style.right = `${10 - px}px`;
+});
 window.pet.on('settings', (s) => { quiet = s.quiet; });
 
 // Menyudan personaj yoki rang almashtirildi

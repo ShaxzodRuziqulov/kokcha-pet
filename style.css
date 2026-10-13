@@ -300,3 +300,123 @@ body.sprite-mode.sleep #sprite-zzz { display: block; }
 body.sprite-mode.sleep #sprite { filter: saturate(0.6) brightness(0.92); animation: sleepy 3.6s ease-in-out infinite; transform-origin: bottom; }
 /* Pingvin tumshug'i uxlaganda ham ko'rinadi */
 body.sleep #mascot .beak { display: inline; }
+
+/* ======================================================================
+   Pozalar: o'tirish, chekkada o'tirish, yotish, tirmashish, osilish,
+   sakrash, yiqilish. SVG'da — .pose guruhi, o'z rasmida — #sprite-wrap.
+   ====================================================================== */
+#pet-inner { position: relative; }
+#sprite-wrap {
+  position: absolute;   /* SVG bilan ustma-ust — joy egallamaydi */
+  inset: 0;
+  transform-origin: 50% 100%;
+  transition: transform 0.35s ease-out;
+}
+#mascot .pose {
+  transform-origin: 80px 80px;
+  transition: transform 0.35s ease-out;
+}
+#mascot .shadow {
+  transform-origin: 80px 150px;
+  transition: transform 0.3s, opacity 0.3s;
+}
+#mascot .foot {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.3s;
+}
+
+/* O'tirish — cho'kadi, oyoqlarini oldinga uzatadi */
+body.pose-sit #mascot .pose,
+body.pose-ledge #mascot .pose { transform: translateY(8px) scaleY(0.9); }
+body.pose-sit #mascot .foot-l { transform: translate(-12px, 3px) rotate(-18deg) scale(1.35, 1.2); }
+body.pose-sit #mascot .foot-r { transform: translate(12px, 3px) rotate(18deg) scale(1.35, 1.2); }
+body.pose-sit #mascot .shadow { transform: scaleX(1.15); }
+body.pose-sit #sprite-wrap,
+body.pose-ledge #sprite-wrap { transform: scaleY(0.92); }
+
+/* Chekkada o'tirish — oyoqlari qirradan osilib, tebranib turadi */
+body.pose-ledge #mascot .shadow { opacity: 0; }
+body.pose-ledge #mascot .foot-l { animation: dangle 1.6s ease-in-out infinite; }
+body.pose-ledge #mascot .foot-r { animation: dangle 1.6s ease-in-out infinite 0.8s; }
+@keyframes dangle {
+  0%, 100% { transform: translate(-2px, 10px) rotate(-14deg); }
+  50%      { transform: translate(2px, 12px) rotate(14deg); }
+}
+
+/* Yotish — yassilanib, yoyilib yotadi; qo'l-oyoqlari yon tomonga, nihol egilgan */
+body.pose-lie #mascot .pose { transform: translateY(15px) scale(1.16, 0.78); }
+body.pose-lie #mascot .shadow { transform: scaleX(1.3); }
+body.pose-lie #mascot .arm-l { transform: translate(-8px, 10px) rotate(50deg); }
+body.pose-lie #mascot .arm-r { transform: translate(8px, 10px) rotate(-50deg); }
+body.pose-lie #mascot .foot-l { transform: translate(-14px, -2px); }
+body.pose-lie #mascot .foot-r { transform: translate(14px, -2px); }
+body.pose-lie #mascot .sprout { transform: rotate(-28deg); transform-origin: 80px 38px; transition: transform 0.35s; }
+body.pose-lie #sprite-wrap { transform: scale(1.12, 0.8); }
+
+/* Tirmashish — qo'llari tepada, devor tomonga egilgan, qo'l-oyoqlari navbatma-navbat */
+body.pose-climb #mascot .shadow,
+body.pose-hang #mascot .shadow,
+body.pose-jump #mascot .shadow,
+body.pose-fall #mascot .shadow { opacity: 0; }
+body.pose-climb.side-right #mascot .pose,
+body.pose-hang.side-right #mascot .pose { transform: rotate(6deg); }
+body.pose-climb.side-left #mascot .pose,
+body.pose-hang.side-left #mascot .pose { transform: rotate(-6deg); }
+body.pose-climb #mascot .arm,
+body.pose-hang #mascot .arm { transform: translateY(-24px); }
+body.pose-climb #mascot .arm-l  { animation: climb-arm 0.5s ease-in-out infinite alternate; }
+body.pose-climb #mascot .arm-r  { animation: climb-arm 0.5s ease-in-out infinite alternate-reverse; }
+body.pose-climb #mascot .foot-l { animation: climb-foot 0.5s ease-in-out infinite alternate-reverse; }
+body.pose-climb #mascot .foot-r { animation: climb-foot 0.5s ease-in-out infinite alternate; }
+@keyframes climb-arm {
+  from { transform: translateY(-18px); }
+  to   { transform: translateY(-30px); }
+}
+@keyframes climb-foot {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-6px); }
+}
+body.pose-climb.side-right #sprite-wrap,
+body.pose-hang.side-right #sprite-wrap { transform: rotate(6deg); }
+body.pose-climb.side-left #sprite-wrap,
+body.pose-hang.side-left #sprite-wrap { transform: rotate(-6deg); }
+
+/* Osilib turish — sekin tebranadi, oyoqlari osilgan */
+body.pose-hang #mascot .body-group { animation: sway 1.8s ease-in-out infinite; }
+body.pose-hang #mascot .foot-l { animation: dangle 1.2s ease-in-out infinite; }
+body.pose-hang #mascot .foot-r { animation: dangle 1.2s ease-in-out infinite 0.6s; }
+@keyframes sway {
+  0%, 100% { transform: rotate(-4deg); }
+  50%      { transform: rotate(4deg); }
+}
+
+/* Sakrash — cho'zilib, qo'llarini ko'taradi */
+body.pose-jump #mascot .pose { transform: scale(0.94, 1.08); }
+body.pose-jump #mascot .arm { transform: translateY(-16px); }
+body.pose-jump #sprite-wrap { transform: scale(0.94, 1.08); }
+
+/* Yiqilish — qo'llarini silkitadi */
+body.pose-fall #mascot .arm { animation: flail 0.25s linear infinite alternate; }
+body.pose-fall:not(.sleep) .eyes-open { transform: scale(1.15); }
+@keyframes flail {
+  from { transform: translateY(-20px) rotate(-20deg); }
+  to   { transform: translateY(-26px) rotate(20deg); }
+}
+
+/* Sakrab-o'ynash (silashganda) */
+#pet-inner.hop { animation: hop-up 0.6s ease-out; }
+@keyframes hop-up {
+  0%, 100% { transform: none; }
+  20%      { transform: scale(1.1, 0.88); }
+  50%      { transform: translateY(-34px) scale(0.95, 1.06); }
+  80%      { transform: scale(1.06, 0.94); }
+}
+
+/* Atrofga qarash */
+body.glance #pupils { animation: glance 2.6s ease-in-out; }
+@keyframes glance {
+  0%, 100% { transform: translate(0, 0); }
+  20%, 40% { transform: translate(-4px, 0); }
+  60%, 80% { transform: translate(4px, -1px); }
+}

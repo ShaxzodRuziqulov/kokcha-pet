@@ -3,7 +3,9 @@
 Ish stolida, taskbar ustida yashaydigan kichik yordamchi.
 
 ## Nimalar qila oladi
-- **Yuradi:** har 8–18 soniyada ekran bo'ylab o'zi yurib qo'yadi, chetga yetsa burilib ketadi. Sichqoncha ustida tursa, yurmaydi.
+- **Yuradi, o'tiradi, yotadi:** o'zi nima qilishni tanlaydi — yurib qo'yadi, charchasa o'tiradi, zerikkanda yoyilib yotadi, atrofga qaraydi. Sichqoncha ustida tursa, joyidan qimirlamaydi.
+- **Oynalar ustida yashaydi** 🪟: yaqindagi oyna ustiga sakrab chiqadi va uning ustida yuradi. Oynani sursangiz — birga ko'chadi; yopsangiz, yig'sangiz yoki ustini boshqa oyna bilan yopsangiz — yiqilib tushadi. Qirraga yetsa buriladi, oyog'ini osiltirib o'tiradi yoki sakrab tushadi.
+- **Devorga tirmashadi** 🧗: ekran chetiga tirmashib chiqadi. Devor yonida oyna bo'lsa — uning ustiga chiqib oladi, bo'lmasa biroz osilib turib, "Uuuu!" deb tushib ketadi.
 - **Uxlaydi:** klaviatura va sichqoncha 3 daqiqa tinch tursa, ko'zini yumib "Zzz" bilan uxlab qoladi. Qaytib kelsangiz, kerishib uyg'onadi.
 - **Gapiradi:** ustiga bossangiz sakrab gapiradi. Soatga qarab salomlashadi. O'zi ham vaqti-vaqti bilan gapiradi, lekin faqat siz yozishdan to'xtaganingizda.
 - **Raqs tushadi:** ikki marta bossangiz.
@@ -11,7 +13,7 @@ Ish stolida, taskbar ustida yashaydigan kichik yordamchi.
 - **Jonli:** vaqti-vaqti bilan esnaydi, qo'l silkitadi. Uzoq yo'q bo'lsangiz, qaytganingizda kutib oladi.
 - **Dam olishni eslatadi:** uzluksiz ishlagan vaqtingizni sanaydi (5 daqiqadan uzoq tanaffusdan keyin hisob noldan boshlanadi).
 - **Kursorga qaraydi:** ko'zlari sichqonchangizni kuzatib turadi.
-- **Sudraladi:** ushlab istalgan joyga olib boring, qo'yib yuborsangiz taskbar ustiga tushadi.
+- **Sudraladi:** ushlab istalgan joyga olib boring. Qo'yib yuborsangiz pastga tushadi — ostida oyna bo'lsa, o'sha oyna ustiga qo'nadi.
 - **Xalaqit bermaydi:** shaffof joylar va gap pufakchasi orqali bemalol bosish mumkin. Ko'kchaning orqasidagi narsani bosish uchun **Ctrl** ni bosib turing. To'liq ekranli video, o'yin yoki prezentatsiya ochilsa, o'zi yashirinadi.
 - **Eslab qoladi:** joylashuvi va sozlamalari qayta ochilganda saqlanib qoladi.
 
@@ -24,7 +26,8 @@ Ko'kchaning ustida yoki soat yonidagi belgida **o'ng tugma** bosilsa, menyu ochi
 | Yashirish / Ko'rsatish | vaqtincha olib turish |
 | Personaj | Ko'kcha, Mushukcha, Kuchukcha, Pingvin yoki **O'z rasmim...** |
 | Rang | asl rang, yashil, pushti, sariq, binafsha, ko'k |
-| O'zi yursin | avtomatik yurishni yoqish/o'chirish |
+| O'zi harakat qilsin | yurish, o'tirish, sakrash va hokazolarni yoqish/o'chirish |
+| Oynalar ustiga chiqsin | oynalar ustida yurish va devorga tirmashishni yoqish/o'chirish |
 | Jim rejim | o'zi gapirmaydi, faqat eslatmalar va bosilganda javob beradi |
 | O'lcham | Kichik / O'rta / Katta |
 | Dam olish eslatmasi | har 30 / 45 / 60 daqiqada yoki o'chiq |
@@ -80,3 +83,4 @@ Qayerga: `npm start` bilan — **`assets/custom/`**, exe bilan — exe yonidagi 
 - Sozlamalar fayli: `%APPDATA%/kokcha-desktop-pet/settings.json`
 - Ko'rinish va animatsiyalar: `style.css`
 - Personajlar (SVG): `characters.js`
+- Oynalarni aniqlash (Windows): `surfaces.js`

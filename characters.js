@@ -1,5 +1,5 @@
 // Tayyor personajlar (SVG).
-// Hammasi bir xil "skelet"ga ega: body-group, arm-l/arm-r, foot-l/foot-r, ko'zlar, og'iz, Zzz.
+// Hammasi bir xil "skelet"ga ega: pose > body-group, arm-l/arm-r, foot-l/foot-r, ko'zlar, og'iz, Zzz.
 // Shuning uchun style.css'dagi barcha animatsiyalar (yurish, uyqu, raqs, esnash...) har biriga ishlaydi.
 // Ranglar CSS o'zgaruvchilaridan olinadi: --body, --line, --belly, --accent, --feet.
 
@@ -45,6 +45,7 @@
   function build({ back = '', face = '', mouth = SMILE, extra = '' }) {
     return `
       <ellipse class="shadow" cx="80" cy="150" rx="40" ry="6"/>
+      <g class="pose">
       <g class="body-group">
         ${back}
         <path class="c-body" d="${BODY}" stroke-width="3"/>
@@ -58,6 +59,7 @@
         ${CHEEKS}
         ${mouth}
         ${extra}
+      </g>
       </g>
       ${ZZZ}`;
   }
