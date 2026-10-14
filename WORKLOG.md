@@ -5,7 +5,7 @@ Qoidalar: [AGENTS.md](AGENTS.md).
 
 ## Hozir band
 - **Claude:** `src/renderer/` (characters.js, renderer.js, style.css, index.html) — C1 kelishildi; X4 boshlang'ich o'lchovidan keyin boshlanadi
-- **Codex:** X4 arxivlangan boshlang'ich nusxada o'lchanmoqda; X1 fayllari review uchun bo'shatildi
+- **Codex:** hozir fayl band qilmagan; X1 review'da, X4 qisman natija bilan qolgan
 - Umumiy fayllar (`package.json`, `CHANGELOG.md`): o'zgartirishdan oldin Shaxzod orqali kelishiladi.
 
 ## Kontrakt: main → renderer kanallari
@@ -50,7 +50,7 @@ Boshlash tartibi (kelishildi): Claude — C1, Codex — X1; keyin eslatmalar va 
 | X1 | Ctrl+Alt+M: bir tugma bilan yashirish/ko'rsatish | Codex | review | 7 mantiq sinovi; haqiqiy Electron normal/band yorliq sinovlari o'tdi; jismoniy tugma Shaxzodda |
 | X2 | Tez otib yuborishni aniqlash → `mood` yuborish | Codex | ochiq | `motion.js`, drag-end tezligi; renderer qismi C2 da |
 | X3 | Eslatmalar: qo'shish oynasi, saqlash, vaqtida `remind` yuborish | Codex | ochiq | sozlamalarda saqlansin, qayta ochilganda yo'qolmasin |
-| X4 | Tezlikni o'lchash: CPU/RAM (tinch, yurish, sudrash) | Codex | ishlanmoqda | a37dc14 arxivi saqlandi; tinch/yurish 3×60s; haqiqiy sudrash hali o'lchanmagan |
+| X4 | Tezlikni o'lchash: CPU/RAM (tinch, yurish, sudrash) | Codex | qisman, tugamagan | a37dc14 arxivi saqlandi; 2 yaroqli tinch takror, yurish/sudrash va C1 taqqoslash qolgan |
 | C1 | 2.5D: barcha personajlarga hajm, yorug'lik, soya, kursorga qarab egilish | Claude | kelishildi, X4 kutilmoqda | GPU'siz, yengil bo'lishi shart |
 | C2 | Kayfiyat animatsiyalari: jahl (`mood`), eslatma pufakchasi (`remind`), cho'zilib-siqilish | Claude | ochiq | X0 dan keyin |
 | C3 | 3D tajriba (Three.js) | — | keyin | Shaxzod 2.5D natijasini ko'rib baholagandan keyin alohida topshiriq (Codex taklifi, kelishildi) |
@@ -60,6 +60,13 @@ Boshlash tartibi (kelishildi): Claude — C1, Codex — X1; keyin eslatmalar va 
 **Yo'nalish (Shaxzod, 2026-10-14):** Ko'kchani yaxshi darajaga olib chiqish, 2D dan 3D gacha. MaoMao'dan nusxa olinmaydi, lekin undan yaxshiroq va yengilroq bo'lishi kerak.
 
 ---
+
+## 2026-10-14 · Codex · X4: o'lchov tugadi, qabul mezoni hali bajarilmadi
+- Dalil: `../x4-baseline-report.json`; source a37dc14, Electron 37.10.3, alohida test profil.
+- 15s warm-up va 60s × 3 takror bajarildi. Tinch #1: CPU 69.34% bir yadroga nisbatan, o'rtacha working set 559.1 MiB; #3: 75.26%, 820.7 MiB. #2 oyna 3 namunada yashirilgani sabab yaroqsiz. RAM barcha app jarayonlari working set yig'indisi, umumiy xotira ikki marta sanalishi mumkin. Bu ikkita takror to'liq uch takrorli baseline o'rnini bosmaydi.
+- Yurish #1–#3 YAROQSIZ: motion.startWalk() 3–7s da tabiiy tugaydi; 15s warm-up o'tgach motion=null bo'lgan. Ular yurish CPU/RAM natijasi sifatida ishlatilmaydi. Bu measurement harness cheklovi, ilovaning yurish xatosi emas.
+- Qolgan ish: yurish sikllarini test harness'da takroran boshlash orqali to'liq 60s walking holatini tekshirish; yaroqsiz tinch takrorni qaytarish; haqiqiy sudrash 3×60s; keyin C1 bilan bir xil sharoitda taqqoslash. C1 +2 foiz punkt mezoni hali baholanmagan.
+- X1 commit: 0bdee6e. Claude review; Shaxzod jismoniy Ctrl+Alt+M va haqiqiy fullscreen sinovi.
 
 ## 2026-10-14 · Codex · X1: Ctrl+Alt+M va X4 boshlang'ich nusxa
 - Fayllar: main.js, src/main/menu.js, yangi src/main/shortcuts.js, WORKLOG.md.
