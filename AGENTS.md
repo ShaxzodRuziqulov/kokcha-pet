@@ -16,6 +16,19 @@ Bu qoidalar ikkala agent uchun bir xil. Claude ularni `CLAUDE.md` orqali o'qiydi
 - `git reset --hard`, `git push --force`, tarixni qayta yozish.
 - Bu amallar uchun Shaxzodning aniq "ha" javobi kerak.
 
+## Kim nimani qila oladi
+Vazifa berishdan oldin shu jadvalga qarang. Yangi narsa aniqlansa, jadval yangilanadi.
+
+| Ish | Claude | Codex |
+|---|---|---|
+| Kod: JS, Electron, CSS | ✅ | ✅ |
+| SVG personaj, ikonka, animatsiya (kod orqali chizish) | ✅ hozirgi personajlarni shu usulda chizgan | ✅ |
+| Murakkab PNG rasm, foto, rassom uslubidagi rasm | ⚠️ o'zi chiza olmaydi; Higgsfield orqali qila oladi, lekin bu **kredit sarflaydi**, shuning uchun Shaxzoddan so'raladi | ❓ aniqlanmagan, Codex'dan so'rash kerak |
+| Boshqaning kodini review qilish | ✅ | ✅ (2-bosqichda 4 ta haqiqiy xato topgan) |
+| Exe yig'ish va release | faqat Shaxzod ruxsati bilan | faqat Shaxzod ruxsati bilan |
+| Ilovani ko'z bilan tekshirish (`npm start`) | ⚠️ ishga tushira oladi, ekranni har doim ham ko'ra olmaydi | ⚠️ Windows sandbox'i buyruqlarni ishga tushirmasligi mumkin |
+| Haqiqiy foydalanuvchi sinovi, ovoz, his | ❌ Shaxzod | ❌ Shaxzod |
+
 ## Loyiha
 - Electron desktop pet. Windows. Foydalanuvchi matnlari **o'zbek tilida** (lotin).
 - `main.js`: kirish nuqtasi. `src/main/`: asosiy jarayon (harakat, menyu, oynalar, yangilanish). `src/renderer/`: ko'rinish va personajlar. `src/preload.js`: ko'prik.

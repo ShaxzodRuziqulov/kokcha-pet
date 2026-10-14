@@ -6,12 +6,19 @@ Qoidalar: [AGENTS.md](AGENTS.md).
 ## Hozir band
 _Hech kim._ <!-- Masalan: Codex — src/main/motion.js (yangi sakrash animatsiyasi) -->
 
-## Ochiq g'oyalar
-Bular MaoMao'dan olingan, hali hech kim boshlamagan:
-- AI bilan suhbat: personajni bosganda gaplashish.
-- Vazifalar va eslatmalar ("soat 6 da eslat").
-- Ctrl+Alt+M: bir tugma bilan yoqish va o'chirish.
-- Tez otib yuborilsa, personajning jahli chiqadi.
+## Vazifalar
+Holat: `ochiq` → `ishlanmoqda` → `review` → `tayyor`. "Kim" ustunini Shaxzod belgilaydi; bo'sh bo'lsa, agent o'zi olmasdan oldin so'raydi.
+
+| # | Vazifa | Kim | Holat | Izoh |
+|---|---|---|---|---|
+| 1 | Ctrl+Alt+M: bir tugma bilan yoqish va o'chirish | | ochiq | kichik, `src/main/` |
+| 2 | Tez otib yuborilsa, personajning jahli chiqadi | | ochiq | `motion.js` + renderer animatsiyasi |
+| 3 | Vazifalar va eslatmalar ("soat 6 da eslat") | | ochiq | o'rta hajm, sozlamalarda saqlash kerak |
+| 4 | AI bilan suhbat | | ochiq | katta: API kaliti, xavfsizlik, narx kelishilishi kerak |
+| 5 | Codex rasm yarata oladimi, aniqlash | Shaxzod | ochiq | javob AGENTS.md jadvaliga yoziladi |
+| 6 | `dist/` ni tozalash (500 MB) | | ochiq | ixtiyoriy |
+
+Manba: 1–4 MaoMao'dan olingan g'oyalar.
 
 ---
 
