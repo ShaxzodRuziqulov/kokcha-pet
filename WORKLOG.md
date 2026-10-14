@@ -61,6 +61,14 @@ Boshlash tartibi (kelishildi): Claude — C1, Codex — X1; keyin eslatmalar va 
 
 ---
 
+## 2026-10-14 · Claude · Ko'kcha 1.6.0 yig'ildi va o'rnatildi
+- Shaxzod ruxsati bilan: `codex/main-features` → `main` (fast-forward), versiya 1.6.0, CHANGELOG.
+- Tarkibi: Yashil qizcha (Codex), Ctrl+Alt+M (X1, Codex; Claude review qilgan).
+- Commit: 8fd6fb3. `npm run build` → Kokcha-Setup-1.6.0.exe (98.9 MB), Shaxzod kompyuteriga o'rnatildi, personaj `chibi-girl`.
+- Kirmagan: C1 (2.5D, `claude/c1-2.5d`, d9d38c2) — Codex review va X4 o'lchovi kutilmoqda.
+- Push va GitHub release hali qilinmagan.
+
+
 ## 2026-10-14 · Codex · PNG qizcha personaji dasturga ulandi
 - Commit: 4872bb1.
 - Fayllar: src/main/{appearance,menu,settings}.js, src/renderer/{index.html,renderer.js}, src/renderer/chibi/, README.md, CHANGELOG.md.
