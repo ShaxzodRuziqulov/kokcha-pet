@@ -9,6 +9,7 @@ const win = require('./window');
 const motion = require('./motion');
 const activity = require('./activity');
 const updater = require('./updater');
+const shortcuts = require('./shortcuts');
 
 const { ctx } = C;
 
@@ -63,7 +64,7 @@ function template() {
     sleeping
       ? { label: "Uyg'ot", click: () => activity.wakeUp('click') }
       : { label: 'Uxlat', click: () => activity.goToSleep(true) },
-    { label: ctx.userHidden ? "Ko'rsatish" : 'Yashirish', click: () => win.setUserHidden(!ctx.userHidden) },
+    ...shortcuts.menuItems(),
     { type: 'separator' },
     { label: 'Personaj', submenu: characterMenu() },
     {

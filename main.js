@@ -24,6 +24,7 @@ const native = require('./src/main/native');
 const menu = require('./src/main/menu');
 const updater = require('./src/main/updater');
 const ipc = require('./src/main/ipc');
+const shortcuts = require('./src/main/shortcuts');
 
 const { ctx } = C;
 
@@ -49,6 +50,7 @@ if (!app.requestSingleInstanceLock()) {
     native.init();
     motion.init(w.getNativeWindowHandle());
     menu.createTray();
+    shortcuts.register();
 
     native.watchFullscreen();
     activity.start();
@@ -79,6 +81,7 @@ if (!app.requestSingleInstanceLock()) {
   });
 
   app.on('before-quit', () => {
+    shortcuts.unregister();
     C.rememberPosition();
     settings.save(true);
   });

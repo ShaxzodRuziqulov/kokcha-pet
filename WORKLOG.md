@@ -5,7 +5,7 @@ Qoidalar: [AGENTS.md](AGENTS.md).
 
 ## Hozir band
 - **Claude:** `src/renderer/` (characters.js, renderer.js, style.css, index.html) — C1 kelishildi; X4 boshlang'ich o'lchovidan keyin boshlanadi
-- **Codex:** `src/main/`, `src/preload.js`, `main.js`, yangi `src/reminders/`
+- **Codex:** X4 arxivlangan boshlang'ich nusxada o'lchanmoqda; X1 fayllari review uchun bo'shatildi
 - Umumiy fayllar (`package.json`, `CHANGELOG.md`): o'zgartirishdan oldin Shaxzod orqali kelishiladi.
 
 ## Kontrakt: main → renderer kanallari
@@ -46,11 +46,11 @@ Boshlash tartibi (kelishildi): Claude — C1, Codex — X1; keyin eslatmalar va 
 
 | # | Vazifa | Kim | Holat | Izoh |
 |---|---|---|---|---|
-| X0 | `preload.js`: `mood`, `remind` kanallarini qo'shish | Codex | review | Kanallar qo'shildi; Claude tekshiradi |
-| X1 | Ctrl+Alt+M: bir tugma bilan yashirish/ko'rsatish | Codex | kelishildi, X4 dan keyin | `globalShortcut`; tray menyusida ham ko'rinsin |
+| X0 | `preload.js`: `mood`, `remind` kanallarini qo'shish | Codex | tayyor | Claude d87f5c0 ni tasdiqladi |
+| X1 | Ctrl+Alt+M: bir tugma bilan yashirish/ko'rsatish | Codex | review | 7 mantiq sinovi; haqiqiy Electron normal/band yorliq sinovlari o'tdi; jismoniy tugma Shaxzodda |
 | X2 | Tez otib yuborishni aniqlash → `mood` yuborish | Codex | ochiq | `motion.js`, drag-end tezligi; renderer qismi C2 da |
 | X3 | Eslatmalar: qo'shish oynasi, saqlash, vaqtida `remind` yuborish | Codex | ochiq | sozlamalarda saqlansin, qayta ochilganda yo'qolmasin |
-| X4 | Tezlikni o'lchash: CPU/RAM (tinch, yurish, sudrash) | Codex | kelishildi, birinchi | **hozirgi holatni oldin o'lchash**, keyin C1/C3 bilan solishtirish |
+| X4 | Tezlikni o'lchash: CPU/RAM (tinch, yurish, sudrash) | Codex | ishlanmoqda | a37dc14 arxivi saqlandi; tinch/yurish 3×60s; haqiqiy sudrash hali o'lchanmagan |
 | C1 | 2.5D: barcha personajlarga hajm, yorug'lik, soya, kursorga qarab egilish | Claude | kelishildi, X4 kutilmoqda | GPU'siz, yengil bo'lishi shart |
 | C2 | Kayfiyat animatsiyalari: jahl (`mood`), eslatma pufakchasi (`remind`), cho'zilib-siqilish | Claude | ochiq | X0 dan keyin |
 | C3 | 3D tajriba (Three.js) | — | keyin | Shaxzod 2.5D natijasini ko'rib baholagandan keyin alohida topshiriq (Codex taklifi, kelishildi) |
@@ -60,6 +60,16 @@ Boshlash tartibi (kelishildi): Claude — C1, Codex — X1; keyin eslatmalar va 
 **Yo'nalish (Shaxzod, 2026-10-14):** Ko'kchani yaxshi darajaga olib chiqish, 2D dan 3D gacha. MaoMao'dan nusxa olinmaydi, lekin undan yaxshiroq va yengilroq bo'lishi kerak.
 
 ---
+
+## 2026-10-14 · Codex · X1: Ctrl+Alt+M va X4 boshlang'ich nusxa
+- Fayllar: main.js, src/main/menu.js, yangi src/main/shortcuts.js, WORKLOG.md.
+- X1: global yorliq va mavjud menyu bir callback orqali haqiqiy ko'rinishni almashtiradi; fullscreenHidden o'zgarmaydi. Band yorliqda accelerator yashiriladi, izoh ko'rsatiladi. Faqat o'z ro'yxatidan o'tgan yorliq chiqishda bo'shatiladi.
+- Tekshirildi: 3 fayl `node --check`; 7 izolyatsiyalangan mantiq sinovi; alohida profilli haqiqiy Electron normal/band globalShortcut, haqiqiy oynada yashirish/ko'rsatish, fullscreen bayrog'i simulyatsiyasi, unregister sinovlari o'tdi.
+- Dalillar (lokal, repo tashqarisida): `../verify-x1.cjs`, `../probe-x1.cjs`, `../x1-live-report.json`, `../x1-blocked-report.json`.
+- Tekshirilmadi: jismoniy Ctrl+Alt+M bosilishi va haqiqiy o'yin/to'liq ekran; Shaxzod sinaydi.
+- X4: C1'dan oldingi a37dc14 arxivi `../x4-baseline/` da saqlandi; alohida profil, Ko'kcha/original/medium, autoWalk=false, climb=false, quiet=true. Main+renderer+GPU va boshqa app jarayonlari hisoblanadi. `../x4-baseline-report.json` yozilmoqda. Oyna yashirilgan takrorlar `valid=false`; haqiqiy sudrash o'lchanmagan. To'liq X4 tugadi yoki C1 +2 punkt mezoni o'tdi deb hisoblanmaydi.
+- Keyingi agentga: X1 review qiling. C1 uchun boshlang'ich renderer nusxasi saqlandi; keyingi taqqoslash bir xil profil/tartibda bo'lishi kerak. CHANGELOG umumiy fayl bo'lgani uchun X1 yozuvi egalik kelishilgach qo'shiladi.
+- Commit: shu yozuv bilan birga "X1: toggle pet visibility with Ctrl+Alt+M" (`git log` orqali SHA).
 
 ## 2026-10-14 · Codex · X0: renderer kanallari ochildi
 - Fayllar: src/preload.js, AGENTS.md, WORKLOG.md.
