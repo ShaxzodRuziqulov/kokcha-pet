@@ -5,7 +5,7 @@ Qoidalar: [AGENTS.md](AGENTS.md).
 
 ## Hozir band
 - **Claude:** `src/renderer/` (characters.js, renderer.js, style.css, index.html) — C1 kelishildi; X4 boshlang'ich o'lchovidan keyin boshlanadi
-- **Codex:** X4 — `../x4-comparison/` o'lchov skriptlari va hisobotlari; keyin d9d38c2 review (renderer'ga faqat o'qish)
+- **Codex:** yangi personaj ishi tugadi, fayllar bo'shatildi. Shaxzodning mustaqil ishlash ruxsati asosida alohida worktree'da bajarildi.
 - Umumiy fayllar (`package.json`, `CHANGELOG.md`): o'zgartirishdan oldin Shaxzod orqali kelishiladi.
 
 ## Kontrakt: main → renderer kanallari
@@ -60,6 +60,17 @@ Boshlash tartibi (kelishildi): Claude — C1, Codex — X1; keyin eslatmalar va 
 **Yo'nalish (Shaxzod, 2026-10-14):** Ko'kchani yaxshi darajaga olib chiqish, 2D dan 3D gacha. MaoMao'dan nusxa olinmaydi, lekin undan yaxshiroq va yengilroq bo'lishi kerak.
 
 ---
+
+## 2026-10-14 · Codex · PNG qizcha personaji dasturga ulandi
+- Commit: 4872bb1.
+- Fayllar: src/main/{appearance,menu,settings}.js, src/renderer/{index.html,renderer.js}, src/renderer/chibi/, README.md, CHANGELOG.md.
+- Original to'rt PNG nusxasi o'zgarishsiz ishlatiladi. Atlaslar bir marta o'qiladi; canvas faqat haqiqiy poza/ifoda/burilish o'zgarishida chiziladi. Har kadrda rasm qayta ishlanmaydi; yangi dependency qo'shilmadi.
+- Pozalar: turish, yurish, o'tirish, yotish/uyqu, osilish, sakrash, yiqilish; devorda orqa ko'rinish. Yuz ifodalari, kursor tomonga burilish, raqs va Zzz indikatori.
+- Yangi o'rnatishda standart personaj qizcha; eski Ko'kcha bir marta almashtiriladi, keyin foydalanuvchi tanlovi saqlanadi. Eski personajlar va custom rasm ishlashi saqlandi. PNG ranglari o'zgartirilmaydi.
+- Tekshirildi: haqiqiy Electron manba va paketlangan app.asar bilan 27 tekshiruv; konsol xatosi yo'q. 1000 bir xil paint chaqiruvida 0 qayta chizish. Paketdagi 11 fayl manba bilan byte bo'yicha bir xil. Rasm yo'qolsa Ko'kchaga fallback ham tekshirildi.
+- Dalillar: ../chibi-qa/report.json, ../chibi-qa-packed/report.json va shu papkalardagi PNG ko'rinishlar. Lokal portable: kokcha-chibi/dist/Kokcha-Yashil-qizcha-preview.exe (~86.5 MiB). Build cache workspace'da; publish bajarilmadi, versiya oshirilmadi.
+- Cheklov: yurish bitta mid-step poza + yengil CSS tebranish; alohida oyoq qadamlari uchun yangi animatsiya kadrlari kerak. Haqiqiy foydalanuvchi hissi va sudrash Shaxzod tomonidan baholanadi.
+- Oldingi X4/C1 solishtirishi yakunlanmagan; bu yangi personaj topshirig'ida davom ettirilmadi.
 
 ## 2026-10-14 · Codex · Yangi yashil sochli chibi personaj rasmi
 - Fayl: assets/characters/green-girl-v1.png.
