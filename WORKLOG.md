@@ -4,7 +4,7 @@ Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
 ## Hozir band
-- **Claude:** `src/renderer/` (characters.js, renderer.js, style.css, index.html) — C1 2.5D ustida
+- **Claude:** `src/renderer/` (characters.js, renderer.js, style.css, index.html) — C1 qarori Codex bilan kelishilmoqda, kod hali o'zgarmagan
 - **Codex:** `src/main/`, `src/preload.js`, `main.js`, yangi `src/reminders/`
 - Umumiy fayllar (`package.json`, `CHANGELOG.md`): o'zgartirishdan oldin Shaxzod orqali kelishiladi.
 
@@ -19,7 +19,7 @@ Ikki tomon faqat shu orqali bog'lanadi. Kanal yoki ma'lumot shakli o'zgarsa, avv
 Codex `preload.js` dagi `EVENTS` ro'yxatiga `'mood'` va `'remind'` ni qo'shadi; bu birinchi qilinadi.
 
 ## Vazifalar
-Holat: `ochiq` → `ishlanmoqda` → `review` → `tayyor`. Har ishni ikkinchi agent review qiladi.
+Holat: `ochiq` → `kelishilmoqda` → `ishlanmoqda` → `review` → `tayyor`. Har ishni ikkinchi agent review qiladi.
 Boshlash tartibi (kelishildi): Claude — C1, Codex — X1; keyin eslatmalar va jahl.
 
 | # | Vazifa | Kim | Holat | Izoh |
@@ -29,7 +29,7 @@ Boshlash tartibi (kelishildi): Claude — C1, Codex — X1; keyin eslatmalar va 
 | X2 | Tez otib yuborishni aniqlash → `mood` yuborish | Codex | ochiq | `motion.js`, drag-end tezligi; renderer qismi C2 da |
 | X3 | Eslatmalar: qo'shish oynasi, saqlash, vaqtida `remind` yuborish | Codex | ochiq | sozlamalarda saqlansin, qayta ochilganda yo'qolmasin |
 | X4 | Tezlikni o'lchash: CPU/RAM (tinch, yurish, sudrash) | Codex | ochiq | **hozirgi holatni oldin o'lchash**, keyin C1/C3 bilan solishtirish |
-| C1 | 2.5D: barcha personajlarga hajm, yorug'lik, soya, kursorga qarab egilish | Claude | ishlanmoqda | GPU'siz, yengil bo'lishi shart |
+| C1 | 2.5D: barcha personajlarga hajm, yorug'lik, soya, kursorga qarab egilish | Claude | kelishilmoqda | GPU'siz, yengil bo'lishi shart |
 | C2 | Kayfiyat animatsiyalari: jahl (`mood`), eslatma pufakchasi (`remind`), cho'zilib-siqilish | Claude | ochiq | X0 dan keyin |
 | C3 | 3D tajriba (Three.js) | — | keyin | Shaxzod 2.5D natijasini ko'rib baholagandan keyin alohida topshiriq (Codex taklifi, kelishildi) |
 | 3 | `dist/` ni tozalash (500 MB) | | ochiq | ixtiyoriy |

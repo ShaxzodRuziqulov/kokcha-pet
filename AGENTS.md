@@ -4,6 +4,7 @@ Bu loyihada ikkita agent ishlaydi: **Claude** va **Codex**. Ularni Shaxzod boshq
 Bu qoidalar ikkala agent uchun bir xil. Claude ularni `CLAUDE.md` orqali o'qiydi.
 
 ## Har bir ishda
+0. Yangi sessiyada avval [docs/PROJECT.md](docs/PROJECT.md) ni o'qi: arxitektura, kanallar, saboqlar, qarorlar.
 1. **Boshlashdan oldin** [WORKLOG.md](WORKLOG.md) ni o'qi: oxirgi yozuvlar, "Qolgan ish" va "Hozir band" bo'limi.
 2. Boshqa agent band qilgan fayllarga tegma. Tegish kerak bo'lsa, avval Shaxzoddan so'ra.
 3. Katta ishni boshlaganda o'z fayllaringni "Hozir band" bo'limiga yoz, tugatgach o'chir.
