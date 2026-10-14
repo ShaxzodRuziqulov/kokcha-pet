@@ -3,7 +3,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 const EVENTS = [
   'state', 'woke', 'welcome', 'say', 'hover', 'ghost', 'look', 'clicked', 'landed', 'petted', 'settings',
-  'appearance', 'bubble-shift', 'update',
+  'appearance', 'bubble-shift', 'update', 'mood', 'remind',
 ];
 
 contextBridge.exposeInMainWorld('pet', {

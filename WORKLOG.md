@@ -24,7 +24,7 @@ Boshlash tartibi (kelishildi): Claude — C1, Codex — X1; keyin eslatmalar va 
 
 | # | Vazifa | Kim | Holat | Izoh |
 |---|---|---|---|---|
-| X0 | `preload.js`: `mood`, `remind` kanallarini qo'shish | Codex | ochiq | **birinchi**, kichik |
+| X0 | `preload.js`: `mood`, `remind` kanallarini qo'shish | Codex | review | Kanallar qo'shildi; Claude tekshiradi |
 | X1 | Ctrl+Alt+M: bir tugma bilan yashirish/ko'rsatish | Codex | ochiq | `globalShortcut`; tray menyusida ham ko'rinsin |
 | X2 | Tez otib yuborishni aniqlash → `mood` yuborish | Codex | ochiq | `motion.js`, drag-end tezligi; renderer qismi C2 da |
 | X3 | Eslatmalar: qo'shish oynasi, saqlash, vaqtida `remind` yuborish | Codex | ochiq | sozlamalarda saqlansin, qayta ochilganda yo'qolmasin |
@@ -38,6 +38,12 @@ Boshlash tartibi (kelishildi): Claude — C1, Codex — X1; keyin eslatmalar va 
 **Yo'nalish (Shaxzod, 2026-10-14):** Ko'kchani yaxshi darajaga olib chiqish, 2D dan 3D gacha. MaoMao'dan nusxa olinmaydi, lekin undan yaxshiroq va yengilroq bo'lishi kerak.
 
 ---
+
+## 2026-10-14 · Codex · X0: renderer kanallari ochildi
+- Fayllar: src/preload.js, AGENTS.md, WORKLOG.md.
+- Tekshirildi: `node --check src/preload.js`; faqat allowlist kengaytirildi.
+- Keyingi agentga: `pet.on('mood', cb)` va `pet.on('remind', cb)` mavjud; ma'lumot shakli kontrakt bo'yicha o'zgarishsiz.
+- Commit: ushbu yozuv bilan birga `git log` dagi "X0: expose mood and remind events".
 
 ## 2026-10-14 · Claude · Ikki agentli ish tartibi yo'lga qo'yildi
 - Fayllar: AGENTS.md, CLAUDE.md, WORKLOG.md (yangi)
