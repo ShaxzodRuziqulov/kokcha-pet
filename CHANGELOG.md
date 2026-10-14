@@ -1,5 +1,8 @@
 # O'zgarishlar
 
+## Keyingi versiya
+- Yashil qizcha: original PNG rasmlar asosidagi yangi personaj, yurish, o'tirish, yotish, osilish, sakrash va yiqilish pozalari; yuz ifodalari va kursor tomonga burilish. Menyu → Personaj → Yashil qizcha.
+
 ## 1.5.0
 ### O'rnatish va yangilanish
 - 📦 **Haqiqiy o'rnatuvchi:** `Kokcha-Setup-1.5.0.exe` — bir bosishda o'rnatiladi, ish stoli va Start menyuga yorliq qo'yadi, Windows "Ilovalar" ro'yxatidan o'chirsa bo'ladi

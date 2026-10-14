@@ -69,7 +69,7 @@ function template() {
     { label: 'Personaj', submenu: characterMenu() },
     {
       label: 'Rang',
-      enabled: s.character !== 'custom',
+      enabled: s.character !== 'custom' && s.character !== 'chibi-girl',
       submenu: radios(Object.entries(appearance.COLORS), (k) => s.color === k, appearance.setColor),
     },
     { type: 'separator' },

@@ -85,6 +85,12 @@ scripts/release.mjs  release chiqarish
 ```
 
 ## Personajni almashtirish
+
+**Yangi Yashil qizcha:** tayyor PNG rasmlardan chiziladi; yurish, o'tirish, uyqu/yotish,
+osilish, sakrash va yiqilish pozalari hamda yuz ifodalari mavjud. Menyu → **Personaj → Yashil qizcha**.
+Eski standart Ko'kcha ilk ochishda yangi qiyofaga o'tadi; keyin tanlagan personajingiz eslab qolinadi.
+Ranglar original rasmga mos qoladi. Bu birinchi variantda yurish bitta poza va yengil tebranishdan iborat;
+oyoq-qo'llari qadamlab o'zgaradigan animatsiya uchun alohida yurish kadrlari kerak.
 Ko'kcha ustida o'ng tugma → **Personaj**:
 - **Tayyor personajlar:** Ko'kcha 🌱, Mushukcha 🐱, Kuchukcha 🐶, Pingvin 🐧. Hammasi to'liq animatsiyali.
 - **Rang:** har bir tayyor personajni 5 xil rangda qilish mumkin.

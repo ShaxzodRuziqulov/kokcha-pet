@@ -6,6 +6,7 @@
         content="default-src 'self'; img-src 'self' file: data:; style-src 'self' 'unsafe-inline'; script-src 'self'" />
   <title>Ko'kcha</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="chibi/chibi.css" />
 </head>
 <body class="idle">
   <div id="bubble" class="hidden">
@@ -15,6 +16,7 @@
 
   <div id="pet">
    <div id="pet-inner">
+    <canvas id="chibi" class="hidden" aria-label="Yashil qizcha"></canvas>
     <!-- "O'z rasmim" tanlansa, shu img ishlatiladi -->
     <div id="sprite-wrap"><img id="sprite" class="hidden" alt="" draggable="false" /></div>
 
@@ -25,6 +27,7 @@
   </div>
 
   <script src="characters.js"></script>
+  <script src="chibi/chibi.js"></script>
   <script src="renderer.js"></script>
 </body>
 </html>

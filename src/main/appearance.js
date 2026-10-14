@@ -11,7 +11,7 @@ const win = require('./window');
 const activity = require('./activity');
 
 // Tayyor personajlar (ko'rinishi — renderer/characters.js) va ranglar (renderer/style.css)
-const CHARACTERS = { kokcha: "Ko'kcha", cat: 'Mushukcha', dog: 'Kuchukcha', penguin: 'Pingvin' };
+const CHARACTERS = { 'chibi-girl': 'Yashil qizcha', kokcha: "Ko'kcha", cat: 'Mushukcha', dog: 'Kuchukcha', penguin: 'Pingvin' };
 const CUSTOM_NAME = "Do'stcha";
 const COLORS = {
   original: 'Asl rang',
@@ -61,13 +61,23 @@ function normalize() {
   if (!COLORS[s.color]) s.color = 'original';
   if (!CHARACTERS[s.character] && s.character !== 'custom') {
     // Avval custom/ papkaga rasm qo'yganlar uchun — o'sha rasm qoladi
-    s.character = findCustomSprites().idle ? 'custom' : 'kokcha';
+    s.character = findCustomSprites().idle ? 'custom' : 'chibi-girl';
+  }
+  // Eski standart Ko'kcha bir marta yangi qiyofaga o'tadi; keyingi tanlov eslab qolinadi.
+  if (!s.chibiIntroduced) {
+    if (s.character === 'kokcha') s.character = 'chibi-girl';
+    s.chibiIntroduced = true;
   }
 }
 
 function current() {
   let character = ctx.settings.character;
   let sprites = {};
+  if (character === 'chibi-girl') {
+    const image = path.join(app.getAppPath(), 'src', 'renderer', 'chibi', 'standing.png');
+    if (fs.existsSync(image)) sprites.idle = fileUrl(image);
+    else character = 'kokcha';
+  }
   if (character === 'custom') {
     sprites = findCustomSprites();
     const img = ctx.settings.customImage;

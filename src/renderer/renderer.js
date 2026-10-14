@@ -102,6 +102,9 @@ let petName = "Ko'kcha";
 let character = null;
 let quiet = false;
 let state = 'idle';
+let currentPose = 'stand';
+let currentSide = null;
+let chibiReady = false;
 let talking = false;
 let bubbleTimer = null;
 let lastPettedTalk = 0;
@@ -111,6 +114,20 @@ function render() {
   body.classList.remove('idle', 'walk', 'sleep');
   body.classList.add(state);
   body.classList.toggle('talk', talking);
+
+  const isChibi = character === 'chibi-girl';
+  body.classList.toggle('chibi-mode', isChibi);
+  document.getElementById('chibi').classList.toggle('hidden', !isChibi || !chibiReady);
+  if (isChibi && chibiReady) {
+    body.classList.remove('sprite-mode');
+    sprite.classList.add('hidden');
+    mascot.classList.add('hidden');
+    window.Chibi.paint({ state, pose: currentPose, side: currentSide,
+      expression: body.classList.contains('angry') ? 'angry' : talking ? 'talking' :
+        body.classList.contains('yawn') ? 'sleeping' :
+        body.classList.contains('happy') ? 'happy' : body.classList.contains('hover') ? 'embarrassed' : 'neutral' });
+    return;
+  }
 
   const key = talking && sprites.talk ? 'talk' : state;
   const src = sprites[key] || sprites.idle;
@@ -153,7 +170,8 @@ const bodyTimers = {};
 function mood(cls, ms) {
   clearTimeout(bodyTimers[cls]);
   body.classList.add(cls);
-  bodyTimers[cls] = setTimeout(() => body.classList.remove(cls), ms);
+  bodyTimers[cls] = setTimeout(() => { body.classList.remove(cls); render(); }, ms);
+  render();
 }
 
 // Yurakcha, nota kabi uchib chiqadigan zarrachalar
@@ -314,6 +332,8 @@ const POSES = ['stand', 'sit', 'ledge', 'lie', 'climb', 'hang', 'jump', 'fall'];
 
 window.pet.on('state', ({ state: s, dir, pose, side }) => {
   state = s;
+  currentPose = pose || 'stand';
+  currentSide = side;
   for (const p of POSES) body.classList.toggle(`pose-${p}`, p === pose);
   body.classList.toggle('side-left', side === 'left');
   body.classList.toggle('side-right', side === 'right');
@@ -366,7 +386,12 @@ window.pet.on('clicked', () => {
 });
 
 window.pet.on('landed', () => play('land', 350));
-window.pet.on('hover', (over) => body.classList.toggle('hover', over));
+window.pet.on('hover', (over) => { body.classList.toggle('hover', over); render(); });
+window.pet.on('mood', (data) => {
+  if (character !== 'chibi-girl' || data?.mood !== 'angry' || state === 'sleep') return;
+  const level = [1, 2, 3].includes(data.level) ? data.level : 1;
+  mood('angry', 1500 + level * 700);
+});
 window.pet.on('ghost', (on) => body.classList.toggle('ghost', on));
 
 // Yangi versiya: o'rnatilganida — yuklab olindi, portable'da — chiqdi
@@ -397,6 +422,7 @@ window.pet.on('appearance', (a) => {
 
 // Ko'zlar kursorga qaraydi
 window.pet.on('look', ({ dx, dy }) => {
+  if (character === 'chibi-girl') { window.Chibi.look(dx); return; }
   const flip = body.classList.contains('dir-left') ? -1 : 1;
   const dist = Math.hypot(dx, dy) || 1;
   const k = Math.min(1, dist / 200);   // yaqin bo'lsa — kamroq buriladi
@@ -409,6 +435,7 @@ window.pet.on('look', ({ dx, dy }) => {
 
 // ---- Boshlash ----
 (async () => {
+  window.Chibi.ready.then(() => { chibiReady = true; render(); }).catch(error => console.error('Personaj rasmlari yuklanmadi:', error));
   const init = await window.pet.getInit();
   quiet = init.quiet;
   applyAppearance(init);

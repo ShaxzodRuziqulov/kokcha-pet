@@ -1,0 +1,24 @@
+#chibi {
+  width: 150px;
+  height: 150px;
+  display: block;
+  pointer-events: none;
+  transform-origin: 50% 100%;
+}
+body.chibi-mode.idle:not(.pose-lie):not(.dancing) #chibi { animation: chibi-breathe 3s ease-in-out infinite; }
+body.chibi-mode.walk #chibi { animation: chibi-step 0.5s ease-in-out infinite; }
+body.chibi-mode.sleep #chibi { animation: chibi-breathe 4s ease-in-out infinite; }
+body.chibi-mode.dancing #chibi { animation: chibi-dance 0.5s ease-in-out infinite; }
+body.chibi-mode.sleep #sprite-zzz { display: block; top: 45px; right: 24px; }
+@keyframes chibi-dance {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg) translateY(-2px); }
+}
+@keyframes chibi-breathe {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.008); }
+}
+@keyframes chibi-step {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
