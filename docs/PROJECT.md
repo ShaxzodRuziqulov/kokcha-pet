@@ -38,7 +38,7 @@ scripts/release.mjs     GitHub Release yaratish (CHANGELOG'dan tavsif oladi)
 
 ## main ↔ renderer
 - main → renderer: `C.send(kanal, ma'lumot)` (context.js). Renderer faqat `preload.js` dagi `EVENTS` ro'yxatini oladi:
-  `state, woke, welcome, say, hover, ghost, look, clicked, landed, petted, settings, appearance, bubble-shift, update`.
+  `state, woke, welcome, say, hover, ghost, look, clicked, landed, petted, settings, appearance, bubble-shift, update, mood, remind` (`mood`/`remind` — X0, `d87f5c0`).
 - renderer → main: `getInit, dragStart, dragMove, dragEnd, click, menu, dance`.
 - `state` = `{ state: idle|walk|sleep, dir, pose: stand|sit|ledge|lie|climb|hang|jump|fall, side }` → renderer `body` klasslariga aylantiradi (`pose-sit`, `side-left`...).
 - `look` = `{ dx, dy }` — kursorning personajga nisbatan joyi; ko'zlar shunga qaraydi.
@@ -77,7 +77,7 @@ scripts/release.mjs     GitHub Release yaratish (CHANGELOG'dan tavsif oladi)
 
 ## Yo'nalish va qarorlar
 - **Maqsad (2026-10-14):** Ko'kchani yuqori darajaga olib chiqish, 2D → 2.5D → 3D. MaoMao (djurayev-ab.itch.io/maomao) — o'xshash loyiha; undan nusxa olinmaydi, lekin undan yengilroq va chiroyliroq bo'lishi kerak.
-- Avval 2.5D (SVG gradientlar, GPU'siz). Haqiqiy 3D (Three.js) — Shaxzod 2.5D natijasini baholagandan keyin alohida qaror.
+- Avval 2.5D (SVG gradientlar; Three.js/WebGL qo'shilmaydi, SVG filtrlar ishlatilmaydi, resurs sarfi X4 tartibida o'lchanadi — Electron SVG/CSS'ni chizishda GPU'dan foydalanishi mumkin). Haqiqiy 3D (Three.js) — Shaxzod 2.5D natijasini baholagandan keyin alohida qaror.
 - AI bilan suhbat — hozircha qilinmaydi.
 - Ish tartibi: har qaror ikkala agent rozi bo'lgandan keyin boshlanadi (bir agent taklif qiladi, ikkinchisi har bandga "roziman/qarshiman + sabab"; 3 raundda kelishilmasa — Shaxzod hal qiladi).
 - Hajm: ~89 MB normal (MaoMao zip ~78 MB). Tauri'ga o'tish (~5–10 MB) hozir arzimaydi.
