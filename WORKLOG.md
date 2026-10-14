@@ -4,8 +4,7 @@ Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
 ## Hozir band
-- **Claude:** `src/renderer/` (characters.js, renderer.js, style.css, index.html) — C1 kelishildi; X4 boshlang'ich o'lchovidan keyin boshlanadi
-- **Codex:** yangi personaj ishi tugadi, fayllar bo'shatildi. Shaxzodning mustaqil ishlash ruxsati asosida alohida worktree'da bajarildi.
+_Hech kim._ Barcha ish `main` branch'da, alohida worktree yo'q.
 - Umumiy fayllar (`package.json`, `CHANGELOG.md`): o'zgartirishdan oldin Shaxzod orqali kelishiladi.
 
 ## Kontrakt: main → renderer kanallari
@@ -50,16 +49,23 @@ Boshlash tartibi (kelishildi): Claude — C1, Codex — X1; keyin eslatmalar va 
 | X1 | Ctrl+Alt+M: bir tugma bilan yashirish/ko'rsatish | Codex | tayyor | Claude 0bdee6e ni tasdiqladi; jismoniy tugma Shaxzodda |
 | X2 | Tez otib yuborishni aniqlash → `mood` yuborish | Codex | ochiq | `motion.js`, drag-end tezligi; renderer qismi C2 da |
 | X3 | Eslatmalar: qo'shish oynasi, saqlash, vaqtida `remind` yuborish | Codex | ochiq | sozlamalarda saqlansin, qayta ochilganda yo'qolmasin |
-| X4 | Tezlikni o'lchash: CPU/RAM (tinch, yurish, sudrash) | Codex | ishlanmoqda | a37dc14 va d9d38c2 bir xil tuzatilgan skript bilan ketma-ket; Shaxzod haqiqiy sudrashga rozi |
-| C1 | 2.5D: barcha personajlarga hajm, yorug'lik, soya, kursorga qarab egilish | Claude | kelishildi, X4 kutilmoqda | GPU'siz, yengil bo'lishi shart |
+| X4 | Tezlikni o'lchash: CPU/RAM (tinch, yurish, sudrash) | Codex | to'xtatilgan | vaqtinchalik o'lchov fayllari tozalandi; kerak bo'lsa qayta, toza skript bilan |
+| C1 | 2.5D: eski 4 ta SVG personajga hajm, yorug'lik, bosh burilishi | Claude | kutilmoqda | `claude/c1-2.5d` branch'ida (d9d38c2), Codex review va X4 bo'lmaguncha main'ga qo'shilmaydi |
 | C2 | Kayfiyat animatsiyalari: jahl (`mood`), eslatma pufakchasi (`remind`), cho'zilib-siqilish | Claude | ochiq | X0 dan keyin |
 | C3 | 3D tajriba (Three.js) | — | keyin | Shaxzod 2.5D natijasini ko'rib baholagandan keyin alohida topshiriq (Codex taklifi, kelishildi) |
-| 3 | `dist/` ni tozalash (500 MB) | | ochiq | ixtiyoriy |
+| 3 | `dist/` ni tozalash | Claude | tayyor | faqat 1.6.0 qoldi |
 | — | AI bilan suhbat | — | kerak emas | Shaxzod qarori (2026-10-14) |
 
 **Yo'nalish (Shaxzod, 2026-10-14):** Ko'kchani yaxshi darajaga olib chiqish, 2D dan 3D gacha. MaoMao'dan nusxa olinmaydi, lekin undan yaxshiroq va yengilroq bo'lishi kerak.
 
 ---
+
+## 2026-10-14 · Claude · Loyiha papkasi tozalandi
+- Shaxzod so'rovi: `D:\projects\kokcha-pet` da faqat `kokcha-pet` qoldi.
+- O'chirildi: worktree'lar (`kokcha-c1`, `kokcha-chibi`), birlashtirilgan branch'lar (`codex/main-features`, `codex/chibi-character`), X1/X4/chibi sinov profillari, skriptlar va hisobotlar, `build-cache`, `.idea`, `dist/` dagi 1.5.0 fayllari.
+- Repo'dan olindi: `assets/characters/green-girl-v1.png` (kodda ishlatilmagan; git tarixida `e5c21d4` da bor).
+- Qoldi: `claude/c1-2.5d` branch'i (birlashtirilmagan 2.5D ishi).
+- **Qoida:** vaqtinchalik sinov fayllari loyiha papkasidan tashqarida (tizim Temp'ida) yaratiladi va ish tugagach o'chiriladi.
 
 ## 2026-10-14 · Claude · Ko'kcha 1.6.0 yig'ildi va o'rnatildi
 - Shaxzod ruxsati bilan: `codex/main-features` → `main` (fast-forward), versiya 1.6.0, CHANGELOG.
