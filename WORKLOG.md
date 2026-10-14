@@ -14,11 +14,13 @@ Holat: `ochiq` → `ishlanmoqda` → `review` → `tayyor`. "Kim" ustunini Shaxz
 | 1 | Ctrl+Alt+M: bir tugma bilan yoqish va o'chirish | | ochiq | kichik, `src/main/` |
 | 2 | Tez otib yuborilsa, personajning jahli chiqadi | | ochiq | `motion.js` + renderer animatsiyasi |
 | 3 | Vazifalar va eslatmalar ("soat 6 da eslat") | | ochiq | o'rta hajm, sozlamalarda saqlash kerak |
-| 4 | AI bilan suhbat | | ochiq | katta: API kaliti, xavfsizlik, narx kelishilishi kerak |
+| 4 | AI bilan suhbat | — | kerak emas | Shaxzod qarori (2026-10-14): hozircha qilinmaydi |
 | 5 | Codex rasm yarata oladimi, aniqlash | Shaxzod | ochiq | javob AGENTS.md jadvaliga yoziladi |
 | 6 | `dist/` ni tozalash (500 MB) | | ochiq | ixtiyoriy |
 
 Manba: 1–4 MaoMao'dan olingan g'oyalar.
+
+**Yo'nalish (Shaxzod, 2026-10-14):** Ko'kchani yaxshi darajaga olib chiqish, 2D dan 3D gacha. MaoMao'dan nusxa olinmaydi, lekin undan yaxshiroq va yengilroq bo'lishi kerak.
 
 ---
 
