@@ -10,6 +10,7 @@ Bu qoidalar ikkala agent uchun bir xil. Claude ularni `CLAUDE.md` orqali o'qiydi
 3. Katta ishni boshlaganda o'z fayllaringni "Hozir band" bo'limiga yoz, tugatgach o'chir.
 4. Ish tugagach, o'zgarishni **commit qil** va WORKLOG.md'ga **eng yuqoriga** yozuv qo'sh (namuna pastda).
 5. Boshqa agent yozgan kodni o'zgartirsang, sababini yozuvda ayt.
+6. **Toza papka:** sinov profillari, o'lchov skriptlari, hisobotlar va vaqtinchalik worktree'lar loyiha papkasida ham, uning ota papkasida (`D:\projects\kokcha-pet`) ham yaratilmaydi — faqat tizim Temp'ida. Ish tugagach ular o'chiriladi, birlashtirilgan branch'lar ham o'chiriladi.
 
 ## Ruxsatsiz qilinmaydi
 - `git push`, `npm run release`, GitHub release, teg qo'yish.
