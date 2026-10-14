@@ -5,7 +5,7 @@ Qoidalar: [AGENTS.md](AGENTS.md).
 
 ## Hozir band
 - **Claude:** `src/renderer/` (characters.js, renderer.js, style.css, index.html) — C1 kelishildi; X4 boshlang'ich o'lchovidan keyin boshlanadi
-- **Codex:** hozir fayl band qilmagan; X1 review'da, X4 qisman natija bilan qolgan
+- **Codex:** X4 — `../x4-comparison/` o'lchov skriptlari va hisobotlari; keyin d9d38c2 review (renderer'ga faqat o'qish)
 - Umumiy fayllar (`package.json`, `CHANGELOG.md`): o'zgartirishdan oldin Shaxzod orqali kelishiladi.
 
 ## Kontrakt: main → renderer kanallari
@@ -47,10 +47,10 @@ Boshlash tartibi (kelishildi): Claude — C1, Codex — X1; keyin eslatmalar va 
 | # | Vazifa | Kim | Holat | Izoh |
 |---|---|---|---|---|
 | X0 | `preload.js`: `mood`, `remind` kanallarini qo'shish | Codex | tayyor | Claude d87f5c0 ni tasdiqladi |
-| X1 | Ctrl+Alt+M: bir tugma bilan yashirish/ko'rsatish | Codex | review | 7 mantiq sinovi; haqiqiy Electron normal/band yorliq sinovlari o'tdi; jismoniy tugma Shaxzodda |
+| X1 | Ctrl+Alt+M: bir tugma bilan yashirish/ko'rsatish | Codex | tayyor | Claude 0bdee6e ni tasdiqladi; jismoniy tugma Shaxzodda |
 | X2 | Tez otib yuborishni aniqlash → `mood` yuborish | Codex | ochiq | `motion.js`, drag-end tezligi; renderer qismi C2 da |
 | X3 | Eslatmalar: qo'shish oynasi, saqlash, vaqtida `remind` yuborish | Codex | ochiq | sozlamalarda saqlansin, qayta ochilganda yo'qolmasin |
-| X4 | Tezlikni o'lchash: CPU/RAM (tinch, yurish, sudrash) | Codex | qisman, tugamagan | a37dc14 arxivi saqlandi; 2 yaroqli tinch takror, yurish/sudrash va C1 taqqoslash qolgan |
+| X4 | Tezlikni o'lchash: CPU/RAM (tinch, yurish, sudrash) | Codex | ishlanmoqda | a37dc14 va d9d38c2 bir xil tuzatilgan skript bilan ketma-ket; Shaxzod haqiqiy sudrashga rozi |
 | C1 | 2.5D: barcha personajlarga hajm, yorug'lik, soya, kursorga qarab egilish | Claude | kelishildi, X4 kutilmoqda | GPU'siz, yengil bo'lishi shart |
 | C2 | Kayfiyat animatsiyalari: jahl (`mood`), eslatma pufakchasi (`remind`), cho'zilib-siqilish | Claude | ochiq | X0 dan keyin |
 | C3 | 3D tajriba (Three.js) | — | keyin | Shaxzod 2.5D natijasini ko'rib baholagandan keyin alohida topshiriq (Codex taklifi, kelishildi) |
@@ -60,6 +60,13 @@ Boshlash tartibi (kelishildi): Claude — C1, Codex — X1; keyin eslatmalar va 
 **Yo'nalish (Shaxzod, 2026-10-14):** Ko'kchani yaxshi darajaga olib chiqish, 2D dan 3D gacha. MaoMao'dan nusxa olinmaydi, lekin undan yaxshiroq va yengilroq bo'lishi kerak.
 
 ---
+
+## 2026-10-14 · Codex · Yangi yashil sochli chibi personaj rasmi
+- Fayl: assets/characters/green-girl-v1.png.
+- Shaxzodning alohida topshirig'i: old ko'rinish, yashil soch/ko'z/sviter, qora yubka/etik, shaffof fon, matnsiz original personaj.
+- Tekshirildi: rasm ko'z bilan ko'rildi; PNG 1254×1254, RGBA, haqiqiy alpha kanali mavjud.
+- Commit: e5c21d4.
+- Faqat rasm tayyorlandi; ilovaga personaj sifatida ulash va animatsiyalar ushbu topshiriqda bajarilmadi.
 
 ## 2026-10-14 · Codex · X4: o'lchov tugadi, qabul mezoni hali bajarilmadi
 - Dalil: `../x4-baseline-report.json`; source a37dc14, Electron 37.10.3, alohida test profil.
