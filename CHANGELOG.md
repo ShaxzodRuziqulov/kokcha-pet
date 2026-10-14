@@ -1,7 +1,8 @@
 # O'zgarishlar
 
-## Keyingi versiya
-- Yashil qizcha: original PNG rasmlar asosidagi yangi personaj, yurish, o'tirish, yotish, osilish, sakrash va yiqilish pozalari; yuz ifodalari va kursor tomonga burilish. Menyu → Personaj → Yashil qizcha.
+## 1.6.0
+- 👧 **Yangi personaj — Yashil qizcha:** yurish, o'tirish, yotish, osilish, sakrash va yiqilish pozalari; kulish, jahl, uyqu, gapirish va uyalish ifodalari; kursor tomonga burilish. Menyu → Personaj → Yashil qizcha.
+- ⌨️ **Ctrl+Alt+M:** bir tugma bilan yashirish va ko'rsatish (tray menyusida ham ko'rinadi). Tugma boshqa dastur tomonidan band bo'lsa, menyuda aytiladi.
 
 ## 1.5.0
 ### O'rnatish va yangilanish
