@@ -3,6 +3,13 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+
+## 2026-10-15 · Claude · Ko'kcha 1.9.0 chiqarildi
+- Claude review: Codex 925d4e1 (persona main) va 4fcffd8 (P3) — tasdiqlandi; birgalikdagi Electron sinovi (start/menu/takror/otish/silash/taymer/Ko'kcha/qaytish/saqlash) o'tdi.
+- 1.8.0 alohida chiqarilmadi — CHANGELOG'da 1.9.0 ga birlashtirildi. Menyu nomlari bilan moslandi: quvnoq/uyatchan/qaysar/sho'x.
+- app.asar ichida tekshirildi: gaplar, persona menyusi, walk/idle slotlar (gapirish paytida kelishilgan bo'yicha statik + yuz), konsol 0 xato.
+- Commit 8a16a9e, teg v1.9.0, release chiqdi (latest.yml: 1.9.0), Shaxzod kompyuteriga o'rnatildi.
+- Ochiq: yurishda qoldiq sirpanish (oraliq oyoq pozalari kerak).
 ## 2026-10-15 · Codex · Persona P3: vaqtinchalik holat ortidagi taymer e'loni
 - Claude `925d4e1` ni tasdiqlagach bildirgan P3 tuzatildi. `src/main/persona.js`: hodisa boshlanishidagi asosiy id faqat xotirada saqlanadi; temporary tugaganda joriy asosiy id farq qilsa `timer`, farq qilmasa `event` yuboriladi. Taqqoslash muddati o'tgan asosiy navbat ham yangilangandan keyin bajariladi — kechikkan resume'da ikkala muddat birga o'tsa ham ishlaydi.
 - Takroriy silash yoki otish hali faol temporary muddatini uzaytirsa/almashtirsa boshlang'ich base id saqlanadi: allaqachon yashiringan taymer e'loni yo'qolmaydi. Effektiv id o'zgarmasa deduplikatsiya saqlandi; disk formati va renderer kodi o'zgarmadi. PROJECT kontrakti aniqlashtirildi.
