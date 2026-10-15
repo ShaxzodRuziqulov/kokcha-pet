@@ -1,5 +1,9 @@
 # O'zgarishlar
 
+## 1.10.1
+- Midori'ning mashg'ulotlari (kitob, choy, gul sug'orish, cho'zilish) endi har 45–90 soniyada chiqadi; o'tirgan bo'lsa avval turadi, shu paytda yurib ketmaydi.
+- Panelda yangi "🎬 Harakat" bo'limi — xohlagan harakatni o'zingiz tanlaysiz.
+
 ## 1.10.0
 ### 🔄 Yangilanish
 - Menyuda **"Yangilanishni tekshirish"** — personaj natijani aytadi; yuklanish foizi menyuda ko'rinadi.
