@@ -1,10 +1,10 @@
 # O'zgarishlar
 
-## Keyingi versiya
+## 1.7.0
 - Qizcha ifodalari ¾/yon ko'rinish, o'tirish, yurish va qirrada o'tirishda ham almashadi; ko'z pirpirashi shu holatlarda ham ishlaydi.
 - Qizcha tirmashayotganda qo'l va oyoqlari ikki alohida kadrda almashadi.
 - Shaxsiy eslatmalar: menyudan matn va vaqt kiriting; saqlanadi, vaqti kelganda eslatadi. Yashirin holatda qolgan eslatmalar qaytgach ko'rsatiladi.
-- Tez sudrab qo'yib yuborilganda otish kuchiga qarab jahlning uch darajasi. Oddiy sudrash va oxirida to'xtab qo'yish jahlni yoqmaydi.
+- Yashil qizcha: tez sudrab qo'yib yuborilganda otish kuchiga qarab jahlning uch darajasi (boshqa personajlarda keyingi versiyada). Oddiy sudrash va oxirida to'xtab qo'yish jahlni yoqmaydi.
 
 ## 1.6.1
 - Yashil qizcha kadrlari alohida, 400 px gacha PNG'larga ajratildi; qo'shni kadrdan soch kirishi va osilishdagi taxta olib tashlandi. Rasmlar jami 6.54 MB dan 0.55 MB ga tushdi, ochilishdagi alfa skaneri olib tashlandi.
