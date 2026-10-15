@@ -200,9 +200,13 @@ function walkBounds() {
   return { min: wa.x + m, max: wa.x + wa.width - m, ledge: false };
 }
 
+// Oraliq bir qadamga ham sig'masa — joyida burilib titramasin: yurmaydi, tinch turadi
+const tooNarrow = (b) => b.max - b.min < 2 * WALK_SPEED;
+
 function startWalk(dir) {
   if (ctx.state !== 'idle' || ctx.motion || ctx.dragging || ctx.hovering || Date.now() < ctx.danceUntil) return;
   if (!C.alive() || !ctx.win.isVisible()) return;
+  if (tooNarrow(walkBounds())) return;
   if (ctx.pose !== 'stand') setPose('stand');
   ctx.walkDir = dir || (Math.random() < 0.5 ? -1 : 1);
   ctx.motion = 'walk';
@@ -215,6 +219,7 @@ function startWalk(dir) {
 
     const [x, y] = ctx.win.getPosition();
     const b = walkBounds();
+    if (tooNarrow(b)) return stopWalk();
     const cx = x + C.winW() / 2 + ctx.walkDir * WALK_SPEED;
     // Faqat chetga qarab yurayotgan bo'lsa (aks holda chetda titrab qoladi)
     if ((ctx.walkDir < 0 && cx < b.min) || (ctx.walkDir > 0 && cx > b.max)) return onEdge(b);
