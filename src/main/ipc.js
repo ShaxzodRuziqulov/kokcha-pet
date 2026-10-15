@@ -45,19 +45,23 @@ function register() {
     const c = screen.getCursorScreenPoint();
     const [x, y] = ctx.win.getPosition();
     dragFrom = { cx: c.x, cy: c.y, x, y };
+    motion.beginDrag(c);
     if (ctx.state === 'sleep') activity.wakeUp('drag');
   });
 
   ipcMain.on('drag-move', () => {
     if (!C.alive() || !ctx.dragging || !dragFrom) return;
     const c = screen.getCursorScreenPoint();
+    motion.sampleDrag(c);
     C.placeAt(dragFrom.x + c.x - dragFrom.cx, dragFrom.y + c.y - dragFrom.cy);
   });
 
   // Qo'yib yuborilganda pastga tushadi — ostida oyna bo'lsa, o'sha oyna ustiga
   ipcMain.on('drag-end', () => {
+    if (!ctx.dragging || !dragFrom) return;
     ctx.dragging = false;
     dragFrom = null;
+    motion.finishDrag(screen.getCursorScreenPoint());
     motion.fall();
   });
 }

@@ -19,6 +19,34 @@ const PAUSE_MS = 3000;         // yozishdan shuncha to'xtasangiz — gapirsa bo'
 let timer = null;
 let wantClimb = false;         // devorga yetganda tirmashsin
 let getSurfaces = null;        // surfaces.js
+let dragSamples = null;
+const THROW_WINDOW_MS = 120;
+
+// Faqat qo'yib yuborish oldidagi harakat: uzoq sudrash va oxirida to'xtash jahl emas.
+function beginDrag(cursor, now = performance.now()) {
+  dragSamples = [{ x: cursor.x, y: cursor.y, t: now }];
+}
+
+function sampleDrag(cursor, now = performance.now()) {
+  if (!dragSamples) return;
+  dragSamples.push({ x: cursor.x, y: cursor.y, t: now });
+  dragSamples = dragSamples.filter(p => now - p.t <= THROW_WINDOW_MS).slice(-32);
+}
+
+function finishDrag(cursor, now = performance.now()) {
+  if (!dragSamples) return;
+  const last = dragSamples[dragSamples.length - 1];
+  if (now - last.t > 100) { dragSamples = null; return; }
+  sampleDrag(cursor, now);
+  const first = dragSamples[0];
+  dragSamples = null;
+  const elapsed = now - first.t;
+  if (elapsed < 30 || elapsed > THROW_WINDOW_MS || !C.alive()) return;
+  const distance = Math.hypot(cursor.x - first.x, cursor.y - first.y) / C.scale();
+  const speed = Math.round(distance * 1000 / elapsed);
+  if (distance < 35 || speed < 700) return;
+  C.send('mood', { mood: 'angry', level: speed >= 2200 ? 3 : speed >= 1400 ? 2 : 1 });
+}
 
 function init(nativeHandle) {
   getSurfaces = createSurfaceFinder(nativeHandle);
@@ -400,4 +428,7 @@ Object.assign(module.exports, {
   findJumpTarget,
   usableSurfaces,
   decide,
+  beginDrag,
+  sampleDrag,
+  finishDrag,
 });

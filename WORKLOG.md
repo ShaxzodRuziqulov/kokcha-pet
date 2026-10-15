@@ -3,6 +3,12 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-15 · Codex · X2: qo'yib yuborish tezligidan jahl
+- Fayllar: src/main/motion.js, src/main/ipc.js. Eski SVG ko'rinishi o'zgarmadi.
+- Oxirgi 120 ms siljish / vaqt, personaj o'lchamiga nisbatan: 700/1400/2200 DIP/s → angry level 1/2/3. Kamida 35 DIP va 30 ms; oxirgi harakatdan 100 ms dan ko'p to'xtab qo'yib yuborish jahl emas. performance.now() ishlatiladi, bir drag uchun bir hodisa. Oddiy sudrash va mavjud fall saqlandi.
+- Tekshirildi: node --check motion.js/ipc.js; 26 tezlik/o'lcham/diagonal/to'xtash/shovqin/takroriy finish sinovi o'tdi. Haqiqiy sichqoncha bilan hissi Shaxzodda; umumiy Electron sinovi barcha 1.7.0 ishlari tugagach.
+- Holat: Claude review uchun. Commit: shu yozuv bilan `Detect fast drag releases for angry mood`.
+
 ## 2026-10-15 · Codex · Qizcha kadrlari va animatsiyalar to'liq yangilandi
 - Shaxzod rasm hamda Claude uchun taklif qilingan renderer ishlarining barchasini Codex'ga topshirdi; band fayllar yo'q edi. Claude renderer kodi shu topshiriq uchun o'zgartirildi.
 - Fayllar: src/renderer/chibi/ (19 PNG + manifest + README), renderer.js, style.css; src/main/{appearance,context,motion}.js; CHANGELOG.md.
@@ -16,7 +22,7 @@ Qoidalar: [AGENTS.md](AGENTS.md).
 - Commit: ushbu yozuv bilan `git log` dagi `Improve chibi frames, turning and animation`.
 
 ## Hozir band
-_Hech kim._ Barcha ish `main` branch'da, alohida worktree yo'q.
+Codex: qizcha ifodalari va climb (src/renderer/chibi/, renderer.js), X2 (motion.js, ipc.js), X3 (main.js, src/main/{reminders,menu,settings,ipc}.js, preload va yangi eslatma oynasi). Shaxzod: eski SVG personajlarga tegilmaydi.
 - Umumiy fayllar (`package.json`, `CHANGELOG.md`): o'zgartirishdan oldin Shaxzod orqali kelishiladi.
 
 ## Kontrakt: main → renderer kanallari
@@ -59,7 +65,7 @@ Boshlash tartibi (kelishildi): Claude — C1, Codex — X1; keyin eslatmalar va 
 |---|---|---|---|---|
 | X0 | `preload.js`: `mood`, `remind` kanallarini qo'shish | Codex | tayyor | Claude d87f5c0 ni tasdiqladi |
 | X1 | Ctrl+Alt+M: bir tugma bilan yashirish/ko'rsatish | Codex | tayyor | Claude 0bdee6e ni tasdiqladi; jismoniy tugma Shaxzodda |
-| X2 | Tez otib yuborishni aniqlash → `mood` yuborish | Codex | ochiq | `motion.js`, drag-end tezligi; renderer qismi C2 da |
+| X2 | Tez otib yuborishni aniqlash → `mood` yuborish | Codex | review | `motion.js`, drag-end tezligi; renderer qismi C2 da |
 | X3 | Eslatmalar: qo'shish oynasi, saqlash, vaqtida `remind` yuborish | Codex | ochiq | sozlamalarda saqlansin, qayta ochilganda yo'qolmasin |
 | X4 | Tezlikni o'lchash: CPU/RAM (tinch, yurish, sudrash) | Codex | to'xtatilgan | vaqtinchalik o'lchov fayllari tozalandi; kerak bo'lsa qayta, toza skript bilan |
 | C1 | 2.5D: eski 4 ta SVG personajga hajm, yorug'lik, bosh burilishi | Claude | kutilmoqda | `claude/c1-2.5d` branch'ida (d9d38c2), Codex review va X4 bo'lmaguncha main'ga qo'shilmaydi |
