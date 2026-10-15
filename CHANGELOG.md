@@ -15,6 +15,8 @@
 ### ✨ Harakat
 - Ko'tarib olinganda Midori qo'llarini ko'tarib osilib turadi; har ikki personaj sudralganda mayatnikdek tebranadi.
 - Bosh ustida his-tuyg'u belgilari: ❗ 💗 ❓ 💫 💢.
+- Midori'ning yangi harakatlari: salomlashganda qo'l silkitadi, bo'sh vaqtida kitob o'qiydi, choy ichadi, gul sug'oradi, cho'ziladi.
+- Yangi yuzlar: sho'x 😏, mehr 💗 (silanganda), hayajon 🎉 — yon tomondan ham.
 
 ## 1.9.1
 - Midori endi ekran chetidan chiqib ketmaydi: oyna ustiga sakraganda, chiqqanda, oyna bilan birga ko'chganda, oyna ustida yurganda va uxlab yotganda ham to'liq ko'rinadi.
