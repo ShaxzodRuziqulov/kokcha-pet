@@ -3,6 +3,13 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-15 · Claude · Ko'kcha 1.10.0 chiqarildi
+- Shaxzod "ha, 1.10.0 ni chiqar" dedi. Tarkibi: yangilash tugmasi va qo'lda tekshirish, umumiy gaplar va to'g'ri o'zbek harflari, yangi bulutcha, o'ng tugma paneli, osilish va emote, Midori'ning yangi yuzlari va harakatlari (Codex 714b986), review tuzatishlari.
+- app.asar ichida tekshirildi: versiya 1.10.0, panel fayllari, playActivity, 103 WebP kadr, ipc hasOwn. Hajm: setup 90.7 MB.
+- `/S` bilan o'rnatildi (Kokcha.exe 1.10.0.0), ishga tushirildi — 4 jarayon ishlayapti. Commit eba183d, teg v1.10.0, push, release chiqdi, latest.yml 1.10.0. dist o'chirildi.
+- Codex c979efc dagi o'zgarishlarni (chibi.js kesh/playActivity, review tuzatishlari) hali qayta ko'rmagan — release Shaxzod qarori bilan.
+- Shaxzod qo'lda tekshiradi: o'ng tugma paneli, bulutcha tugmasi, sudrashda tebranish, mashg'ulotlar chastotasi, yangi rasmlar.
+
 ## 2026-10-15 · Claude · Codex paketini ulash (714b986) + review tuzatishlari
 - Fayllar: `src/renderer/chibi/chibi.js` (Codex fayli — sabab: yangi slotlarni ishga tushirish va kadr keshi strategiyasi, Codex HANDOFF shuni so'ragan), `renderer.js`, `phrases.js`, `style.css`, `src/main/ipc.js`, `activity.js`, `context.js`. Commit: c979efc.
 - Review tuzatildi: P2 hit-area endi CSS px'da saqlanadi va tekshiruvda joriy scale bilan hisoblanadi; P2 eslatma oldingi tugmalarni tozalaydi; P3 `bubble-action` faqat `Object.hasOwn` + funksiya.
