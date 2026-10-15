@@ -1,0 +1,11 @@
+{
+  "tool": "built-in image_gen",
+  "references": [
+    "frames/stand.png",
+    "frames/walk-a.png",
+    "frames/walk-b.png"
+  ],
+  "prompt": "Use case: identity-preserve. Asset type: ONE production walking animation sprite sheet, 4 columns by 2 rows, EIGHT consecutive frames of ONE complete walk cycle. Reference 1 is the exact green-haired chibi girl identity and neutral face; references 2 and 3 are her right-facing walking pose references. Draw all eight sprites at the SAME scale, head size, camera angle (RIGHT three-quarter), hairstyle, neutral smile and clothing. Exact green tufted bob hair, green eyes, pale green turtleneck, black pleated skirt, green socks, black boots, thick crisp dark outlines, same original chibi proportions. Eight chronologically ordered gait phases in reading order: 1 near leg forward contact / far leg behind; 2 near foot takes weight, far heel lifts; 3 near leg planted vertical, far knee passes forward; 4 near heel lifts, far leg extends forward; 5 far leg forward contact, near leg behind; 6 far leg takes weight, near heel lifts; 7 far leg planted vertical, near knee passes forward; 8 far heel lifts, near leg extends forward ready to return to frame 1. Opposite arm swing synchronized to legs. Her HEAD AND HAIR must be virtually identical across all cells, no face emotion changes, no head tilt or camera rotation. Walk IN PLACE, no travel inside cells. Consistent hip and head position, planted soles on exactly same relative horizontal baseline in every cell; lifted feet allowed. Eight entire figures, equal 4x2 cells, generous transparent padding at least 12 percent each cell, NO overlap or clipping. True transparent background. No ground, shadows, motion lines, labels, numbers, text, props or backdrop. This is a smooth coherent animation strip, not eight unrelated illustrations.",
+  "generation": "exec-66826a8c-d2f0-43c3-bc2b-2933a5e05709.png",
+  "postprocess": "4x2 cells; original walk-a head reused for exact identity; body phases kept; alpha and foot baseline normalized; lossless WebP"
+}

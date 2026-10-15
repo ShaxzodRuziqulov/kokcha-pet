@@ -19,3 +19,7 @@ Animatsiya: faqat yurishda 250 ms kadr almashuvi; neytral old ko'rinishda 3.2–
 - Neutral holatda shu pozalarning barchasi ko'z pirpirata oladi. `sleeping` yuz ifodasi ko'zlarni yumadi; haqiqiy `state:sleep` avvalgidek yotish kadrini tanlaydi. Embarrassed hozir faqat front guruhida bor; boshqa yo'nalishlar neytralga qaytadi.
 - Climb haqiqiy orqa ko'rinishdagi ikkita poza bilan 250 ms almashadi; yurish bilan bitta faza taymeridan foydalanadi va harakat tugaganda/yashirilganda to'xtaydi.
 - Yangi rasmlar built-in `image_gen` bilan yaratildi. Aniq promptlar: `expression-prompts.json`, `climb-prompts.json`. 3x2 yuz atlasi builddan oldin alohida PNG'larga kesildi; runtime atlas/skaner ishlatmaydi.
+
+## 1.8.0 sifat sinovi
+
+Claude bilan A–D kelishuvi asosida qatlamli idle va 8 kadr / 10 fps walk pilot tayyorlandi. Hali ilovaga ulanmagan; GIF ko‘rigidan keyingi C qarori kutiladi. Manba, aniq prompt, qatlamlar va tekshiruvlar: [pilot/README.md](pilot/README.md).

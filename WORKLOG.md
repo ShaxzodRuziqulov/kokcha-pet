@@ -3,6 +3,19 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-15 · Codex · 1.8.0 A–D kelishuvi va sifat sinovi tayyor
+- Shaxzod orqali Claude tuzatishlari va Codex roziligi qabul qilindi.
+- A: idle stand.png qatlamlaridan (soch uchlari, bosh, tana), canvas'da protsedural nafas/soch tebranishi/bosh qiyshayishi. Alohida image_gen idle kadrlar yo'q; yoriq, yoqa, oyoq chizig'i tekshiriladi; resurs sarfi keyingi integratsiyada o'lchanadi.
+- B: walk avval 8 sifatli image_gen tayanch kadr, 10 fps. 12–15 ga majburan to'ldirilmaydi; faqat ko'rish sinovida ehtiyoj bo'lsa.
+- C: sifat sinovi tugashi bilan GIF'lar Shaxzodga ko'rsatiladi. Asosiy davom etish qarori shu yerda; tasdiqqacha runtime manifest/renderer integratsiyasi yo'q.
+- D: pilot neytral yuzda; boshqa ifodada mavjud bitta kadr + yuz-overlay ishlaydi. Har kadr uchun yuz anchor hozir qilinmaydi.
+- Manba faqat qizchaning o'z rasmlari; Higgsfield/video ishlatilmaydi. MaoMao exe/rasmlariga tegilmaydi. <=400 px, alfa, bir xil masshtab/tayanch chizig'i; butun chibi <=3 MB maqsad. Prompt/manba chibi/README.md'da. Sinov skript/profillari faqat Temp'da; yakunda tozalanadi.
+- Natija: pilot/idle-rig.js, 8 ta 300×400 lossless WebP (501 504 bayt), walk.json va aniq walk-prompt.json. Image_gen atlasida bosh farqlangani sabab original walk-a.png boshi hamma 8 fazaga aynan teng qilib qo'yildi; yangi tana/qo'l/oyoq pozalari qoldirildi. Neutral-only sifat sinovi; eski ilovaga ulanmagan.
+- Tekshirildi: alohida Electron'da 64 kadr chizildi, konsol toza. 8 walk kadr alohida, ko'rinadigan bosh piksellari teng, barcha baseline y=398; idle oyoq hududi butun siklda o'zgarmaydi. Suratlar ko'z bilan ko'rildi; JS sintaksis va git diff --check. Faqat shu sifat sinovi o'tdi; MaoMao darajasiga erishildi deb aytilmaydi.
+- Shaxzodga GIF'lar tayyor: comparison.gif, idle.gif, walk.gif — Codex visualizations papkasidagi chibi-180-quality. Ular yakuniy review artifactlari sifatida saqlanadi; test profili/script/capture PNG'lari faqat tizim Temp'ida, yakunda o'chirildi. Tafsilot: chibi/pilot/README.md.
+- C: Shaxzod bahosi kutilmoqda. Sequence integratsiyasi, neutral-only runtime fallback, timer/regressiya va xotira/CPU o'lchovi KEYIN; hozir qilinmadi. Runtime chibi.js/manifest/CSS/renderer, eski personajlar, versiya, build/push/release o'zgarmadi.
+- Commit: shu yozuv bilan `Prepare layered idle and eight-frame walk quality pilot`. Claude review va Shaxzodning GIF bo'yicha qarori uchun.
+
 ## 2026-10-15 · Claude · Ko'kcha 1.7.0 chiqarildi
 - Claude review: X2 (c4a48c9), X3 (8205ff0, 4d09954), climb (f946699), ifodalar barcha pozalarda (71d24ad) — tasdiqlandi. 28 poza×ifoda holati va eslatma pufakchasi Electron'da suratga olinib ko'rildi, konsol xatosi yo'q.
 - Takliflar (keyingi versiya): personaj yashirin bo'lsa eslatma uchun Windows bildirishnomasi; eski 4 ta SVG personajga jahl va yumshoq burilish (Claude, `claude/c1-2.5d` asosida).
@@ -52,8 +65,7 @@ Qoidalar: [AGENTS.md](AGENTS.md).
 - Commit: ushbu yozuv bilan `git log` dagi `Improve chibi frames, turning and animation`.
 
 ## Hozir band
-_Hech kim._ 1.7.0 uchun Codex topshiriqlari tayyor, Claude review kutilmoqda.
-- Umumiy fayllar (`package.json`, `CHANGELOG.md`): o'zgartirishdan oldin Shaxzod orqali kelishiladi.
+_Hech kim._ 1.8.0 sifat GIF'lari tayyor; kelishilgan C bandi bo'yicha Shaxzod bahosi kutiladi, runtime integratsiyasi boshlanmagan.
 
 ## Kontrakt: main → renderer kanallari
 Ikki tomon faqat shu orqali bog'lanadi. Kanal yoki ma'lumot shakli o'zgarsa, avval ikkinchi agent bilan Shaxzod orqali kelishiladi.

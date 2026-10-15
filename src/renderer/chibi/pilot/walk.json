@@ -1,0 +1,21 @@
+{
+  "status": "quality-review-only",
+  "fps": 10,
+  "loop": true,
+  "width": 300,
+  "height": 400,
+  "baseline": 398,
+  "neutralOnly": true,
+  "frames": [
+    "walk/00.webp",
+    "walk/01.webp",
+    "walk/02.webp",
+    "walk/03.webp",
+    "walk/04.webp",
+    "walk/05.webp",
+    "walk/06.webp",
+    "walk/07.webp"
+  ],
+  "canonicalHead": "../frames/walk-a.png: crop 0,0,271,228 at 14,2 (no resizing)",
+  "source": "image_gen exec-66826a8c-d2f0-43c3-bc2b-2933a5e05709.png; 4x2 atlas; generated body below source y=288"
+}
