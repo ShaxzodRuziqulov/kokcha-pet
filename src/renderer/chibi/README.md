@@ -19,7 +19,9 @@ Shaxzod uch variantni (eski 2 kadr, Codex 12 kadr, Claude cutout) jonli solishti
 - Oyoqlar: yerga tegish fazasida walk-a, oraliqda walk-b (B_DX=-4). Oyoqlar yerda qoladi; tana `12·sin²` bilan ko'tariladi, son yuqorisi yubka ostiga cho'zilgan (bo'shliq ochilmaydi).
 - Qo'llar ±0.09 rad siltanadi; tanadan faqat fon ustidagi yeng o'chiriladi, orqa yeng ostiga yubka rangidagi taglik.
 - Blink: `blinkPatches['walk-a']` tana transformida chiziladi. Manifest: `slots.walk = { frames: ['walk-a'], procedural: 'walk', fps: 20, duration: 1 }`.
-- Cheklov: oyoq uchun asl rasmda faqat 2 poza — oyoqlar siklda 4 marta almashadi (tana/qo'llar silliq).
+- Tayanch oyoq (Codex review 4b997e6 P2): oyoqlar son bo'g'imi (140, 300) atrofida ±0.14 rad aylanadi — faza markazidan ±0.055 s ichida yerga to'liq yopishadi, chetlarida sirpanish ~yarmiga kamaygan. Surish (translate) sinab ko'rildi va rad etildi: asl rasmda oyoqlar faqat etakdan pastda, siljitilganda son tepasidagi kesiklar ochiladi.
+- Ko'tarilgan etik (P2): walk-b oyoqlari tik oyoq konturi bo'ylab ajratilgan (x 120–126 ustma-ust), etik tepasi y≥294 dan — kontur to'liq.
+- Cheklov: oyoq uchun asl rasmda faqat 2 poza — oyoqlar siklda 4 marta almashadi; to'liq yopishish uchun 2–4 oraliq oyoq rasmi kerak.
 
 ## Tarix: 12 kadrli kod-oyoq yurishi (olib tashlangan)
 

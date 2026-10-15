@@ -3,11 +3,14 @@
 // - Oyoqlar: yerga tegishda walk-a, oraliq fazada walk-b. Oyoqlar doim yerda, tana esa
 //   qadamga mos ko'tariladi (walk-b'da tik oyoq tanani 12 px yuqori ushlaydi).
 // - Qo'llar oyoqlarga qarama-qarshi ±5° siltanadi.
-// Sikl 1 s: ekranda 100 px/s tezlikda qadam uzunligiga mos — oyoqlar sirpanmaydi.
+// - Yerda turgan oyoq son bo'g'imi atrofida orqaga tebranadi (oyna oldinga yuradi): sirpanish ~yarmiga kamayadi.
+//   Surish emas, aylantirish: son tepasi yubka ostida qoladi, asl rasmdagi kesik chiziqlar ochilmaydi.
+// Sikl 1 s: qadam 127 px, ya'ni o'rta o'lchamda ekrandagi 100 px/s ga mos.
 (() => {
   const W = 271, H = 400, PERIOD = 1.0, BOB = 12;
   // walk-a koordinatalari. Yubka etagidan pastdagi hamma narsa — oyoqlar.
-  const HEM = [[20,330],[70,330],[84,306],[100,311],[120,313],[140,314],[160,313],[178,310],[196,304],[206,300],[271,300],[271,400],[20,400]];
+  // Etakdan 3 px pastroq: yubka konturi oyoqlar qatlamiga tushmasin (oyoqlar aylanganda ajralib chiqardi).
+  const HEM = [[20,333],[70,333],[84,309],[100,314],[120,316],[140,317],[160,316],[178,313],[196,307],[206,303],[271,303],[271,400],[20,400]];
   // Yenglar o'z konturi bo'ylab, yubkasiz; aylanish nuqtasi — yelka.
   const BACK_ARM = [[44,262],[52,252],[70,240],[100,228],[126,225],[128,250],[106,262],[92,274],[82,284],[68,290],[54,292],[44,284]];
   const FRONT_ARM = [[174,232],[205,226],[240,234],[254,248],[252,272],[232,280],[205,284],[190,281],[178,268],[172,250]];
@@ -18,6 +21,17 @@
   // Orqa yeng ostida yubka chizilmagan: qo'l burilganda ochiladigan joy uchun yubka rangidagi taglik.
   const SKIRT_FILL = [[80,296],[90,280],[104,268],[120,262],[124,292]];
   const B_DX = -4;   // walk-b tik oyog'i walk-a soni ostiga tushadi
+  // Oyoqlarning yerdagi joyi (walk-a koordinatalari): A old etik 207, A orqa etik 80, B tik etik 156.
+  const STEP = 207 - 80, SPEED = 2 * STEP / PERIOD;      // to'liq yopishish uchun kerakli tezlik
+  const HIP = [140, 300], LEG = 100;                     // son bo'g'imi va son→tagcharm uzunligi
+  const MAX_TILT = 0.14;                                  // ~8°: etik sezilarli qiyshaymaydi
+  // Faza markazidan dt vaqtda tayanch oyoq qancha orqaga ketishi kerak — burchak bilan, chegaralangan
+  const tilt = dt => Math.max(-MAX_TILT, Math.min(MAX_TILT, Math.asin(Math.max(-1, Math.min(1, SPEED * dt / LEG)))));
+  // walk-b oyoqlarini tik oyoq konturi (x≈127) bo'ylab ajratamiz: ko'tarilgan oyoqning tizzasi va etik tepasi butun qoladi.
+  // Ikki qatlam 6 px ustma-ust (x 120–126): xira chetlar bir joyga tushib fonni ochmasin.
+  // Tik oyoq oldinda chiziladi va ko'tarilgan tizzaning chetini yopadi.
+  const B_LIFTED = [[0,294],[100,295],[112,298],[126,300],[126,333],[110,340],[100,354],[0,354]];
+  const B_PLANTED = [[120,299],[W,299],[W,H],[116,H],[116,340],[120,333]];
 
   const canvas = () => Object.assign(document.createElement('canvas'), { width: W, height: H });
   function path(ctx, points) {
@@ -39,7 +53,9 @@
   function extendThighs(legs, source, fromY, toY) {
     const ctx = legs.getContext('2d');
     ctx.globalCompositeOperation = 'destination-over';
-    ctx.drawImage(source, 112, fromY, 52, 6, 112, toY, 52, fromY - toY + 6);
+    // Butun son kengligi (x 96–190): kesik chetidagi yarim shaffof qator ham to'ldiriladi.
+    // Oyoqlar son bo'g'imi atrofida aylanadi, shuning uchun bu bo'lak yubka ostidan chiqmaydi.
+    ctx.drawImage(source, 96, fromY, 94, 6, 96, toY, 94, fromY - toY + 6);
   }
 
   class WalkRig {
@@ -47,9 +63,10 @@
       if (a.naturalWidth !== W || a.naturalHeight !== H) throw new Error('Walk rig uchun original 271×400 walk-a.png kerak');
       const bAligned = canvas(); bAligned.getContext('2d').drawImage(b, B_DX, 0);
       this.legsA = keep(a, HEM);
-      extendThighs(this.legsA, a, 313, 296);
-      this.legsB = keep(bAligned, [[0,299],[W,299],[W,H],[0,H]], 0.6);
-      extendThighs(this.legsB, bAligned, 300, 284);
+      extendThighs(this.legsA, a, 316, 296);
+      this.liftedB = keep(bAligned, B_LIFTED, 0.6);
+      this.plantedB = keep(bAligned, B_PLANTED, 0.6);
+      extendThighs(this.plantedB, bAligned, 300, 284);
       const upper = cut(a, HEM);
       const body = cut(cut(upper, BACK_OUTER), FRONT_OUTER);
       this.body = canvas();
@@ -65,10 +82,19 @@
       const phase = ((seconds / PERIOD) % 1 + 1) % 1;
       const s = Math.sin(2 * Math.PI * phase);
       const lift = BOB * s * s;                             // 0 — yerga tegish, 12 — oraliq
-      const legs = (phase * 4 + 0.5) % 2 < 1 ? this.legsA : this.legsB;
+      const quarter = Math.round(phase * 4);                // juft — yerga tegish (A), toq — oraliq (B)
+      const dt = (phase - quarter / 4) * PERIOD;           // faza markazidan vaqt, ±PERIOD/8
       const swing = Math.cos(2 * Math.PI * phase) * 0.09;
       ctx.save(); ctx.translate(x, y); ctx.scale(width / W, height / H);
-      ctx.drawImage(legs, 0, 0);
+      const rotated = (img, angle) => {
+        ctx.save(); ctx.translate(...HIP); ctx.rotate(angle); ctx.translate(-HIP[0], -HIP[1]);
+        ctx.drawImage(img, 0, 0); ctx.restore();
+      };
+      if (quarter % 2 === 0) rotated(this.legsA, tilt(dt));               // ikkala oyoq yerda — birga orqaga
+      else {
+        rotated(this.liftedB, -tilt(dt) * 0.6);                           // havodagi oyoq oldinga tebranadi
+        rotated(this.plantedB, tilt(dt));                                 // tik oyoq orqaga
+      }
       ctx.translate(0, -lift);
       ctx.drawImage(this.body, 0, 0);
       if (blinkPatch) ctx.drawImage(blinkPatch, 0, 0);
