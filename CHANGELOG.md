@@ -1,6 +1,6 @@
 # O'zgarishlar
 
-## Keyingi versiya
+## 1.10.0
 ### 🔄 Yangilanish
 - Menyuda **"Yangilanishni tekshirish"** — personaj natijani aytadi; yuklanish foizi menyuda ko'rinadi.
 - Yangi versiya tayyor bo'lsa, gap bulutchasida **"Yangilash"** tugmasi chiqadi — bir bosishda o'rnatiladi.
