@@ -176,7 +176,12 @@
     surprised: '😮😲😱😵🎢👀',
     happy: '✨😜😊😄😁💚😎💪🎉😆😌😏🤸💃👑🥰',
   };
-  const VOICE_FACES = { cheerful: 'happy', playful: 'happy', shy: 'embarrassed' };
+  // Qaysar (tsundere): "Ishla! ...Yaxshi ishlayapsan." — qattiq gapdan keyin "..." bilan yumshasa
+  // uyalgan yuz, faqat qattiq gap bo'lsa — jahldor. Oddiy "gapiryapman" yuzi unga mos emas.
+  const VOICE_FACES = {
+    cheerful: 'happy', playful: 'happy', shy: 'embarrassed',
+    tsundere: (text) => text.includes('...') ? 'embarrassed' : 'angry',
+  };
   function faceOf(voice, text) {
     let best = -1, face = null;
     for (const [name, chars] of Object.entries(EMOJI_FACES)) {
@@ -185,7 +190,8 @@
         if (at > best) { best = at; face = name; }
       }
     }
-    return face || VOICE_FACES[voice] || 'talking';
+    const byVoice = VOICE_FACES[voice];
+    return face || (typeof byVoice === 'function' ? byVoice(text) : byVoice) || 'talking';
   }
 
   const has = (voice, key) => Boolean(lookup(VOICES[voice] ? voice : 'default', key) || lookup('default', key));
