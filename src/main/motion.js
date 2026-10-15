@@ -45,6 +45,7 @@ function finishDrag(cursor, now = performance.now()) {
   const distance = Math.hypot(cursor.x - first.x, cursor.y - first.y) / C.scale();
   const speed = Math.round(distance * 1000 / elapsed);
   if (distance < 35 || speed < 700) return;
+  require('./persona').thrown();
   C.send('mood', { mood: 'angry', level: speed >= 2200 ? 3 : speed >= 1400 ? 2 : 1 });
 }
 

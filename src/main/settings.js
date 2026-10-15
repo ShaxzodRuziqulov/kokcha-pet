@@ -19,6 +19,7 @@ const DEFAULTS = {
   onboarded: false,   // birinchi ochilishdagi tanishtirish ko'rsatilganmi
   lastSeenDay: null,  // "xayrli tong" kuniga bir marta
   reminders: [],     // bir martalik eslatmalar, vaqt epoch ms
+  persona: null,     // Midori asosiy fe'li: { id, since, nextAt }; vaqtlar epoch ms
 };
 
 let timer = null;
@@ -34,6 +35,7 @@ function load() {
   }
   if (!SIZES[s.size]) s.size = DEFAULTS.size;
   s.reminders = require('./reminders').normalize(s.reminders);
+  s.persona = require('./persona').normalize(s.persona);
   ctx.settings = s;
 }
 

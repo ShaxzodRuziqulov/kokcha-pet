@@ -1,6 +1,7 @@
 # O'zgarishlar
 
 ## Keyingi versiya
+- Midori uchun "Kayfiyat" menyusi: fe'llar har 3–4 soatda navbat bilan almashadi, muddat qayta ochilganda saqlanadi. Otishdan keyin 2 daqiqa qaysar, 20 soniyada 4 marta silansa 2 daqiqa uyatchan bo'ladi; keyin asosiy fe'liga qaytadi.
 - Personajlar o'z fe'li bilan gapiradi: Midori'ning 4 kayfiyati (quvnoq, uyatchan, injiq, hazilkash) navbat bilan almashadi; Ko'kcha — bolalarcha qiziquvchan. Salomlashish, harakat, jahl, uyg'onish, silash va tanaffus gaplari fe'lga mos.
 
 ## 1.8.0

@@ -10,6 +10,7 @@ const motion = require('./motion');
 const activity = require('./activity');
 const updater = require('./updater');
 const shortcuts = require('./shortcuts');
+const persona = require('./persona');
 
 const { ctx } = C;
 
@@ -67,6 +68,10 @@ function template() {
     ...shortcuts.menuItems(),
     { type: 'separator' },
     { label: 'Personaj', submenu: characterMenu() },
+    ...(s.character === 'chibi-girl' ? [{
+      label: 'Kayfiyat',
+      submenu: radios(Object.entries(persona.LABELS), (id) => persona.current().id === id, persona.set),
+    }] : []),
     {
       label: 'Rang',
       enabled: s.character !== 'custom' && s.character !== 'chibi-girl',

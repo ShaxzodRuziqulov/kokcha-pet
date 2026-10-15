@@ -11,7 +11,7 @@ const win = require('./window');
 const activity = require('./activity');
 
 // Tayyor personajlar (ko'rinishi — renderer/characters.js) va ranglar (renderer/style.css)
-const CHARACTERS = { 'chibi-girl': 'Yashil qizcha', kokcha: "Ko'kcha" };
+const CHARACTERS = { 'chibi-girl': 'Midori', kokcha: "Ko'kcha" };
 const REMOVED = ['cat', 'dog', 'penguin']; // 1.8.0 da olib tashlangan — tanlaganlar Ko'kchaga o'tadi
 const CUSTOM_NAME = "Do'stcha";
 const COLORS = {
@@ -95,6 +95,8 @@ function current() {
 
 function apply(change, report = null) {
   const a = current();
+  // Persona avval: renderer yangi qiyofaning birinchi gapini ham to'g'ri fe'lda tanlaydi.
+  require('./persona').appearanceChanged();
   send('appearance', { ...a, change, report });
   if (ctx.tray) ctx.tray.setToolTip(a.name);
   settings.save();

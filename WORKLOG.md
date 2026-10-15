@@ -3,6 +3,15 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-15 · Codex · 1.9.0 persona main qismi tayyor
+- Shaxzod 'senam boshla' dedi. Fayllar: yangi `src/main/persona.js`; `main.js`, `src/preload.js`, `src/main/{settings,menu,appearance,ipc,motion,activity}.js`, tegishli WORKLOG/PROJECT/CHANGELOG. Renderer fayllariga tegilmadi; Claude'ning parallel `9c6267c` gaplar commitiga ulanish tekshirildi. Boshqa agent main kodi ichiga faqat kelishilgan persona chaqiruvlari qo'shildi — mavjud otish/silash/ko'rinish oqimini yangi fe'l bilan bog'lash uchun.
+- Midori ismi appearance/menyuga ulandi (`chibi-girl` id saqlandi). Asosiy navbat cheerful→shy→tsundere→playful, har safar tasodifiy 3–4h; `{id,since,nextAt}` diskda. Eski/malformed/future qiymat normallashtiriladi, restart muddatni qaytarmaydi, uzoq tanaffus/resume'da bitta yangi fe'l, gaplar backlog'i yo'q. Bitta timeout/resume listener, stop/start tozalash va soat orqaga ketishi tekshirildi.
+- Otish 2min tsundere; 20s ichida4 haqiqiy petted 2min shy. Vaqtinchalik holat diskka kirmaydi, base jadvalini surmaydi; oxirgi event ustun, bir xil id qayta yuborilmaydi. Kayfiyat radiolari: Quvnoq/Uyatchan/Qaysar/Sho'x, faqat Midori; joriy fe'l tekshirilgan, qo'lda tanlash override'ni bekor qilib jadvalni yangilaydi. Ko'kcha/custom fallback curious; personaj almashtirish base muddatini saqlaydi, vaqtinchalik holatni tozalaydi.
+- Kontrakt: `persona {id,reason:start|timer|menu|event}` + `getInit().persona`. Xabar `mood`/`petted` dan oldin. Claude renderer kelgach qo'shma sinovda `appearance` oldidan ham persona yuborish zarurligi tekshirilib main tartibi tuzatildi: Midoriga qaytishdagi birinchi `newLook` ham saqlangan tsundere ovozida chiqdi. Initial snapshot iste'mol qilgan kechikkan expiry'da tray radiosi ham yangilanadi.
+- Tekshirildi:83 model tekshiruvi — navbat/to'liq aylanma, interval chetlari, normalizatsiya/migratsiya, restart/resume/clock rollback, repeat event/expiry, ko'p silash oynasi, menu, character switch, timer ichidagi override, bitta timer/listener, snapshot va stop. Bu3–4h haqiqiy kutish emas: deterministik fake wall clock ishlatildi.
+- Haqiqiy Electron main/preload/renderer:36 tekshiruv, Temp profil. Native tray radio callbacklari, getInit/ism/payload, preload orqali persona, throw level2 dan oldingi event, haqiqiy40ms petting detektoridan4ta hodisa (cursor o'qishlari sintetik), persona→4-petted tartibi, diskda faqat base fields, Ko'kcha menyusida Kayfiyat yo'qligi, round-trip schedule, resume expiry/timer, birinchi Midori gapining to'g'ri ovozi va konsol0xato. Birinchi33 integratsiya tekshiruvi ham o'tgan; appearance tartibi o'zgargach36 bilan qayta o'tdi. Jismoniy sichqoncha gesturelari va haqiqiy3–4h/OS uyqu qo'lda bajarilmadi.
+- Test script/profil/JSON/loglar faqat tizimTemp'ida yaratildi va yakunda o'chirildi. Yangi paket yo'q; package versiyasi bu ishda o'zgarmadi, build/push/release yo'q. Claude main review qilishi mumkin. Commit: ushbu yozuv bilan `Add persisted Midori persona scheduling and event moods`.
+
 
 ## 2026-10-15 · Claude · Personaj gaplari fe'lga mos (1.9.0, Claude qismi)
 - Shaxzod qarorlari: Midori (緑) — fe'llar navbat bilan har 3–4 soatda; Ko'kcha — bolalarcha qiziquvchan. Codex bilan kelishuv: navbat cheerful→shy→tsundere→playful, persona {id, reason}, getInit'da persona, vaqtinchalik otish→tsundere / silash→shy (main).
@@ -179,6 +188,9 @@ Ikki tomon faqat shu orqali bog'lanadi. Kanal yoki ma'lumot shakli o'zgarsa, avv
 |---|---|---|---|
 | `mood` | Codex (motion.js) | `{ mood: 'angry', level: 1 \| 2 \| 3 }` | Claude: jahl animatsiyasi; level = otish kuchi |
 | `remind` | Codex (eslatmalar) | `{ text: string }` | Claude: pufakchada eslatmani maxsus ko'rinishda ko'rsatadi |
+| `persona` | Codex (persona.js) | `{ id: 'cheerful' \| 'shy' \| 'tsundere' \| 'playful' \| 'curious', reason: 'start' \| 'timer' \| 'menu' \| 'event' }` | Claude: gap to'plamini almashtiradi; ayni id qayta kelsa kayfiyat gapi takrorlanmaydi. `getInit().persona` ham shu shaklda; start salomlashuvga birlashtiriladi. |
+
+1.9.0 persona kontrakti (Shaxzod 'senam boshla'): Midori tartibi cheerful→shy→tsundere→playful, tasodifiy3–4h, settings.persona={id,since,nextAt}. Otish2min tsundere;20s ichida4ta haqiqiy petted hodisasi2min shy; vaqtinchalik holat diskka yozilmaydi, asosiy jadvalni surmaydi. Menyu tanlovi asosiy fe'lni belgilaydi, override'ni bekor qilib yangi3–4h boshlaydi. Ko'kcha/custom fallback curious, Kayfiyat faqat Midori. Yangi renderer→main kanali kerak emas: persona event'i tegishli mood/petted va personaj almashtirishdagi appearance xabaridan oldin yuboriladi.
 
 Codex `preload.js` dagi `EVENTS` ro'yxatiga `'mood'` va `'remind'` ni qo'shadi; bu birinchi qilinadi.
 

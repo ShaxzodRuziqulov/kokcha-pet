@@ -21,6 +21,7 @@ src/main/               asosiy jarayon (Node)        — Codex egaligida (WORKLO
   surfaces.js           ochiq oynalarning yuqori qirralari (koffi orqali Win32)
   native.js             to'liq ekran va Ctrl tugmasini aniqlash (koffi); yuklanmasa — o'chadi, qolgani ishlaydi
   activity.js           uyqu/uyg'onish, dam olish eslatmasi, o'zi gapirishi, kursor (hover, silash, ko'z qarashi)
+  persona.js            Midori fe'li, saqlanadigan 3–4h navbat, vaqtinchalik otish/silash holati
   appearance.js         personaj, rang, "O'z rasmim" (tekshirish, qirqish, nusxalash)
   menu.js               tray va o'ng tugma menyusi (bir xil), Windows bilan birga ishga tushish
   ipc.js                renderer'dan kelgan xabarlar: bosish, sudrash, menyu, raqs
@@ -38,12 +39,13 @@ scripts/release.mjs     GitHub Release yaratish (CHANGELOG'dan tavsif oladi)
 
 ## main ↔ renderer
 - main → renderer: `C.send(kanal, ma'lumot)` (context.js). Renderer faqat `preload.js` dagi `EVENTS` ro'yxatini oladi:
-  `state, woke, welcome, say, hover, ghost, look, clicked, landed, petted, settings, appearance, bubble-shift, update, mood, remind` (`mood`/`remind` — X0, `d87f5c0`).
+  `state, woke, welcome, say, hover, ghost, look, clicked, landed, petted, settings, appearance, bubble-shift, update, mood, remind, persona` (`mood`/`remind` — X0, `d87f5c0`).
 - renderer → main: `getInit, dragStart, dragMove, dragEnd, click, menu, dance`.
 - `state` = `{ state: idle|walk|sleep, dir, pose: stand|sit|ledge|lie|climb|hang|jump|fall, side }` → renderer `body` klasslariga aylantiradi (`pose-sit`, `side-left`...).
 - `look` = `{ dx, dy }` — kursorning personajga nisbatan joyi; ko'zlar shunga qaraydi.
 - `say` = matn turi (`'random'`, `'break'`, `'here'`, harakat turlari, `'image-*'`). **Matnning o'zi renderer'da** — main faqat turini yuboradi.
 - Yangi kanallar kontrakti: WORKLOG.md "Kontrakt" jadvali (`mood`, `remind`).
+- `persona` = `{id,reason}`; `getInit().persona` ham shu shaklda. Midori id'lari `cheerful→shy→tsundere→playful`, Ko'kcha uchun `curious`, sabab `start|timer|menu|event`. `persona` xabari `mood`/`petted` va personaj almashishdagi `appearance` xabaridan oldin keladi — birinchi gap ham yangi fe'lda tanlanadi. Renderer bir xil id'ni qayta e'lon qilmaydi; `start` salomga, `event` tegishli reaksiya gapiga birlashtiriladi.
 
 ## Personajlar va ko'rinish
 - 2 ta: `chibi-girl` (Yashil qizcha, PNG kadrlar — `src/renderer/chibi/`) va `kokcha` (SVG). `cat`/`dog`/`penguin` 1.8.0 da olib tashlangan; tanlaganlar Ko'kchaga o'tadi.
@@ -94,6 +96,13 @@ scripts/release.mjs     GitHub Release yaratish (CHANGELOG'dan tavsif oladi)
 | 1.3.0 | O'z rasmini tekshirish va avtomatik qirqish, personaj maslahat beradi |
 | 1.4.0 | Oynalar ustida yashash, tirmashish, yangi pozalar |
 | 1.5.0 | O'rnatuvchi, avtomatik yangilanish, kod modullarga ajratildi |
+
+## 1.9.0 persona main qismi (2026-10-15)
+
+- Appearance nomi Midori; identifikator `chibi-girl` o'zgarmaydi. "Kayfiyat" faqat Midorida, radio joriy (vaqtinchalikni ham) fe'lni ko'rsatadi. Qo'lda tanlash vaqtinchalik holatni bekor qilib yangi 3–4h muddat boshlaydi.
+- `settings.persona={id,since,nextAt}` — faqat asosiy navbat, epoch ms. 3–4h tasodifiy muddat diskda saqlanadi; eski/zararlangan qiymat normallashtiriladi. Ilova qayta ochilganda yoki OS uyqusidan qaytganda muddati o'tgan bo'lsa bir marta keyingi fe'lga o'tadi, o'tgan gaplar navbati yig'ilmaydi. Asosiy navbat boshqa personaj tanlanganda ham davom etadi.
+- Otish 2min `tsundere`; 20s ichida 4 haqiqiy `petted` hodisasi 2min `shy`. Oxirgi hodisa ustun, ayni id qayta kelsa muddat yangilanadi, yangi persona xabari takrorlanmaydi. Vaqtinchalik holat diskka yozilmaydi va asosiy navbatni surmaydi; personaj almashtirilsa tozalanadi. Ko'kcha/custom fallback `curious`, ularga event override yoki Kayfiyat menyusi yo'q.
+- Bitta deadline timeout va bitta `powerMonitor.resume` listener. `stop` ikkalasini tozalaydi. 83 deterministik model va 36 haqiqiy Electron/main/preload/renderer integratsiya tekshiruvi o'tdi; renderer Claude'ning `9c6267c` commitidan. Testlar vaqtinchalik profilda, versiya/build/push/release bu ishda yo'q.
 
 ## 1.7.0 tayyorgarligi (2026-10-15)
 - `src/main/reminders.js`: bir martalik shaxsiy eslatmalar; `settings.reminders` da epoch ms. Menyu → Eslatmalar alohida sandbox oynani ochadi (`reminders-preload.js`, renderer/reminders.*). IPC faqat shu oynaning asosiy frame'idan qabul qilinadi. `remind {text}` pufakchasi uyqu/jim rejimda ko'rinadi; yashirin/to'liq ekran holatida main yetkazishni kutadi. Ilova yopiq bo'lsa keyingi ochilishda; OS alarm yo'q. settings.save(true) endi muvaffaqiyat bool qiymatini qaytaradi; eski chaqiruvlar o'zgarishsiz.

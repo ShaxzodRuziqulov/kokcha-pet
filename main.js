@@ -26,6 +26,7 @@ const updater = require('./src/main/updater');
 const ipc = require('./src/main/ipc');
 const shortcuts = require('./src/main/shortcuts');
 const reminders = require('./src/main/reminders');
+const persona = require('./src/main/persona');
 
 const { ctx } = C;
 
@@ -43,6 +44,7 @@ if (!app.requestSingleInstanceLock()) {
     Menu.setApplicationMenu(null); // Ctrl+/- kabi standart zoom tugmalari o'chadi
     settings.load();
     appearance.normalize();
+    persona.start();
     ctx.settings.lastSeenDay = new Date().toDateString();
     settings.save();
 
@@ -83,6 +85,7 @@ if (!app.requestSingleInstanceLock()) {
   });
 
   app.on('before-quit', () => {
+    persona.stop();
     shortcuts.unregister();
     C.rememberPosition();
     settings.save(true);

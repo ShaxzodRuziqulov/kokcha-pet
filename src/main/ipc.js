@@ -20,7 +20,8 @@ function register() {
       ctx.settings.onboarded = true;
       settings.save();
     }
-    return { ...appearance.current(), quiet: ctx.settings.quiet, firstRun };
+    return { ...appearance.current(), quiet: ctx.settings.quiet, firstRun,
+      persona: require('./persona').initial() };
   });
 
   ipcMain.on('pet-menu', () => menu.popup());

@@ -110,6 +110,7 @@ function trackPetting(c, now) {
   petTrack.lastX = c.x;
   petTrack.flips = petTrack.flips.filter((t) => now - t < 1500);
   if (petTrack.flips.length >= 3 && now > petTrack.cooldownUntil) {
+    require('./persona').petted();
     C.send('petted');
     petTrack.flips = [];
     petTrack.cooldownUntil = now + 1200;
