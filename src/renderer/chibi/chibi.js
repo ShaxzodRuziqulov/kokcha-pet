@@ -171,7 +171,7 @@
       if (image.naturalWidth !== frame.width || image.naturalHeight !== frame.height) throw new Error(`Kadr o‘lchami noto‘g‘ri: ${name}`);
       frames[name] = { ...frame, image };
     }));
-    // Pilot atigi 8 WebP: bir martalik decode; slot almashganda kutish va qayta decode yo'q.
+    // 12 yurish WebP: bir martalik decode; slot almashganda kutish va qayta decode yo'q.
     cache = new window.ChibiSequences.FrameCache({ mode: 'all', load: async name => {
       const frame = frames[name];
       const response = await fetch(`chibi/${frame.src}`);

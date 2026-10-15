@@ -1,6 +1,6 @@
 {
-  "status": "quality-review-only",
-  "fps": 10,
+  "status": "runtime",
+  "fps": 20,
   "loop": true,
   "width": 300,
   "height": 400,
@@ -14,103 +14,43 @@
     "walk/04.webp",
     "walk/05.webp",
     "walk/06.webp",
-    "walk/07.webp"
+    "walk/07.webp",
+    "walk/08.webp",
+    "walk/09.webp",
+    "walk/10.webp",
+    "walk/11.webp"
   ],
-  "canonicalHead": "../frames/walk-a.png: full contour mask at x14,y2 + headBobPx, no rectangular y228 crop",
-  "source": "same image_gen atlas; full body retained below curved hair/collar contour, baseline normalized",
+  "canonicalHead": "Original walk-a upper body at x14,y2 + headBobPx; no head replacement",
+  "source": "Original walk-a.png upper body; code-drawn articulated legs, socks and boots; generated atlas rejected",
   "headBobPx": [
     2,
+    1,
     0,
-    -2,
+    -1,
     0,
+    1,
     2,
+    1,
     0,
-    -2,
-    0
+    -1,
+    0,
+    1
   ],
-  "headContour": [
-    [
-      0,
-      0
-    ],
-    [
-      271,
-      0
-    ],
-    [
-      271,
-      218
-    ],
-    [
-      230,
-      221
-    ],
-    [
-      207,
-      218
-    ],
-    [
-      189,
-      214
-    ],
-    [
-      185,
-      222
-    ],
-    [
-      174,
-      228
-    ],
-    [
-      153,
-      226
-    ],
-    [
-      139,
-      220
-    ],
-    [
-      132,
-      215
-    ],
-    [
-      128,
-      208
-    ],
-    [
-      127,
-      200
-    ],
-    [
-      121,
-      204
-    ],
-    [
-      116,
-      211
-    ],
-    [
-      105,
-      217
-    ],
-    [
-      100,
-      221
-    ],
-    [
-      95,
-      226
-    ],
-    [
-      80,
-      230
-    ],
-    [
-      0,
-      230
+  "cycleSeconds": 0.6,
+  "strideSourcePx": 72,
+  "builder": "scripts/build-chibi-walk.py",
+  "rig": {
+    "thighPx": 36,
+    "shinPx": 32,
+    "nearHipX": 158,
+    "farHipX": 132,
+    "hipY": 310,
+    "swingLiftPx": 24,
+    "swingPitchDegrees": -18,
+    "layering": [
+      "far",
+      "near",
+      "original-upper-body"
     ]
-  ],
-  "featherPx": 2,
-  "bodyOverlapPx": 5,
-  "bodyMask": "full-width complement of collar/hair contour shifted 5 px up, feather 2 px; no source head remnants"
+  }
 }

@@ -3,6 +3,15 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-15 · Codex · Qizchaning navbatma-navbat yurishi tuzatildi
+- Shaxzod rasm/storyboard usulida yurish xatolarini tuzatishni topshirdi va 'darajani ko'tardim, bajaraver' dedi. Faqat chibi yurish assetlari, manifest, builder va tegishli hujjatlar o'zgardi; main, umumiy renderer va Claude personaj kodi o'zgarmadi. `chibi.js` da faqat kadr soni izohi yangilandi.
+- Eski atlasda bir xil oyoq fazalari va tana/qo'l shaklining keskin o'zgarishi bor edi. Built-in image_gen bilan yangi8atlas sinovi ham takroriy fazalar berdi; rad etildi, runtime'ga kirmadi. Prompt/qaror `pilot/walk-prompt.json` da; Higgsfield ishlatilmadi.
+- Yakuniy yechim: original walk-a yuqori tanasi + kod bilan chizilgan ikki bo'g'imli oyoq/paypoq/etik. `scripts/build-chibi-walk.py` 12losslessWebP/20fps/0.6s siklni oldindan yig'adi. Chap-o'ng faza yarim sikl farq qiladi, near/far qatlam tartibi doimiy; baseline398, tayanch oyoq98.4DIP/s (main100DIP/s ga yaqin). Qo'llar asl pozada qoladi. Runtime piksel skaneri/yangi taymer/yangi paket yo'q.
+- Assetlar12WebP300×400/363488bayt; barcha45rasm1219457bayt. Decode5.49MiB, eski8kadrga nisbatan+1.83MiB; fps10→20, CPU qayta o'lchanmadi va tezlashish da'vosi yo'q.
+- Tekshirildi: Electron24capture, har yo'nalishda12distinct faza, baseline/bounds/tayanch tezligi auditi; bob olib tashlanganda bosh/kofta piksellari aynan teng. Haqiqiy blink146ms ichida06→07→08 yurish davom etdi, ko'zdan past piksel farqi0. Idle/climb/sleep,6ifoda fallback, deactivate canvas muzlashi, konsol0xato. Asosiy main/preload/renderer Temp profilida o'ng/chap walkslot ishladi. Birinchi smoke wrapperda appPath Temp bo'lib qolganligi tuzatilib qayta o'tdi; mahsulot kodi bu sababli o'zgarmadi. JS sintaksis va git diff --check o'tdi.
+- Review GIF'lari: Codex visualizations/2026/10/15/01a13e6e-29de-74b3-ae51-85a3102080ab/walk-fix/{comparison,walking}.gif — haqiqiy Electron canvas capture. Sinov script/profil/capturelari faqat tizim Temp'ida, yakunda o'chirildi. Builder doimiy asset manbasi, o'lchov skripti emas.
+- O'rnatilgan EXE yangilanmadi; versiya/build/push/release yo'q. Jismoniy sudrash/fullscreen/OS sleep-resume va foydalanuvchining yurish hissi tekshirilmadi. Commit: ushbu yozuv bilan `Repair chibi walking with an alternating articulated gait`.
+
 
 ## 2026-10-15 · Claude · B rejasi 3–5: eski personajlar, Ko'kcha CPU, jahl va burilish
 - Fayllar: src/renderer/{characters.js,style.css,renderer.js}, src/main/{appearance.js,settings.js}, README.md, docs/PROJECT.md, CHANGELOG.md. chibi/ ga tegilmadi.

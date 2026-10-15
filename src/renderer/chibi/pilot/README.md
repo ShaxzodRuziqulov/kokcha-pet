@@ -1,5 +1,7 @@
 # 1.8.0 — tasdiqlangan pilot va runtime integratsiyasi
 
+**Joriy yurish:** 2026-10-15 tuzatishida eski8atlas o'rniga original yuqori tana + kod orqali ikki bo'g'imli oyoqlardan12WebP/20fps sikl ulandi. `walk.json` va `scripts/build-chibi-walk.py` joriy manba; eskiAIatlasning takroriy oyoq/tana fazalari ishlatilmaydi. Yangi generatsiya sinovi rad etildi (`walk-prompt.json`). Tafsilot va tekshiruvlar [../README.md](../README.md#yurish-tuzatishi--2026-10-15). Quyidagi8kadr/10fps ma'lumotlari oldingi pilot tarixi.
+
 A–D kelishuvi: qatlamli idle; 8 walk kadr / 10 fps; erta GIF ko'rigi; neutral-only animatsiya, boshqa ifodalarda eski poza + overlay. d513816 review'dan keyingi 4 sifat tuzatishi 8eb8033'da. Shaxzod 'ha, integratsiya qil' degach ushbu assetlar runtime'ga ulandi. Quyidagi manba va sifat auditi 8eb8033 holatiga tegishli; runtime kontrakti va o'lchovi [../README.md](../README.md)'da.
 
 ## Manba va idle

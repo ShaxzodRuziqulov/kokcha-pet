@@ -1,6 +1,6 @@
 # Chibi kadrlar
 
-Runtime: `frames/*.png`, `pilot/walk/*.webp` va `frames/manifest.json`. 33 PNG + 8 WebP; jami 1 396 541 bayt. Eng katta tomoni 400 px, shaffof alfa. Bitmaplarning nazariy hajmi 18 577 920 bayt (17.72 MiB), idle qatlamlari yana 1.82 MiB; Chromium/GPU overhead'i bundan tashqari. Runtime'da atlas yoki alfa skaneri yo'q. `head` — kadr masshtabi uchun bosh kengligi. Chetda shaffof gutter bor.
+Runtime: `frames/*.png`, `pilot/walk/*.webp` va `frames/manifest.json`. 33 PNG + 12 WebP; jami 1 219 457 bayt. Eng katta tomoni 400 px, shaffof alfa. Bitmaplarning nazariy hajmi 20 497 920 bayt (19.55 MiB), idle qatlamlari yana 1.82 MiB; Chromium/GPU overhead'i bundan tashqari. Runtime'da atlas yoki alfa skaneri yo'q. `head` — kadr masshtabi uchun bosh kengligi. Chetda shaffof gutter bor.
 
 Oldingi 4 atlas Git tarixida (`8fd6fb3`, `src/renderer/chibi/`) saqlangan. Kadrlar alfa siluet komponentlari bo'yicha ajratildi: ¾ va yon ko'rinishlar qo'shni soch bo'laklarini olmaydi, o'tirish katagiga pastdagi sakrashning sochi kirmaydi. Ranglar 256 rangli RGBA PNG palitrasiga tushirilgan.
 
@@ -10,7 +10,21 @@ Yangi rasmlar built-in `image_gen` orqali yaratildi, keyin alfa bo'yicha qirqild
 - `walk-b.png`: o'ngga qaragan ayni personaj, yurishning o'tish qadami; oyoqlar bir-biriga yaqin, biri tekis pastga tayangan, ikkinchisining tizzasi bukilgan va tovoni boldir ortiga ko'tarilgan; old qo'l yoniga tushirilgan; bosh, soch, yuz, kiyim va uslub saqlanadi; shaffof fon, to'liq bitta personaj. Dastlabki keng qadam varianti ishlatilmaydi.
 - `ledge.png`: o'ng ¾ ko'rinish, ko'rinmas qirrada o'tirgan ayni personaj; kaftlar ikki yonida, sonlar gorizontal, tizzalar birga, boldirlar va etiklar vertikal pastga osilgan; tagcharm kameraga qaramaydi; stol, qirra, taxta, soya yoki matn chizilmaydi; shaffof fon.
 
-Animatsiya: qatlamli idle 12 fps, 8 kadrli yurish 10 fps, climb 4 fps; 3.2–6 s oralig'ida 135 ms pirpirash; burilishda 95 ms oraliqdagi old/¾/yon kadrlar; kursor uchun 300/190 va 1050/880 px histerezis. Boshqa personaj yoki yashirin hujjatda taymerlar to'xtatiladi. Qizcha 180 px. Qirrada yangi kadrning oyoqlari uchun 46 px pastga siljish.
+Animatsiya: qatlamli idle 12 fps, 12 kadrli yurish 20 fps (0.6 s sikl), climb 4 fps; 3.2–6 s oralig'ida 135 ms pirpirash; burilishda 95 ms oraliqdagi old/¾/yon kadrlar; kursor uchun 300/190 va 1050/880 px histerezis. Boshqa personaj yoki yashirin hujjatda taymerlar to'xtatiladi. Qizcha 180 px. Qirrada yangi kadrning oyoqlari uchun 46 px pastga siljish.
+
+## Yurish tuzatishi — 2026-10-15
+
+Oldingi 8 kadrli atlasda oyoq fazalari takrorlangan, qo'l/kofta/yubka shakli kadrlar orasida keskin o'zgargan. Shaxzod yurishni tuzatishni topshirdi. Yangi built-in image_gen atlasida ham fazalar takrorlandi; u rad etildi va runtime'ga kiritilmadi. Prompt va qaror `pilot/walk-prompt.json` da.
+
+Yakuniy 12 kadr `scripts/build-chibi-walk.py` orqali oldindan yig'iladi (faqat asset tayyorlashda Pillow kerak). Bosh, soch, yuz, kofta, qo'llar va yubka original `walk-a.png` piksellari; pastki tana ikki bo'g'imli kod rig'i, yumaloq tizza, paypoq va etik bilan chiziladi. Qo'llar bu siklda asl pozada qoladi; to'liq yangi qo'l animatsiyasi da'vo qilinmaydi. Bu AI video yoki yangi generatsiya kadrlari emas.
+
+Yaqin va uzoq oyoq fazalari yarim sikl farq qiladi; chizish tartibi far → near → original tana. Har kadrda bitta tayanch oyoq, max alfa>24 baseline398. Tayanch oyoq 50ms da12 source px orqaga yuradi: 180px runtime masshtabida98.4DIP/s, main yurishi100DIP/s ga yaqin. Ko'tarilgan oyoq24px yoy bo'ylab oldinga qaytadi; bosh/tana bob[2,1,0,-1,0,1] ikki marta. Blink anchor x14/y(2+bob); nafas, ifoda fallback va soat kodi saqlandi.
+
+12 lossless WebP300×400 jami363488bayt, decode5.49MiB (oldingi8kadrga nisbatan+1.83MiB). Umumiy45asset1.22MB. Yangi runtime taymeri yoki piksel skaneri qo'shilmadi. Yurish fps10→20: CPU qayta o'lchanmadi, tezlashish da'vosi yo'q; quyidagi CPU jadvali eski10fps yurish holatiga tegishli.
+
+Tekshiruv: haqiqiy Electron'da har yo'nalishda12distinct faza (24capture), baseline/bounds va tayanch oyoq tezligi auditi, bob tekislanganda bosh/kofta piksellari aynan teng. Haqiqiy blink146ms davomida06→07→08walk fazalari davom etdi; ko'zdan past tasvir ayni fazadagi ochiq ko'zga teng. Idle/climb/sleep,6ifoda fallback, deactivate'da canvas muzlashi va konsol0xato. Asosiy ilova main/preload/renderer bilan Temp profilda ochildi, main→renderer o'ng/chap walkslot o'tdi. Installed EXE/build/push/release va jismoniy drag/fullscreen/OS sleep-resume tekshirilmadi. Review GIF'lari Codex visualizations/.../walk-fix/{comparison,walking}.gif; sinov skript/profil/capturelar Temp'da yaratilib o'chirildi.
+
+Quyidagi 8 kadrli pilot va uning o'lchovlari tarixiy ma'lumotdir.
 
 ## 1.7.0 uchun
 
