@@ -31,15 +31,15 @@ function register() {
 
   ipcMain.on('pet-menu', () => menu.popup());
 
-  // Gap bulutchasidagi tugmalar. Joy CSS px'da keladi; oyna zoomFactor = scale.
+  // Gap bulutchasidagi tugmalar. Joy CSS px'da saqlanadi — DIP'ga tekshiruv paytida joriy
+  // scale bilan aylantiriladi (o'lcham almashsa ham to'g'ri qoladi; Codex review P2).
   ipcMain.on('hit-area', (_e, rect) => {
     const ok = rect && ['x', 'y', 'w', 'h'].every((k) => Number.isFinite(rect[k]) && Math.abs(rect[k]) < 5000);
-    const s = C.scale();
-    ctx.hitArea = ok ? { x: rect.x * s, y: rect.y * s, w: rect.w * s, h: rect.h * s } : null;
+    ctx.hitArea = ok ? { x: rect.x, y: rect.y, w: rect.w, h: rect.h } : null;
   });
   ipcMain.on('bubble-action', (_e, id) => {
-    const handler = BUBBLE_ACTIONS[id];
-    if (handler) handler();
+    // Faqat ro'yxatning o'z funksiyalari ('__proto__' kabi meros kalitlar emas; Codex review P3)
+    if (typeof id === 'string' && Object.hasOwn(BUBBLE_ACTIONS, id) && typeof BUBBLE_ACTIONS[id] === 'function') BUBBLE_ACTIONS[id]();
   });
 
   ipcMain.on('pet-click', () => {

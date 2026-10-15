@@ -9,7 +9,10 @@
   context.scale(ratio, ratio);
   let frames = {}, loaded = false, active = false;
   let latest = { state: 'idle', pose: 'stand', expression: 'neutral', dir: 1 };
-  const FACE_FALLBACK = { embarrassed: 'happy' };
+  // Biror boshda ifoda bo'lmasa — eng yaqini
+  const FACE_FALLBACK = { embarrassed: 'happy', smug: 'happy', love: 'happy', excited: 'happy' };
+  // Bir martalik kadrli harakat (wave, read, tea, water, stretch): { name, resolve }
+  let activity = null;
   let lookTarget = 0, facing = 0, previous = '', previousTime = 0;
   let turnTimer = null, blinkTimer = null, blinkEnd = null;
   let blinking = false;
@@ -103,6 +106,7 @@
     if (!loaded || !active) return;
     const { state, pose, side, expression = 'neutral' } = latest;
     let name = 'stand', mirrored = false;
+    if (activity && !(state === 'idle' && pose === 'stand' && !latest.dragging)) finishActivity(false);
     if (latest.dragging) name = 'hang';                 // ko'tarib olinganda — qo'llari tepada osilib turadi
     else if (state === 'sleep' || pose === 'lie') name = 'lie';
     else if (pose === 'sit') name = 'sit';
@@ -115,7 +119,8 @@
     else if (facing !== 0) { name = Math.abs(facing) === 2 ? 'profile' : 'quarter'; mirrored = facing < 0; }
     let requested = expression;
     let slotName = null;
-    if (pose === 'climb' && state !== 'sleep') slotName = 'climb';
+    if (activity) slotName = activity.name;   // old ko'rinish kadrlari: yuz qo'yilmaydi, burilish kutadi
+    else if (pose === 'climb' && state !== 'sleep') slotName = 'climb';
     else if (requested === 'neutral' && !latest.dancing && pose === 'stand') {
       if (state === 'walk' && facing !== 0) slotName = 'walk';
       else if (state === 'idle' && facing === 0) slotName = 'idle';
@@ -125,6 +130,10 @@
     clock.request(slotName);
     const phase = slotName ? clock.sample() : null;
     if (phase) name = phase.frame;
+    if (activity && phase?.name === activity.name) {
+      requested = 'neutral'; mirrored = false;
+      if (!phase.running) { finishActivity(true); return paint(); }
+    }
     const sequenceBlink = blinking && expression === 'neutral' &&
       ((phase?.slot.procedural && blinkPatches[name]) ||
        (phase && blinkPatches[frames[name].blink?.source]));
@@ -181,7 +190,9 @@
       if (image.naturalWidth !== frame.width || image.naturalHeight !== frame.height) throw new Error(`Kadr oʻlchami notoʻgʻri: ${name}`);
       frames[name] = { ...frame, image };
     }));
-    // Kadrli (sequenceOnly) slotlar uchun: bir martalik decode; slot almashganda kutish va qayta decode yo'q.
+    // Kadrli (sequenceOnly) slotlar — birinchi o'ynalganda decode qilinadi va saqlanib qoladi.
+    // Ishga tushishda hech biri yuklanmaydi (hammasi oldindan ~40 MB). Har safar qayta decode qilish
+    // GPU xotirasini o'stirib yuborgani uchun (20 harakatda +250 MB) bo'shatilmaydi.
     cache = new window.ChibiSequences.FrameCache({ mode: 'all', load: async name => {
       const frame = frames[name];
       const response = await fetch(`chibi/${frame.src}`);
@@ -190,13 +201,7 @@
       if (image.width !== frame.width || image.height !== frame.height) { image.close(); throw new Error(`Kadr oʻlchami notoʻgʻri: ${name}`); }
       return image;
     } });
-    const optional = Object.keys(frames).filter(name => frames[name].sequenceOnly);
-    try { await cache.prepare(optional); }
-    catch (error) {
-      cache.clear();
-      for (const [name, slot] of Object.entries(slots)) if (slot.frames.some(id => frames[id].sequenceOnly)) disabledSlots.add(name);
-      console.warn('Animatsiya yuklanmadi, asl poza ishlatiladi:', error);
-    }
+
     try { if (window.PilotIdleRig) rigs.idle = new window.PilotIdleRig(frames.stand.image); }
     catch (error) { console.warn('Idle qatlamlari tayyorlanmadi:', error); }
     try { if (window.ChibiWalkRig) rigs.walk = new window.ChibiWalkRig(frames['walk-a'].image, frames['walk-b'].image); }
@@ -215,11 +220,44 @@
     ]);
     loaded = true; paint();
   });
-  window.Chibi = { ready, paint,
+  function finishActivity(completed) {
+    if (!activity) return;
+    const { resolve } = activity;
+    activity = null;
+    clock?.request(null);
+    if (clock) clock.current = null;   // keyingi safar ayni harakat boshidan boshlansin
+    previous = '';
+    resolve(completed);
+  }
+
+  // Bir martalik harakat. Faqat tinch turganda (old ko'rinishga buriladi). Natija: tugadimi (true) yoki to'xtatildimi.
+  async function playActivity(name) {
+    await ready;
+    const slot = slots[name];
+    if (!slot || disabledSlots.has(name) || activity || !active) return false;
+    if (!(latest.state === 'idle' && latest.pose === 'stand' && !latest.dragging)) return false;
+    try { await cache.prepare([...new Set(slot.frames.filter(id => frames[id].sequenceOnly))]); }
+    catch (error) {
+      disabledSlots.add(name);
+      console.warn(`"${name}" harakati yuklanmadi, oʻtkazib yuborildi:`, error);
+      return false;
+    }
+    if (activity || !active || latest.state !== 'idle' || latest.pose !== 'stand') return false;
+    return new Promise(resolve => {
+      activity = { name, resolve };
+      clock.request(null);
+      clock.current = null;
+      previous = '';
+      paint();
+    });
+  }
+
+  window.Chibi = { ready, paint, playActivity, activities: () => Object.keys(slots).filter(n => !['idle', 'walk', 'climb'].includes(n)),
     setActive(on) {
       if (active === on) return;
       active = on;
       clearTimeout(turnTimer); clearTimeout(animationTimer); animationTimer = null;
+      if (!on) finishActivity(false);
       clock?.pause();
       clearTimeout(blinkTimer); clearTimeout(blinkEnd); blinking = false;
       if (on) { previous = ''; paint(); scheduleBlink(); }

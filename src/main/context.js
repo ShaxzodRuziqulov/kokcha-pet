@@ -28,7 +28,7 @@ const ctx = {
   danceUntil: 0,
   userHidden: false,    // menyu orqali yashirilgan
   fullscreenHidden: false, // boshqa dastur to'liq ekranda
-  hitArea: null,        // tugmali gap bulutchasi: { x, y, w, h } oyna ichida (DIP) — shu joy ham bosiladi
+  hitArea: null,        // tugmali gap bulutchasi: { x, y, w, h } oyna ichida (CSS px) — shu joy ham bosiladi
 };
 
 let bubbleShift = 0;

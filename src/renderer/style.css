@@ -39,6 +39,9 @@ body.chibi-mode #bubble { bottom: 178px; max-height: calc(100% - 184px); }
 #bubble[data-face="embarrassed"] { --accent: #d06a8e; }
 #bubble[data-face="sad"]         { --accent: #5d82b3; }
 #bubble[data-face="surprised"]   { --accent: #c48a2a; }
+#bubble[data-face="love"]        { --accent: #d06a8e; }
+#bubble[data-face="smug"]        { --accent: #7c5fb8; }
+#bubble[data-face="excited"]     { --accent: #d9822b; }
 #bubble.reminder                 { --accent: #7a5bc4; }
 #bubble.closing { animation: fade-out 0.2s ease-in forwards; }
 #bubble::after {

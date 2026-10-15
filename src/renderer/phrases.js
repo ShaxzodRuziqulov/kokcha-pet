@@ -39,6 +39,11 @@
         drop: ['Uuuuu! 😮', 'Uchyapman! 🎢'],
       },
       newLook: ['Salom! Endi men {name}man ✨'],
+      // Midori'ning mashg'ulotlari (kadrli harakat bilan birga)
+      activity: {
+        read: ['Biroz kitob oʻqiy 📖', 'Qiziq joyiga keldim…'], tea: ['Choy ichib olay ☕', 'Mm, issiqqina 😌'],
+        water: ['Gulimni sugʻoray 🌱', 'Oʻs, gulim, oʻs! 😊'], stretch: ['Uf, bir choʻzilay! 💪', 'Qotib qolibman 😌'],
+      },
     },
 
     // Midori — quvnoq va gʻayratli
@@ -210,7 +215,10 @@
     embarrassed: '😳🥺👉👈😅😰🙈',
     sad: '😢😭😔😞😕',   // 💧 — suv ichish eslatmasi, qayg'u emas
     surprised: '😮😲😱😵🎢👀',
-    happy: '✨😜😊😄😁💚😎💪🎉😆😌😏🤸💃👑🥰😋',
+    smug: '😏😎👑',
+    love: '🥰💗💚😍',
+    excited: '🎉🤩💃🤸',
+    happy: '✨😜😊😄😁💪😆😌😋',
   };
   // Qaysar (tsundere): "Ishla! …Yaxshi ishlayapsan." — qattiq gapdan keyin "…" bilan yumshasa
   // uyalgan yuz, faqat qattiq gap bo'lsa — jahldor. Oddiy "gapiryapman" yuzi unga mos emas.

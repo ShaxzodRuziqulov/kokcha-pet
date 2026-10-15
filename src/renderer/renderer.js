@@ -117,6 +117,7 @@ function render() {
         body.classList.contains('surprised') ? 'surprised' :
         body.classList.contains('sad') ? 'sad' : talking ? speechFace :
         body.classList.contains('yawn') ? 'sleeping' :
+        body.classList.contains('love') ? 'love' :
         body.classList.contains('happy') ? 'happy' : body.classList.contains('hover') ? 'embarrassed' : 'neutral' });
     return;
   }
@@ -164,6 +165,21 @@ function mood(cls, ms) {
   body.classList.add(cls);
   bodyTimers[cls] = setTimeout(() => { body.classList.remove(cls); render(); }, ms);
   render();
+}
+
+// Qo'l silkitish: Ko'kchada CSS qo'l, Midori'da kadrli harakat (faqat tinch turganda)
+function wave() {
+  mood('wave', 1600);
+  if (character === 'chibi-girl') window.Chibi.playActivity('wave');
+}
+
+// Midori'ning o'z mashg'ulotlari (MaoMao'dagi kabi): tinch turganda vaqti-vaqti bilan
+const ACTIVITIES = ['read', 'tea', 'water', 'stretch'];
+async function doActivity() {
+  const name = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
+  const started = window.Chibi.playActivity(name);
+  if (!quiet && Math.random() < 0.6) setTimeout(() => { if (!talking) say(line('activity.' + name)); }, 400);
+  return started;
 }
 
 // Bosh ustidagi belgi (❗ 💢 💗 ❓ 💫) — his-tuyg'uni bir qarashda ko'rsatadi
@@ -319,9 +335,11 @@ function say(text, opts = {}) {
   speechFace = window.Phrases.faceOf(voice(), text);
   bubble.dataset.face = speechFace;
   clearSpeechMood();
-  if (character !== 'chibi-girl' && (speechFace === 'happy' || speechFace === 'angry') && !body.classList.contains(speechFace)) {
-    speechMood = speechFace;
-    mood(speechFace, bubbleTime(text));
+  // Ko'kchada faqat quvnoq va jahl yuzi bor: sho'x/sevgi/hayajon — quvnoq
+  const kokchaFace = ['smug', 'love', 'excited'].includes(speechFace) ? 'happy' : speechFace;
+  if (character !== 'chibi-girl' && (kokchaFace === 'happy' || kokchaFace === 'angry') && !body.classList.contains(kokchaFace)) {
+    speechMood = kokchaFace;
+    mood(kokchaFace, bubbleTime(text));
   }
   typeText(text);
   bubble.classList.remove('hidden', 'closing');
@@ -360,6 +378,7 @@ function showReminder() {
   reminderActive = true;
   sayQueue.forEach(clearTimeout); sayQueue = [];
   clearTimeout(bubbleTimer);
+  setActions(null);   // oldingi bulutchaning tugmalari (masalan, "Yangilash") eslatmaga o'tmasin (Codex review P2)
   const text = reminderQueue.shift();
   bubbleName.textContent = '⏰ Eslatma';
   clearInterval(typeTimer);
@@ -456,7 +475,7 @@ function dance() {
 }
 
 function welcome(reason) {
-  mood('wave', 1600);
+  wave();
   if (quiet) return;
   say(reason === 'morning' ? greeting() : line('welcomeBack'));
 }
@@ -467,8 +486,9 @@ function scheduleFidget() {
     const free = state === 'idle' && !talking && !body.classList.contains('hover');
     if (free) {
       const r = Math.random();
-      if (r < 0.35) mood('yawn', 1800);
-      else if (r < 0.6) mood('wave', 1600);
+      if (character === 'chibi-girl' && r < 0.5) doActivity();
+      else if (r < 0.65) mood('yawn', 1800);
+      else if (r < 0.8) wave();
       else mood('glance', 2600);
     }
     scheduleFidget();
@@ -520,7 +540,7 @@ window.pet.on('petted', () => {
   burst(['♥'], 2);
   emote('💗');
   if (state === 'sleep') return; // uxlab yotgan bo'lsa ham yoqadi, lekin uyg'onmaydi
-  mood('happy', 1500);
+  mood(character === 'chibi-girl' ? 'love' : 'happy', 1500);   // Midori'da — yurakchali ko'zlar
   if (Math.random() < 0.3) play('hop', 600);
   const now = Date.now();
   if (now - lastPettedTalk > 10000) {
@@ -533,7 +553,7 @@ window.pet.on('say', (kind) => {
   if (kind === 'break') say(line('breakTime'));
   else if (kind === 'here') { play('boing', 450); say(line('here')); }
   else if (window.Phrases.has(voice(), 'move.' + kind)) say(line('move.' + kind));
-  else if (kind === 'image-tips') { mood('wave', 1600); sayAll(IMAGE_TIPS); }
+  else if (kind === 'image-tips') { wave(); sayAll(IMAGE_TIPS); }
   else if (kind === 'image-cancel') sayAll([IMAGE_CANCEL]);
   else if (kind === 'image-error') { mood('sad', 2400); sayAll([IMAGE_ERROR]); }
   else sayRandom();
@@ -579,7 +599,7 @@ window.pet.on('update', ({ status, version, portable }) => {
   if (status === 'error') return say("Yangilanishni tekshira olmadim 😕 Internet bormi? Keyinroq yana urinib koʻraman.", force);
   if (status === 'dev') return say("Bu sinov nusxasi — yangilanish tekshirilmaydi.", force);
   if (status !== 'ready') return;
-  mood('wave', 1600);
+  wave();
   if (portable) {
     say(`Yangi versiya chiqdi (${version})! ✨`, { force: true, actions: [
       { label: 'Yuklab olish', id: 'update-install', primary: true }, { label: 'Keyinroq' }] });
@@ -632,6 +652,6 @@ window.pet.on('look', ({ dx, dy }) => {
   applyAppearance(init);
   scheduleFidget();
   scheduleBlink();
-  if (init.firstRun) setTimeout(() => { mood('wave', 1600); sayAll(onboarding()); }, 600);
+  if (init.firstRun) setTimeout(() => { wave(); sayAll(onboarding()); }, 600);
   else if (!quiet) setTimeout(() => say(greeting()), 600);
 })();

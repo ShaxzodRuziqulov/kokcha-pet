@@ -128,8 +128,9 @@ function trackCursor() {
       const over = c.x >= r.x && c.x < r.x + r.w && c.y >= r.y && c.y < r.y + r.h;
       const nextGhost = over && native.isCtrlDown(); // Ctrl — orqadagi narsani bosish uchun
       // Tugmali gap bulutchasi ham sichqonchani ushlaydi (personajni "silash" hisoblanmaydi)
-      const [wx, wy] = ctx.win.getPosition(), h = ctx.hitArea;
-      const overBubble = !!h && c.x >= wx + h.x && c.x < wx + h.x + h.w && c.y >= wy + h.y && c.y < wy + h.y + h.h;
+      const [wx, wy] = ctx.win.getPosition(), h = ctx.hitArea, k = C.scale();   // hitArea — CSS px
+      const overBubble = !!h && c.x >= wx + h.x * k && c.x < wx + (h.x + h.w) * k
+        && c.y >= wy + h.y * k && c.y < wy + (h.y + h.h) * k;
       const nextCapture = (over && !nextGhost) || overBubble;
 
       if (over !== ctx.hovering) {
