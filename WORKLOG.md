@@ -3,6 +3,9 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-15 · Claude · Ko'kcha 1.10.1 chiqarildi
+- Shaxzod "ha, 1.10.1 ni chiqar". Tarkibi: mashg'ulotlar 45–90 s, pet-busy, panelda "Harakat" (8ddd2ee). asar: versiya 1.10.1, scheduleActivity/pet-busy bor. `/S` o'rnatildi (1.10.1.0) va ishga tushirildi. Teg v1.10.1, push, release, latest.yml 1.10.1. dist o'chirildi. Codex review hali yo'q.
+
 ## 2026-10-15 · Claude · Mashg'ulotlar kam chiqardi — tuzatildi
 - Shaxzod: 1.10.0 da kitob/gul sug'orish ko'rinmayapti. Sabab: fidget (25–60 s) ichida 50%, faqat tik turganda; "O'zi yursin" bilan Midori ko'pincha yuradi/o'tiradi → o'rtacha 4–5 daqiqada bir; kursor ustida bo'lsa umuman yo'q; main yurishni boshlab harakatni uzishi mumkin edi.
 - Tuzatish (8ddd2ee): alohida taymer 45–90 s; `pet-busy` IPC (main: `danceUntil`, yurish to'xtaydi, o'tirgan/yotgan bo'lsa turadi; qirra/osilish/yiqilishda e'tiborsiz); panel/menyuda Midori uchun "Harakat" (qo'l silkitsin, kitob, choy, gul, cho'zilsin) — `activity` kanali.
