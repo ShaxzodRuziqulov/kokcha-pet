@@ -47,6 +47,7 @@ scripts/release.mjs     GitHub Release yaratish (CHANGELOG'dan tavsif oladi)
 
 ## Personajlar va ko'rinish
 - 2 ta: `chibi-girl` (Yashil qizcha, PNG kadrlar — `src/renderer/chibi/`) va `kokcha` (SVG). `cat`/`dog`/`penguin` 1.8.0 da olib tashlangan; tanlaganlar Ko'kchaga o'tadi.
+- **Gaplar:** `src/renderer/phrases.js` — ovozlar: `default`, Midori fe'llari `cheerful/shy/tsundere/playful` (main `persona` kanali, 3–4 soatda navbat bilan), Ko'kcha `curious`. Kalitlar: `greet.*`, `random`, `time.*`, `wake.*`, `welcomeBack`, `petted`, `breakTime`, `here`, `angry.1–3`, `move.*`, `newLook`, `intro`. Yo'q kalit `default` dan olinadi; `{name}` — ism. renderer.js'da `line(key)`.
 - Ko'kcha skeleti: `pose > body-group`, `arm-l/arm-r`, `foot-l/foot-r`, `eyes-open/happy/closed/angry`, `#pupils`, og'iz, `zzz`.
 - **Tezlik qoidasi:** SVG'dagi CSS animatsiyalar GPU'ga berilmaydi va silliq rejimda 60 fps qayta bo'yaladi. Abadiy animatsiyalar `steps()` bilan (~10–13 fps), ko'z qisish JS taymeri bilan. O'lchov: Ko'kcha tinch holatda 66% → ~20% bir yadro.
 - Ranglar: `--body`, `--line`, `--belly`, `--accent`, `--feet`. Rang variantlari: original, green, pink, yellow, purple, blue (`body[data-color]`).

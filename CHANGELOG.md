@@ -1,5 +1,8 @@
 # O'zgarishlar
 
+## Keyingi versiya
+- Personajlar o'z fe'li bilan gapiradi: Midori'ning 4 kayfiyati (quvnoq, uyatchan, injiq, hazilkash) navbat bilan almashadi; Ko'kcha — bolalarcha qiziquvchan. Salomlashish, harakat, jahl, uyg'onish, silash va tanaffus gaplari fe'lga mos.
+
 ## 1.8.0
 - Mushukcha, Kuchukcha va Pingvin olib tashlandi — ularni tanlaganlar avtomatik Ko'kchaga o'tadi. Menyuda: Yashil qizcha, Ko'kcha va "O'z rasmim".
 - Ko'kcha: otib yuborilganda jahl (qosh, og'iz, g'azab belgisi, kuchiga qarab silkinish); chapga burilishda "varaq ag'darilishi" yo'q.

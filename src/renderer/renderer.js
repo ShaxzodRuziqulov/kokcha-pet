@@ -1,21 +1,15 @@
 // Kokcha — ko'rinish va o'zaro ta'sir (renderer)
 
-const PHRASES = [
-  "Bugun nima kod yozamiz?",
-  "Commit qilishni unutmang!",
-  "Biroz suv iching 💧",
-  "Bug topdingizmi? Birga tuzatamiz!",
-  "Men shu yerdaman, ishlayvering.",
-  "Bir oz cho'zilib oling, qotib qoldingiz.",
-  "Kod ishladimi? Zo'r!",
-];
-const WAKE_IDLE = "Mm... uxlab qolibman.";
-const WAKE_CLICK = "Hm? Uyg'otib yubordingiz-ku!";
-const WAKE_DRAG = "Voy! Qayoqqa olib ketyapsiz?";
-const BREAK_REMINDER = "Ancha bo'ldi, ko'zlaringizga dam bering 👀";
-const HERE = "Men shu yerdaman! 🌱";
-const WELCOME_BACK = "Qaytdingizmi? Sog'indim! 🌱";
-const PETTED = ["Hihi 😊", "Yana! Yana!", "Qitiq bo'lyapti-ku 😄", "Mm, yoqdi 💚"];
+// Gaplar — phrases.js: har bir personaj/fe'l o'z ovozi bilan gapiradi.
+// Midori (chibi-girl) fe'li main'dan `persona` kanali orqali keladi; Ko'kcha doim qiziquvchan.
+const MIDORI_VOICES = ['cheerful', 'shy', 'tsundere', 'playful'];
+let persona = null;
+function voice() {
+  if (character === 'chibi-girl') return MIDORI_VOICES.includes(persona) ? persona : 'cheerful';
+  if (character === 'kokcha') return 'curious';
+  return 'default';
+}
+const line = (key) => window.Phrases.pick(voice(), key, { name: petName });
 
 // Birinchi ochilganda — qisqa tanishtirish
 const onboarding = () => [
@@ -55,34 +49,21 @@ function imageFeedback({ issues, cropped, w, h }) {
   return lines;
 }
 
-// Harakat paytidagi gaplar (asosiy jarayon tanlaydi, qachon aytishni ham)
-const MOVE_PHRASES = {
-  sit: ["Biroz dam olay...", "Oyoqlarim charchadi 😌"],
-  lie: ["Hmm, biroz yotib turay", "Yumshoq ekan 😌"],
-  ledge: ["Oyoqlarimni osiltirib o'tiraman 😊", "Bu yerdan hammasi ko'rinadi!"],
-  perch: ["Bu yerdan hammasi ko'rinadi! 👀", "Men tepadaman! 😎"],
-  jump: ["Hop!", "Sakrayman!"],
-  climb: ["Tepaga chiqaman! 🧗", "Qani, yuqoriga!"],
-  hang: ["Voy, baland ekan!", "Endi qanday tushaman? 😅"],
-  drop: ["Uuuuu!", "Wiii! 🎢"],
-};
-
-// Soatga qarab salomlashish
-function greeting() {
+// Kun vaqti: salomlashish va vaqtga oid gaplar uchun
+function dayPart() {
   const h = new Date().getHours();
-  if (h >= 5 && h < 11) return `Xayrli tong! Men ${petName}man 🌱`;
-  if (h >= 11 && h < 17) return `Salom! Men ${petName}man 🌱`;
-  if (h >= 17 && h < 22) return `Xayrli kech! Men ${petName}man 🌱`;
-  return `Hali ham ishlayapsizmi? Men ${petName}man 🌙`;
+  if (h >= 5 && h < 11) return 'morning';
+  if (h >= 11 && h < 17) return 'day';
+  if (h >= 17 && h < 22) return 'evening';
+  return 'night';
 }
-
-// Soatga qarab qo'shimcha gaplar
-function timePhrases() {
+const greeting = () => line('greet.' + dayPart());
+function timeKey() {
   const h = new Date().getHours();
-  if (h >= 6 && h < 10) return ["Kun yaxshi boshlansin! ☀️", "Nonushta qildingizmi?"];
-  if (h >= 12 && h < 14) return ["Tushlik vaqti! Ovqatlanib oling 🍲"];
-  if (h >= 22 || h < 5) return ["Kech bo'ldi, dam oling 🌙", "Ertaga davom ettirsak ham bo'ladi."];
-  return [];
+  if (h >= 6 && h < 10) return 'time.morning';
+  if (h >= 12 && h < 14) return 'time.lunch';
+  if (h >= 22 || h < 5) return 'time.night';
+  return null;
 }
 
 const FADE_MS = 200;
@@ -271,14 +252,9 @@ window.pet.on('remind', data => {
   showReminder();
 });
 
-let lastPhrase = '';
 function sayRandom() {
-  const extra = timePhrases();
-  const pool = extra.length && Math.random() < 0.35 ? extra : PHRASES;
-  let text;
-  do { text = pool[Math.floor(Math.random() * pool.length)]; } while (text === lastPhrase && pool.length > 1);
-  lastPhrase = text;
-  say(text);
+  const time = timeKey();
+  say(time && Math.random() < 0.35 ? line(time) : line('random'));
 }
 
 // ---- Sudrash va bosish ----
@@ -346,7 +322,7 @@ function dance() {
 function welcome(reason) {
   mood('wave', 1600);
   if (quiet) return;
-  say(reason === 'morning' ? greeting() : WELCOME_BACK);
+  say(reason === 'morning' ? greeting() : line('welcomeBack'));
 }
 
 // Vaqti-vaqti bilan esnaydi yoki qo'l silkitadi
@@ -394,10 +370,10 @@ window.pet.on('state', ({ state: s, dir, pose, side }) => {
 
 window.pet.on('woke', ({ reason }) => {
   play('stretch', 1000);
-  if (reason === 'click') say(WAKE_CLICK);
-  else if (reason === 'drag') say(WAKE_DRAG);
+  if (reason === 'click') say(line('wake.click'));
+  else if (reason === 'drag') say(line('wake.drag'));
   else if (reason === 'morning' || reason === 'back') setTimeout(() => welcome(reason), 900);
-  else if (!quiet) say(WAKE_IDLE);
+  else if (!quiet) say(line('wake.idle'));
 });
 
 window.pet.on('welcome', welcome);
@@ -411,17 +387,14 @@ window.pet.on('petted', () => {
   const now = Date.now();
   if (now - lastPettedTalk > 10000) {
     lastPettedTalk = now;
-    say(PETTED[Math.floor(Math.random() * PETTED.length)]);
+    say(line('petted'));
   }
 });
 
 window.pet.on('say', (kind) => {
-  if (kind === 'break') say(BREAK_REMINDER);
-  else if (kind === 'here') { play('boing', 450); say(HERE); }
-  else if (MOVE_PHRASES[kind]) {
-    const list = MOVE_PHRASES[kind];
-    say(list[Math.floor(Math.random() * list.length)]);
-  }
+  if (kind === 'break') say(line('breakTime'));
+  else if (kind === 'here') { play('boing', 450); say(line('here')); }
+  else if (window.Phrases.has(voice(), 'move.' + kind)) say(line('move.' + kind));
   else if (kind === 'image-tips') { mood('wave', 1600); sayAll(IMAGE_TIPS); }
   else if (kind === 'image-cancel') sayAll([IMAGE_CANCEL]);
   else if (kind === 'image-error') { mood('sad', 2400); sayAll([IMAGE_ERROR]); }
@@ -440,12 +413,21 @@ window.pet.on('mood', (data) => {
   if (character !== 'chibi-girl' && data.mood !== 'angry') return; // Ko'kchada faqat jahl yuzi bor
   const level = [1, 2, 3].includes(data.level) ? data.level : 1;
   mood(data.mood, 1500 + level * 700);
+  if (data.mood === 'angry' && !quiet) say(line('angry.' + level));
   if (character !== 'chibi-girl') {
     body.style.setProperty('--shake', `${level * 2}px`); // kuchli otilsa — qattiqroq silkinadi
     play('shake', 500);
   }
 });
 window.pet.on('ghost', (on) => body.classList.toggle('ghost', on));
+
+// Midori'ning fe'li almashdi. Bir xil fe'l qayta kelsa — jim; 'start' — salomlashish o'zi shu ovozda;
+// 'event' (otish/silash) — gapni jahl/silash reaksiyasining o'zi aytadi.
+window.pet.on('persona', (p) => {
+  if (!p || typeof p.id !== 'string' || p.id === persona) return;
+  persona = p.id;
+  if ((p.reason === 'timer' || p.reason === 'menu') && character === 'chibi-girl' && !quiet && state !== 'sleep') say(line('intro'));
+});
 
 // Yangi versiya: o'rnatilganida — yuklab olindi, portable'da — chiqdi
 window.pet.on('update', ({ version, portable }) => {
@@ -470,7 +452,7 @@ window.pet.on('appearance', (a) => {
   mood('happy', 1400);
   burst(['✦', '✧', '★'], 5);
   if (a.report) sayAll(imageFeedback(a.report));
-  else sayAll([a.change === 'color' ? "Yangi rang! Yarashdimi? ✨" : `Salom! Endi men ${petName}man ✨`]);
+  else sayAll([a.change === 'color' ? "Yangi rang! Yarashdimi? ✨" : line('newLook')]);
 });
 
 // Ko'zlar kursorga qaraydi
@@ -491,6 +473,7 @@ window.pet.on('look', ({ dx, dy }) => {
   window.Chibi.ready.then(() => { chibiReady = true; render(); }).catch(error => console.error('Personaj rasmlari yuklanmadi:', error));
   const init = await window.pet.getInit();
   quiet = init.quiet;
+  if (typeof init.persona?.id === 'string') persona = init.persona.id;
   applyAppearance(init);
   scheduleFidget();
   scheduleBlink();
