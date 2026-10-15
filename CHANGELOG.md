@@ -1,6 +1,6 @@
 # O'zgarishlar
 
-## Keyingi versiya
+## 1.6.1
 - Yashil qizcha kadrlari alohida, 400 px gacha PNG'larga ajratildi; qo'shni kadrdan soch kirishi va osilishdagi taxta olib tashlandi. Rasmlar jami 6.54 MB dan 0.55 MB ga tushdi, ochilishdagi alfa skaneri olib tashlandi.
 - Yurishda ikki kadr, qirrada oyoq osiltirib o'tirish, ko'z pirpiratish va old/¾/yon orqali chapga burilish qo'shildi. Kursor chegarasida burilish titramaydi.
 - Xafa/hayron ifodalari ulandi. Qizcha 180 px bo'ldi; ushlash sohasi va harakat geometriyasi moslandi.
