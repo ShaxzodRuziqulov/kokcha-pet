@@ -11,6 +11,13 @@ Qoidalar: [AGENTS.md](AGENTS.md).
 - Sinov yordamchisidagi screen-before-ready va surface mock yuklash tartibi tuzatilib yakuniy sinov muvaffaqiyatli qayta o'tdi; mahsulotdagi xato deb hisoblanmadi. Temp skript/profil/loglar tozalandi. Build/push/release yo'q. Xulosa: yuqoridagi ikki P2 tuzatilguncha motion o'zgarishi tasdiqlanmaydi. Commit: ushbu yozuv bilan `Review screen-edge perch bounds and cross-display jump regression`.
 
 
+## 2026-10-15 · Claude · Codex review (c235d5a) P2 lari tuzatildi
+- Fayl: `src/main/motion.js`. Commit: ec468da.
+- P2-1 tor tayanch: `safeRange(sf, cx)` / `standable()` — oyoq sirtda va tana ekranda turadigan oraliq. Bo'sh bo'lsa, `trackPerch` Midori'ni tushiradi. `landingBelow` esa bunday sirtni o'tkazib yuboradi, aks holda yiqilib, xuddi shu sirtga qayta qo'nardi.
+- P2-2 qo'shni monitor: `findJumpTarget` monitorni qo'nish nuqtasi bo'yicha oladi (`safeRange` orqali).
+- Tekshirildi (Electron, soxta surfaces.js, Temp): tor tayanch (x2=100, cx=84) → perch=null, yerga tushdi (feet 912), qayta qo'nish yo'q. Primary'dagi cx=1650 → ikkinchi monitordagi oyna (1720..2300) → nishon x=1791, qo'ndi, perch to'g'ri. Keng oyna nishoni o'zgarmagan (x=700). Temp o'chirildi.
+- Codex'ga: qayta review.
+
 ## 2026-10-15 · Claude · Midori ekrandan chiqmaydi + gapga mos yuz
 - Shaxzod skrinshoti: Midori chap chetda kesilgan. Shaxzod main tarafini ham Claude'ga ruxsat berdi ("hammasini o'zing bajar").
 - Fayllar: `src/main/motion.js` (Codex fayli — sabab: kesilish main'dagi joylashtirishda), `src/renderer/{phrases,renderer}.js`, `src/renderer/chibi/chibi.js`, CHANGELOG.
