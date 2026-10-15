@@ -11,7 +11,8 @@ const win = require('./window');
 const activity = require('./activity');
 
 // Tayyor personajlar (ko'rinishi — renderer/characters.js) va ranglar (renderer/style.css)
-const CHARACTERS = { 'chibi-girl': 'Yashil qizcha', kokcha: "Ko'kcha", cat: 'Mushukcha', dog: 'Kuchukcha', penguin: 'Pingvin' };
+const CHARACTERS = { 'chibi-girl': 'Yashil qizcha', kokcha: "Ko'kcha" };
+const REMOVED = ['cat', 'dog', 'penguin']; // 1.8.0 da olib tashlangan — tanlaganlar Ko'kchaga o'tadi
 const CUSTOM_NAME = "Do'stcha";
 const COLORS = {
   original: 'Asl rang',
@@ -59,6 +60,7 @@ function findCustomSprites() {
 function normalize() {
   const s = ctx.settings;
   if (!COLORS[s.color]) s.color = 'original';
+  if (REMOVED.includes(s.character)) s.character = 'kokcha';
   if (!CHARACTERS[s.character] && s.character !== 'custom') {
     // Avval custom/ papkaga rasm qo'yganlar uchun — o'sha rasm qoladi
     s.character = findCustomSprites().idle ? 'custom' : 'chibi-girl';

@@ -24,7 +24,7 @@ Ko'kchaning ustida yoki soat yonidagi belgida **o'ng tugma** bosilsa, menyu ochi
 |---|---|
 | Gapir / Uxlat / Uyg'ot | — |
 | Yashirish / Ko'rsatish | vaqtincha olib turish |
-| Personaj | Ko'kcha, Mushukcha, Kuchukcha, Pingvin yoki **O'z rasmim...** |
+| Personaj | Yashil qizcha, Ko'kcha yoki **O'z rasmim...** |
 | Rang | asl rang, yashil, pushti, sariq, binafsha, ko'k |
 | O'zi harakat qilsin | yurish, o'tirish, sakrash va hokazolarni yoqish/o'chirish |
 | Oynalar ustiga chiqsin | oynalar ustida yurish va devorga tirmashishni yoqish/o'chirish |
@@ -92,8 +92,8 @@ Eski standart Ko'kcha ilk ochishda yangi qiyofaga o'tadi; keyin tanlagan persona
 Ranglar original rasmga mos qoladi. Bu birinchi variantda yurish bitta poza va yengil tebranishdan iborat;
 oyoq-qo'llari qadamlab o'zgaradigan animatsiya uchun alohida yurish kadrlari kerak.
 Ko'kcha ustida o'ng tugma → **Personaj**:
-- **Tayyor personajlar:** Ko'kcha 🌱, Mushukcha 🐱, Kuchukcha 🐶, Pingvin 🐧. Hammasi to'liq animatsiyali.
-- **Rang:** har bir tayyor personajni 5 xil rangda qilish mumkin.
+- **Tayyor personajlar:** Yashil qizcha 👧 va Ko'kcha 🌱. Ikkalasi ham to'liq animatsiyali.
+- **Rang:** Ko'kchani 5 xil rangda qilish mumkin (Yashil qizcha o'z rangida).
 - **O'z rasmim...:** kompyuterdan istalgan rasmni tanlang (PNG, GIF, WebP yoki JPG). Rasm dastur ichiga nusxalanadi, asl faylni o'chirsangiz ham qoladi.
 
 ### Personajning o'zi yordam beradi

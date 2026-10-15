@@ -3,6 +3,14 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+
+## 2026-10-15 · Claude · B rejasi 3–5: eski personajlar, Ko'kcha CPU, jahl va burilish
+- Fayllar: src/renderer/{characters.js,style.css,renderer.js}, src/main/{appearance.js,settings.js}, README.md, docs/PROJECT.md, CHANGELOG.md. chibi/ ga tegilmadi.
+- Shaxzod qarori: cat/dog/penguin olib tashlandi (`appearance.REMOVED` → kokcha migratsiyasi); "O'z rasmim" qoldi.
+- Ko'kcha CPU: o'lchov (tinch, 30 s, main+renderer+GPU): A hozirgi 66%, B blinksiz 63%, C nafas steps(16) 20%, D nafassiz 16% → C tanlandi. Natija: tinch 57% → 19–22%, yurish 39% → 21–24%. Abadiy SVG animatsiyalari steps(), ko'z qisish JS taymeri (body.blink, 3–6 s). "O'z rasmim" (#sprite) ham qadamli.
+- Jahl: claude/c1-2.5d'dan yuz/og'iz/belgi + shake; renderer mood handler Ko'kchada faqat angry. Burilish: #pet transform transition olib tashlandi (bir lahzada).
+- Tekshirildi: Electron, profil `character: cat` → kokcha; menyu [chibi-girl, kokcha]; blink taymeri 7 s ichida; jahl, chapga yurish, uyqu, qirra, raqs suratlari; konsol toza. Sinov fayllari Temp'da, o'chirildi.
+- Codex review kutilmoqda.
 ## 2026-10-15 · Codex · B yo'li: uzluksiz blink va idle12fps
 - Shaxzod 'boshla' dedi; kelishilgan Codex chegarasi faqat src/renderer/chibi/. Fayllar: chibi.js, frames/manifest.json, pilot/idle-rig.js, README'lar. Renderer.js, characters.js/style.css va appearance.js'ga tegilmadi; Claude o'z 3–5-bandlarini bajarishi mumkin. WORKLOG ushbu yozuv/bandlik uchun yangilandi.
 - Blink endi slot tanlashni o'zgartirmaydi. Bir martalik ko'z patch'lari original stand/walk-a koordinatalarida canvas bilan chiziladi, bosh/soch/og'iz almashtirilmaydi; runtime alfa skaneri/yangi raster generatsiya yo'q. Idle patch'i ayni bosh translate/rotate transformida, walk har kadr manifestidagi x14/y(2+bob) anchor bilan. Chapga akslanish tanaga birga. 135ms ichida nafas/soch/yurish va soat davom etadi; haqiqiy ifodalarda eski bitta poza+overlay saqlangan.

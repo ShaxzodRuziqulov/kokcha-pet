@@ -46,7 +46,9 @@ scripts/release.mjs     GitHub Release yaratish (CHANGELOG'dan tavsif oladi)
 - Yangi kanallar kontrakti: WORKLOG.md "Kontrakt" jadvali (`mood`, `remind`).
 
 ## Personajlar va ko'rinish
-- 4 ta: `kokcha` (nihol), `cat`, `dog`, `penguin`. Hammasi bir xil skelet: `pose > body-group`, `arm-l/arm-r`, `foot-l/foot-r`, `eyes-open/happy/closed`, `#pupils`, og'iz, `zzz`. Shuning uchun har bir animatsiya to'rttalasiga ishlaydi — yangi personaj ham shu skeletda qilinsin.
+- 2 ta: `chibi-girl` (Yashil qizcha, PNG kadrlar — `src/renderer/chibi/`) va `kokcha` (SVG). `cat`/`dog`/`penguin` 1.8.0 da olib tashlangan; tanlaganlar Ko'kchaga o'tadi.
+- Ko'kcha skeleti: `pose > body-group`, `arm-l/arm-r`, `foot-l/foot-r`, `eyes-open/happy/closed/angry`, `#pupils`, og'iz, `zzz`.
+- **Tezlik qoidasi:** SVG'dagi CSS animatsiyalar GPU'ga berilmaydi va silliq rejimda 60 fps qayta bo'yaladi. Abadiy animatsiyalar `steps()` bilan (~10–13 fps), ko'z qisish JS taymeri bilan. O'lchov: Ko'kcha tinch holatda 66% → ~20% bir yadro.
 - Ranglar: `--body`, `--line`, `--belly`, `--accent`, `--feet`. Rang variantlari: original, green, pink, yellow, purple, blue (`body[data-color]`).
 - "O'z rasmim": PNG/GIF/WebP/JPG; tekshiriladi (fon, o'lcham, shakl), bo'sh joy avtomatik qirqiladi, 600 px gacha kichraytiriladi. Holat bo'yicha rasmlar (`idle/walk/sleep/talk`) papkasi:
   o'rnatilganda `%APPDATA%\kokcha-desktop-pet\custom`, portable'da exe yonidagi `custom\` (`PORTABLE_EXECUTABLE_DIR`). O'z rasmida ko'z kuzatishi va SVG animatsiyalari yo'q.

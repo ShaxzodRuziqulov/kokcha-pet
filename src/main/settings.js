@@ -12,7 +12,7 @@ const DEFAULTS = {
   size: 'medium',
   breakMinutes: 45,
   position: null,
-  character: null,    // chibi-girl | kokcha | cat | dog | penguin | custom
+  character: null,    // chibi-girl | kokcha | custom (cat/dog/penguin 1.8.0 da olib tashlangan)
   chibiIntroduced: false, // standart Ko'kcha yangi qiyofaga bir marta o'tadi
   color: 'original',
   customImage: null,  // "O'z rasmim" — userData ichidagi nusxa

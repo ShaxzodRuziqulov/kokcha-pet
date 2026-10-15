@@ -363,6 +363,17 @@ function scheduleFidget() {
   }, 25000 + Math.random() * 35000);
 }
 
+// Ko'kchaning ko'z qisishi: abadiy CSS animatsiya o'rniga taymer — oradagi vaqtda hech narsa qayta chizilmaydi
+function scheduleBlink() {
+  setTimeout(() => {
+    if (character !== 'chibi-girl' && state !== 'sleep' && !document.hidden) {
+      body.classList.add('blink');
+      setTimeout(() => body.classList.remove('blink'), 140);
+    }
+    scheduleBlink();
+  }, 3000 + Math.random() * 3000);
+}
+
 // ---- Asosiy jarayondan kelgan xabarlar ----
 const POSES = ['stand', 'sit', 'ledge', 'lie', 'climb', 'hang', 'jump', 'fall'];
 
@@ -425,9 +436,14 @@ window.pet.on('clicked', () => {
 window.pet.on('landed', () => play('land', 350));
 window.pet.on('hover', (over) => { body.classList.toggle('hover', over); render(); });
 window.pet.on('mood', (data) => {
-  if (character !== 'chibi-girl' || !['angry', 'sad', 'surprised'].includes(data?.mood) || state === 'sleep') return;
+  if (!['angry', 'sad', 'surprised'].includes(data?.mood) || state === 'sleep') return;
+  if (character !== 'chibi-girl' && data.mood !== 'angry') return; // Ko'kchada faqat jahl yuzi bor
   const level = [1, 2, 3].includes(data.level) ? data.level : 1;
   mood(data.mood, 1500 + level * 700);
+  if (character !== 'chibi-girl') {
+    body.style.setProperty('--shake', `${level * 2}px`); // kuchli otilsa — qattiqroq silkinadi
+    play('shake', 500);
+  }
 });
 window.pet.on('ghost', (on) => body.classList.toggle('ghost', on));
 
@@ -477,6 +493,7 @@ window.pet.on('look', ({ dx, dy }) => {
   quiet = init.quiet;
   applyAppearance(init);
   scheduleFidget();
+  scheduleBlink();
   if (init.firstRun) setTimeout(() => { mood('wave', 1600); sayAll(onboarding()); }, 600);
   else if (!quiet) setTimeout(() => say(greeting()), 600);
 })();

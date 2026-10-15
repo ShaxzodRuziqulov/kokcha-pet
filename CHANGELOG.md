@@ -1,6 +1,9 @@
 # O'zgarishlar
 
 ## Keyingi versiya
+- Mushukcha, Kuchukcha va Pingvin olib tashlandi — ularni tanlaganlar avtomatik Ko'kchaga o'tadi. Menyuda: Yashil qizcha, Ko'kcha va "O'z rasmim".
+- Ko'kcha: otib yuborilganda jahl (qosh, og'iz, g'azab belgisi, kuchiga qarab silkinish); chapga burilishda "varaq ag'darilishi" yo'q.
+- Ko'kcha va "O'z rasmim" ancha yengil: tinch turganda CPU ~57% → ~20% bir yadro (abadiy SVG animatsiyalari qadamli, ko'z qisish taymer bilan).
 - Yashil qizcha: neytral holatda nafas, bosh va soch harakati; yurishda 8 kadrli ravon sikl. Boshqa yuz ifodalari va pozalar saqlanadi.
 - Animatsiya soati yashirin oynada va boshqa personaj tanlanganda to'xtaydi; takroriy CSS nafas/sakrash olib tashlandi. Walk kadrlari bir marta decode qilinadi.
 
