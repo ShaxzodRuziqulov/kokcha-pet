@@ -24,13 +24,26 @@
   // Oyoqlarning yerdagi joyi (walk-a koordinatalari): A old etik 207, A orqa etik 80, B tik etik 156.
   const STEP = 207 - 80, SPEED = 2 * STEP / PERIOD;      // to'liq yopishish uchun kerakli tezlik
   const HIP = [140, 300], LEG = 100;                     // son bo'g'imi va son→tagcharm uzunligi
+  // Aylantirilgandan keyin eng pastki tagcharm yer chizig'ida (asl rasmdagi joyida) qolishi uchun
+  // vertikal tuzatish. Natija: yerga tegishdan oldin orqa etik yerda, old etik havoda; keyin — aksincha.
+  const groundLift = (sole, angle) => sole.ground - Math.max(...sole.points.map(([sx, sy]) =>
+    HIP[1] + (sx - HIP[0]) * Math.sin(angle) + (sy - HIP[1]) * Math.cos(angle)));
+  // Qatlamning haqiqiy pastki konturi (har ustunning eng pastki ko'rinadigan pikseli), bir marta o'qiladi.
+  function soleOf(layer) {
+    const data = layer.getContext('2d').getImageData(0, 0, W, H).data, points = [];
+    for (let x = 0; x < W; x += 2) for (let y = H - 1; y > 300; y--) {
+      if (data[(y * W + x) * 4 + 3] > 24) { points.push([x, y]); break; }
+    }
+    return { points, ground: Math.max(...points.map(([, y]) => y)) };
+  }
   const MAX_TILT = 0.14;                                  // ~8°: etik sezilarli qiyshaymaydi
   // Faza markazidan dt vaqtda tayanch oyoq qancha orqaga ketishi kerak — burchak bilan, chegaralangan
   const tilt = dt => Math.max(-MAX_TILT, Math.min(MAX_TILT, Math.asin(Math.max(-1, Math.min(1, SPEED * dt / LEG)))));
   // walk-b oyoqlarini tik oyoq konturi (x≈127) bo'ylab ajratamiz: ko'tarilgan oyoqning tizzasi va etik tepasi butun qoladi.
   // Ikki qatlam 6 px ustma-ust (x 120–126): xira chetlar bir joyga tushib fonni ochmasin.
   // Tik oyoq oldinda chiziladi va ko'tarilgan tizzaning chetini yopadi.
-  const B_LIFTED = [[0,294],[100,295],[112,298],[126,300],[126,333],[110,340],[100,354],[0,354]];
+  // Yuqori chegara yubka cheti (y≤289) va qo'l (x 103–121) orasidan: etik uchi (y 291) butun qoladi.
+  const B_LIFTED = [[0,290],[84,290],[88,293],[100,295],[112,298],[126,300],[126,333],[110,340],[100,354],[0,354]];
   const B_PLANTED = [[120,299],[W,299],[W,H],[116,H],[116,340],[120,333]];
 
   const canvas = () => Object.assign(document.createElement('canvas'), { width: W, height: H });
@@ -67,6 +80,8 @@
       this.liftedB = keep(bAligned, B_LIFTED, 0.6);
       this.plantedB = keep(bAligned, B_PLANTED, 0.6);
       extendThighs(this.plantedB, bAligned, 300, 284);
+      this.soleA = soleOf(this.legsA);
+      this.soleB = soleOf(this.plantedB);
       const upper = cut(a, HEM);
       const body = cut(cut(upper, BACK_OUTER), FRONT_OUTER);
       this.body = canvas();
@@ -86,14 +101,16 @@
       const dt = (phase - quarter / 4) * PERIOD;           // faza markazidan vaqt, ±PERIOD/8
       const swing = Math.cos(2 * Math.PI * phase) * 0.09;
       ctx.save(); ctx.translate(x, y); ctx.scale(width / W, height / H);
-      const rotated = (img, angle) => {
-        ctx.save(); ctx.translate(...HIP); ctx.rotate(angle); ctx.translate(-HIP[0], -HIP[1]);
+      const rotated = (img, angle, dy = 0) => {
+        ctx.save(); ctx.translate(HIP[0], HIP[1] + dy); ctx.rotate(angle); ctx.translate(-HIP[0], -HIP[1]);
         ctx.drawImage(img, 0, 0); ctx.restore();
       };
-      if (quarter % 2 === 0) rotated(this.legsA, tilt(dt));               // ikkala oyoq yerda — birga orqaga
+      const a = tilt(dt);
+      if (quarter % 2 === 0) rotated(this.legsA, a, groundLift(this.soleA, a));   // ikkala oyoq — birga orqaga
       else {
-        rotated(this.liftedB, -tilt(dt) * 0.6);                           // havodagi oyoq oldinga tebranadi
-        rotated(this.plantedB, tilt(dt));                                 // tik oyoq orqaga
+        const dy = groundLift(this.soleB, a);
+        rotated(this.liftedB, -a * 0.6, dy);                              // havodagi oyoq oldinga tebranadi
+        rotated(this.plantedB, a, dy);                                    // tik oyoq orqaga, tagcharm yerda
       }
       ctx.translate(0, -lift);
       ctx.drawImage(this.body, 0, 0);
