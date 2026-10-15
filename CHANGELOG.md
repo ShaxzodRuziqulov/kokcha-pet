@@ -1,6 +1,6 @@
 # O'zgarishlar
 
-## Keyingi versiya
+## 1.9.1
 - Midori endi ekran chetidan chiqib ketmaydi: oyna ustiga sakraganda, chiqqanda, oyna bilan birga ko'chganda, oyna ustida yurganda va uxlab yotganda ham to'liq ko'rinadi.
 - Gapirayotganda yuzi gapga mos: quvnoq gapda kuladi, jahldorida jahli chiqadi, uyatchanida qizaradi, hayratlanganda ko'zini katta ochadi. Ko'kcha ham quvnoq va jahldor gaplarda shunga mos yuz qiladi.
 
