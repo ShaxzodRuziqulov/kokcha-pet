@@ -3,6 +3,12 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-15 · Claude · Mashg'ulotlar kam chiqardi — tuzatildi
+- Shaxzod: 1.10.0 da kitob/gul sug'orish ko'rinmayapti. Sabab: fidget (25–60 s) ichida 50%, faqat tik turganda; "O'zi yursin" bilan Midori ko'pincha yuradi/o'tiradi → o'rtacha 4–5 daqiqada bir; kursor ustida bo'lsa umuman yo'q; main yurishni boshlab harakatni uzishi mumkin edi.
+- Tuzatish (8ddd2ee): alohida taymer 45–90 s; `pet-busy` IPC (main: `danceUntil`, yurish to'xtaydi, o'tirgan/yotgan bo'lsa turadi; qirra/osilish/yiqilishda e'tiborsiz); panel/menyuda Midori uchun "Harakat" (qo'l silkitsin, kitob, choy, gul, cho'zilsin) — `activity` kanali.
+- Tekshirildi (Electron, Temp): o'tirgan holatda menyudan "Kitob o'qisin" → 400 ms da stand, read sloti o'ynadi, shu vaqtda yurish yo'q; runActivity('water') ishladi. Skrinshot ko'rildi.
+- Release qilinmagan (1.10.1 uchun Shaxzod ruxsati kerak).
+
 ## 2026-10-15 · Claude · Ko'kcha 1.10.0 chiqarildi
 - Shaxzod "ha, 1.10.0 ni chiqar" dedi. Tarkibi: yangilash tugmasi va qo'lda tekshirish, umumiy gaplar va to'g'ri o'zbek harflari, yangi bulutcha, o'ng tugma paneli, osilish va emote, Midori'ning yangi yuzlari va harakatlari (Codex 714b986), review tuzatishlari.
 - app.asar ichida tekshirildi: versiya 1.10.0, panel fayllari, playActivity, 103 WebP kadr, ipc hasOwn. Hajm: setup 90.7 MB.
