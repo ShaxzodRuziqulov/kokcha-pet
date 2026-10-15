@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'">
+  <title>Eslatmalar</title>
+  <link rel="stylesheet" href="reminders.css">
+</head>
+<body>
+  <main>
+    <header><span class="badge">KO‘KCHA</span><h1>Eslatmalar</h1><p>Vaqti kelganda men eslataman.</p></header>
+    <form id="form">
+      <label for="text">Nimani eslatay?</label>
+      <input id="text" maxlength="200" placeholder="Masalan, suv ichish" required autofocus>
+      <label for="due">Qachon?</label>
+      <input id="due" type="datetime-local" required>
+      <div class="quick"><button type="button" data-minutes="10">10 daqiqadan keyin</button><button type="button" data-minutes="30">30 daqiqa</button><button type="button" data-minutes="60">1 soat</button></div>
+      <button id="save" class="primary" type="submit">Eslatma qo‘shish</button>
+      <p id="status" role="status" aria-live="polite"></p>
+    </form>
+    <section aria-labelledby="list-title"><h2 id="list-title">Mening eslatmalarim</h2><p id="empty">Hozircha eslatma yo‘q.</p><ul id="list"></ul></section>
+    <footer>Ilova ochiq bo‘lsin. Kompyuter uxlagan yoki personaj yashiringan bo‘lsa, qaytgach eslataman.</footer>
+  </main>
+  <script src="reminders.js"></script>
+</body>
+</html>

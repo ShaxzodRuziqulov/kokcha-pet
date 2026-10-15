@@ -109,6 +109,8 @@ let chibiReady = false;
 let talking = false;
 let bubbleTimer = null;
 let lastPettedTalk = 0;
+let reminderActive = false;
+const reminderQueue = [];
 
 // ---- Ko'rinish ----
 function render() {
@@ -150,7 +152,7 @@ function render() {
 function applyAppearance(a) {
   sprites = a.sprites || {};
   petName = a.name;
-  bubbleName.textContent = a.name;
+  if (!reminderActive) bubbleName.textContent = a.name;
   document.title = a.name;
   body.dataset.char = a.character;
   body.dataset.color = a.color;
@@ -194,6 +196,7 @@ function burst(chars, count) {
 
 // ---- Gap pufakchasi ----
 function hideBubble(immediate = false) {
+  if (reminderActive) { talking = state !== 'sleep'; return; }
   clearTimeout(bubbleTimer);
   talking = false;
   render();
@@ -210,6 +213,7 @@ function hideBubble(immediate = false) {
 }
 
 function say(text) {
+  if (reminderActive) return;
   if (state === 'sleep') return;
   bubbleText.textContent = text;
   bubble.classList.remove('hidden', 'closing');
@@ -239,6 +243,32 @@ function sayAll(lines) {
     delay += bubbleTime(line) + 400;
   }
 }
+
+// Eslatma jim rejimda va uxlayotganda ham ko'rinadi; oddiy gaplar uni yopmaydi.
+function showReminder() {
+  if (reminderActive || !reminderQueue.length) return;
+  reminderActive = true;
+  sayQueue.forEach(clearTimeout); sayQueue = [];
+  clearTimeout(bubbleTimer);
+  const text = reminderQueue.shift();
+  bubbleName.textContent = '⏰ Eslatma';
+  bubbleText.textContent = text;
+  bubble.classList.remove('hidden', 'closing');
+  talking = state !== 'sleep';
+  render();
+  bubbleTimer = setTimeout(() => {
+    reminderActive = false;
+    bubbleName.textContent = petName;
+    hideBubble();
+    showReminder();
+  }, Math.min(18000, Math.max(8000, bubbleTime(text))));
+}
+
+window.pet.on('remind', data => {
+  if (typeof data?.text !== 'string' || !data.text.trim()) return;
+  reminderQueue.push(data.text.slice(0, 200));
+  showReminder();
+});
 
 let lastPhrase = '';
 function sayRandom() {

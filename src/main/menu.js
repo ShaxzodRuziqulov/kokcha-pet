@@ -105,6 +105,7 @@ function template() {
         },
       ),
     },
+    { label: `Eslatmalar (${require('./reminders').pendingCount()})...`, click: () => require('./reminders').open() },
     // dasturlash rejimida ma'nosi yo'q
     check('Windows bilan birga ishga tushsin', getAutoStart(), setAutoStart, app.isPackaged),
     { type: 'separator' },

@@ -25,6 +25,7 @@ const menu = require('./src/main/menu');
 const updater = require('./src/main/updater');
 const ipc = require('./src/main/ipc');
 const shortcuts = require('./src/main/shortcuts');
+const reminders = require('./src/main/reminders');
 
 const { ctx } = C;
 
@@ -47,6 +48,7 @@ if (!app.requestSingleInstanceLock()) {
 
     ipc.register();
     const w = win.create();
+    w.webContents.once('did-finish-load', () => reminders.start());
     native.init();
     motion.init(w.getNativeWindowHandle());
     menu.createTray();

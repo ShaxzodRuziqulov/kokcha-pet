@@ -18,6 +18,7 @@ const DEFAULTS = {
   customImage: null,  // "O'z rasmim" — userData ichidagi nusxa
   onboarded: false,   // birinchi ochilishdagi tanishtirish ko'rsatilganmi
   lastSeenDay: null,  // "xayrli tong" kuniga bir marta
+  reminders: [],     // bir martalik eslatmalar, vaqt epoch ms
 };
 
 let timer = null;
@@ -32,6 +33,7 @@ function load() {
     s = { ...DEFAULTS };
   }
   if (!SIZES[s.size]) s.size = DEFAULTS.size;
+  s.reminders = require('./reminders').normalize(s.reminders);
   ctx.settings = s;
 }
 
@@ -40,11 +42,13 @@ function save(now = false) {
   const write = () => {
     try {
       fs.writeFileSync(file(), JSON.stringify(ctx.settings, null, 2));
+      return true;
     } catch {
       /* muhim emas */
+      return false;
     }
   };
-  if (now) write();
+  if (now) return write();
   else timer = setTimeout(write, 500);
 }
 
