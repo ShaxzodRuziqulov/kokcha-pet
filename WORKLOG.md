@@ -3,6 +3,16 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-15 · Codex · B yo'li: uzluksiz blink va idle12fps
+- Shaxzod 'boshla' dedi; kelishilgan Codex chegarasi faqat src/renderer/chibi/. Fayllar: chibi.js, frames/manifest.json, pilot/idle-rig.js, README'lar. Renderer.js, characters.js/style.css va appearance.js'ga tegilmadi; Claude o'z 3–5-bandlarini bajarishi mumkin. WORKLOG ushbu yozuv/bandlik uchun yangilandi.
+- Blink endi slot tanlashni o'zgartirmaydi. Bir martalik ko'z patch'lari original stand/walk-a koordinatalarida canvas bilan chiziladi, bosh/soch/og'iz almashtirilmaydi; runtime alfa skaneri/yangi raster generatsiya yo'q. Idle patch'i ayni bosh translate/rotate transformida, walk har kadr manifestidagi x14/y(2+bob) anchor bilan. Chapga akslanish tanaga birga. 135ms ichida nafas/soch/yurish va soat davom etadi; haqiqiy ifodalarda eski bitta poza+overlay saqlangan.
+- Idle20→12fps, sikl3.2s/amplitudalar saqlandi, walk10fps. Ikki doimiy patch bitmap nazariy+0.78MiB, diskdagi rasmlar o'zgarmadi.
+- Tekshirildi:66 deterministik Electron tekshiruvi; 28 open/closed juftlik (12idle,8walk o'ng,8walk chap), ayni faza/slot, yopiq ko'z bilan yurish,6ifoda fallback, deactivate blink bekor bo'lishi,12fps deadline. Pixel audit: canvas y>=140 farq0, yangi alpha<200 teshik0; ikkala yo'nalishda8distinct walk faza. Screenshotlar ko'z bilan. Tabiiy taymerli test: idle137.6ms/walk135.2ms, slot hech qachon uzilmadi, walk yopiq ko'z bilan01→02→03, konsol toza. Sintaksis/diff --check o'tdi.
+- CPU haqiqiy npm start: yangi Temp profillar, old/neytral idle, quiet=true, autoWalk/climb=false, cursor/hover IPC filtr, fidget reschedule o'chirilgan (birinchi qolgan fidget glance). Har variant5s warmup+30s×2, har5s ko'rinish tekshirildi; yashirin namuna0. Oldin935ee60/20fps jami10.507/10.623%, renderer3.485/3.583%, GPUprocess5.452/5.812%; keyin12fps+blink jami7.272/7.305%, renderer2.276/2.320%, GPUprocess3.525/3.615%. Formula100*delta(cumulativeCPUUsage seconds)/elapsed, 100%=1yadro; GPU ustuni GPU process CPU vaqti, apparat utilization emas. Jami o'rtacha~31% pasaydi; ikki lokal namuna, X4/60s×3 yoki umumiy kafolat emas.
+- App process working set yig'indisi oldin450.6/452.4MiB, keyin455.2/440.1MiB; shared takror sanalishi mumkin, RAM yutug'i da'vo qilinmaydi. To'liq sharoit/jadval chibi/README.md'da. Sinovda haqiqiy sudrash/fullscreen/OS sleep-resume bajarilmadi.
+- GIF review: Codex visualizations/.../chibi-blink-b/{idle,walk}.gif — haqiqiy Electron capture, har biri4.1s/68capture, kulrang preview fon. Saqlanadigan artifact; script/profil/capture/reportlar faqat tizim Temp'ida yaratildi va yakunda o'chirildi.
+- Keyingi: Claude review. Versiya/build/push/release yo'q. Commit: shu yozuv bilan `Keep chibi blinking inside live sequences and lower idle fps`.
+
 ## 2026-10-15 · Codex · Tasdiqlangan idle/walk pilot runtime'ga ulandi
 - Ruxsat: Shaxzod 'ha, integratsiya qil'. A–D va 8eb8033 sifat tuzatishlari asosida; yangi generatsiya yo'q.
 - Fayllar: chibi/sequence.js, chibi.js/chibi.css, frames/manifest.json, pilot/idle-rig.js izohi; index.html, renderer.js va README/PROJECT/CHANGELOG. Claude yozgan umumiy renderer'ga faqat dancing flag qo'shildi — raqs pilot idle bilan to'qnashmasligi uchun. Eski 4 SVG, characters.js/style.css va main o'zgarmadi.

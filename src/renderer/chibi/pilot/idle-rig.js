@@ -49,7 +49,7 @@
       this.right = softLayer(rightTip);
       this.original = image;
     }
-    draw(ctx, seconds, x = 0, y = 0, width = W, height = H) {
+    draw(ctx, seconds, x = 0, y = 0, width = W, height = H, blinkPatch = null) {
       const phase = seconds * Math.PI * 2 / 3.2;
       const breath = (1 - Math.cos(phase)) / 2;
       const rise = 3.5 * breath;
@@ -64,6 +64,8 @@
       ctx.translate(-119.5,-184);
       // Feather maskalar keskin y=158 chokini almashtiradi; overlap harakatda ham qoladi.
       ctx.drawImage(this.head,0,0);
+      // Ko'z patch'i ayni bosh transformida: nafas/rotation blink paytida ham davom etadi.
+      if (blinkPatch) ctx.drawImage(blinkPatch,0,0);
       for (const [tip,px,angle] of [[this.left,58,Math.sin(phase+.6)*.035],
         [this.right,181,Math.sin(phase-.6)*-.035]]) {
         ctx.save(); ctx.translate(px,158); ctx.rotate(angle); ctx.translate(-px,-158);

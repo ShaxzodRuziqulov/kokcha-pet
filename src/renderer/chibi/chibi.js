@@ -13,9 +13,37 @@
   let turnTimer = null, blinkTimer = null, blinkEnd = null;
   let blinking = false;
   let slots = {}, clock = null, cache = null, rig = null, animationTimer = null;
+  const blinkPatches = {};
   const disabledSlots = new Set();
 
-  function draw(name, mirrored = false, seconds = null) {
+  // Faqat ko'z hududi: original bosh/soch/og'iz va siluet almashtirilmaydi.
+  // Original stand/walk-a koordinatalari; patch ishga tushishda bir marta tayyorlanadi.
+  function makeBlinkPatch(width, height, skin, eyes) {
+    const patch = document.createElement('canvas'); patch.width = width; patch.height = height;
+    const ctx = patch.getContext('2d');
+    const mask = document.createElement('canvas'); mask.width = width; mask.height = height;
+    const maskContext = mask.getContext('2d');
+    maskContext.filter = 'blur(0.6px)'; maskContext.fillStyle = '#fff';
+    for (const { outline } of eyes) {
+      maskContext.beginPath(); maskContext.moveTo(...outline[0]);
+      for (const point of outline.slice(1)) maskContext.lineTo(...point);
+      maskContext.closePath(); maskContext.fill();
+    }
+    ctx.fillStyle = skin; ctx.fillRect(0, 0, width, height);
+    ctx.globalCompositeOperation = 'destination-in'; ctx.drawImage(mask, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.strokeStyle = '#171c14'; ctx.lineWidth = 3.6; ctx.lineCap = 'round';
+    for (const { lid } of eyes) {
+      const [x, y, cx, cy, endX, endY] = lid;
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo(cx, cy, endX, endY); ctx.stroke();
+      ctx.lineWidth = 2.6;
+      ctx.beginPath(); ctx.moveTo(x + 3, y + 2); ctx.lineTo(x + 1, y + 5);
+      ctx.moveTo(x + 8, y + 4); ctx.lineTo(x + 7, y + 7); ctx.stroke(); ctx.lineWidth = 3.6;
+    }
+    return patch;
+  }
+
+  function draw(name, mirrored = false, seconds = null, blink = false) {
     const frame = { ...frames[name], image: frames[name].image || cache?.get(name) };
     const maxHeight = name.startsWith('walk-') ? 164 : SIZE - 4;
     const scale = Math.min(HEAD / frame.head, (SIZE - 4) / frame.width, maxHeight / frame.height);
@@ -23,8 +51,14 @@
     const x = (SIZE - width) / 2, y = SIZE - height;
     context.save();
     if (mirrored) { context.translate(SIZE, 0); context.scale(-1, 1); }
-    if (seconds !== null && rig) rig.draw(context, seconds, x, y, width, height);
-    else context.drawImage(frame.image, x, y, width, height);
+    if (seconds !== null && rig) rig.draw(context, seconds, x, y, width, height, blink ? blinkPatches.stand : null);
+    else {
+      context.drawImage(frame.image, x, y, width, height);
+      const anchor = blink && frame.blink;
+      const patch = anchor && blinkPatches[anchor.source];
+      if (patch) context.drawImage(patch, x + anchor.x * scale, y + anchor.y * scale,
+        patch.width * scale, patch.height * scale);
+    }
     context.restore();
     return { frame, scale, x, y, width, height };
   }
@@ -74,7 +108,7 @@
     else if (pose === 'climb') { name = 'climb-a'; mirrored = side === 'left'; }
     else if (state === 'walk') { name = facing === 0 ? 'stand' : 'walk-a'; mirrored = facing < 0; }
     else if (facing !== 0) { name = Math.abs(facing) === 2 ? 'profile' : 'quarter'; mirrored = facing < 0; }
-    const requested = blinking && expression === 'neutral' ? 'sleeping' : expression;
+    let requested = expression;
     let slotName = null;
     if (pose === 'climb' && state !== 'sleep') slotName = 'climb';
     else if (requested === 'neutral' && !latest.dancing && pose === 'stand') {
@@ -85,14 +119,18 @@
     clock.request(slotName);
     const phase = slotName ? clock.sample() : null;
     if (phase) name = phase.frame;
+    const sequenceBlink = blinking && expression === 'neutral' &&
+      ((phase?.slot.procedural === 'idle' && blinkPatches.stand) ||
+       (phase && blinkPatches[frames[name].blink?.source]));
+    if (blinking && expression === 'neutral' && !sequenceBlink) requested = 'sleeping';
     const head = frames[name].face;
     const faceName = head ? `face-${head.group === 'front' ? '' : `${head.group}-`}${requested}` : '';
     const emotion = head && frames[faceName] ? requested : 'neutral';
-    const key = `${name}:${mirrored}:${emotion}:${phase ? `${phase.name}:${phase.tick}:${phase.running}` : ''}`;
+    const key = `${name}:${mirrored}:${emotion}:${Boolean(sequenceBlink)}:${phase ? `${phase.name}:${phase.tick}:${phase.running}` : ''}`;
     if (key !== previous) {
       previous = key;
       context.clearRect(0, 0, SIZE, SIZE);
-      const base = draw(name, mirrored, phase?.slot.procedural === 'idle' ? phase.seconds : null);
+      const base = draw(name, mirrored, phase?.slot.procedural === 'idle' ? phase.seconds : null, Boolean(sequenceBlink));
       if (emotion !== 'neutral') {
         const face = frames[faceName];
         // Har pozaning o'z bosh/yoqa chegarasi bor. Chap kadrga yuz ham birga akslanadi.
@@ -114,6 +152,7 @@
       canvas.dataset.facing = String(facing);
       canvas.dataset.slot = phase?.name || '';
       canvas.dataset.animated = String(Boolean(phase?.running));
+      canvas.dataset.blink = String(Boolean(sequenceBlink));
     }
     clearTimeout(animationTimer); animationTimer = null;
     if (phase?.running) animationTimer = setTimeout(() => paint(), phase.delay);
@@ -150,6 +189,18 @@
     }
     try { if (window.PilotIdleRig) rig = new window.PilotIdleRig(frames.stand.image); }
     catch (error) { console.warn('Idle qatlamlari tayyorlanmadi:', error); }
+    blinkPatches.stand = makeBlinkPatch(239, 400, '#fbe3d2', [
+      { outline: [[58,137],[64,129],[72,123],[86,122],[96,126],[103,134],[104,150],[100,158],[88,162],[74,162],[65,156],[61,148]],
+        lid: [63,143,82,155,101,141] },
+      { outline: [[128,130],[134,123],[144,119],[157,118],[169,123],[175,131],[175,145],[168,154],[156,158],[142,158],[133,153],[129,144]],
+        lid: [132,141,151,152,171,139] }
+    ]);
+    blinkPatches['walk-a'] = makeBlinkPatch(271, 400, '#fbe2d4', [
+      { outline: [[118,144],[125,134],[137,128],[151,127],[162,133],[168,144],[168,158],[162,168],[148,173],[133,171],[122,161]],
+        lid: [123,150,145,164,165,146] },
+      { outline: [[189,134],[196,127],[205,124],[213,126],[218,133],[220,146],[217,158],[210,165],[199,165],[191,157],[188,146]],
+        lid: [192,146,205,157,217,143] }
+    ]);
     loaded = true; paint();
   });
   window.Chibi = { ready, paint,

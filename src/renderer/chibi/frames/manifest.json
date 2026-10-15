@@ -234,56 +234,96 @@
       "width": 300,
       "height": 400,
       "head": 265.535,
-      "sequenceOnly": true
+      "sequenceOnly": true,
+      "blink": {
+        "source": "walk-a",
+        "x": 14,
+        "y": 4
+      }
     },
     "walk-seq-01": {
       "src": "pilot/walk/01.webp",
       "width": 300,
       "height": 400,
       "head": 265.535,
-      "sequenceOnly": true
+      "sequenceOnly": true,
+      "blink": {
+        "source": "walk-a",
+        "x": 14,
+        "y": 2
+      }
     },
     "walk-seq-02": {
       "src": "pilot/walk/02.webp",
       "width": 300,
       "height": 400,
       "head": 265.535,
-      "sequenceOnly": true
+      "sequenceOnly": true,
+      "blink": {
+        "source": "walk-a",
+        "x": 14,
+        "y": 0
+      }
     },
     "walk-seq-03": {
       "src": "pilot/walk/03.webp",
       "width": 300,
       "height": 400,
       "head": 265.535,
-      "sequenceOnly": true
+      "sequenceOnly": true,
+      "blink": {
+        "source": "walk-a",
+        "x": 14,
+        "y": 2
+      }
     },
     "walk-seq-04": {
       "src": "pilot/walk/04.webp",
       "width": 300,
       "height": 400,
       "head": 265.535,
-      "sequenceOnly": true
+      "sequenceOnly": true,
+      "blink": {
+        "source": "walk-a",
+        "x": 14,
+        "y": 4
+      }
     },
     "walk-seq-05": {
       "src": "pilot/walk/05.webp",
       "width": 300,
       "height": 400,
       "head": 265.535,
-      "sequenceOnly": true
+      "sequenceOnly": true,
+      "blink": {
+        "source": "walk-a",
+        "x": 14,
+        "y": 2
+      }
     },
     "walk-seq-06": {
       "src": "pilot/walk/06.webp",
       "width": 300,
       "height": 400,
       "head": 265.535,
-      "sequenceOnly": true
+      "sequenceOnly": true,
+      "blink": {
+        "source": "walk-a",
+        "x": 14,
+        "y": 0
+      }
     },
     "walk-seq-07": {
       "src": "pilot/walk/07.webp",
       "width": 300,
       "height": 400,
       "head": 265.535,
-      "sequenceOnly": true
+      "sequenceOnly": true,
+      "blink": {
+        "source": "walk-a",
+        "x": 14,
+        "y": 2
+      }
     }
   },
   "slots": {
@@ -291,7 +331,7 @@
       "frames": [
         "stand"
       ],
-      "fps": 20,
+      "fps": 12,
       "loop": true,
       "next": null,
       "procedural": "idle",

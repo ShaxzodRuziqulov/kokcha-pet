@@ -7,7 +7,7 @@ A–D kelishuvi: qatlamli idle; 8 walk kadr / 10 fps; erta GIF ko'rigi; neutral-
 - idle-rig.js: original rasm pastki qism/oyoq, tana, bosh va ikki soch uchiga ajratiladi. Yangi rasm generatsiyasi yo'q; draw(ctx,seconds,x,y,width,height) taymer yaratmaydi.
 - Soch tip maskalari yuqorida y=146 dan yumshoq boshlanadi; boshdagi ichki kesim y=177 dan. Ichki ildiz bo'yicha ham overlap bor. Maskalarning 2.5 px blur'i faqat alfaga qo'llanadi; original rang piksellari xiralashtirilmaydi. Eski y=158 qattiq kesim va to'g'ri to'rtburchak 'patch' olib tashlandi.
 - Harakat 2.5× oshirildi: nafas 0–3.5 source px, bosh ±0.015 rad, soch uchlari ±0.035 rad. 3.2 s sikl. 180 px canvasda nafasning peak siljishi taxminan 1.5 px. Yoqa overlap'i saqlandi; oyoqlar statik qatlamda.
-- 5 saqlanadigan layer canvas nazariy 1 912 000 bayt (1.82 MiB); maskalar faqat konstruktor vaqtida tayyorlanadi. Runtime idle20fps, o'z taymeri yo'q. CPU/process working set integratsiyada qisqa namuna bilan o'lchandi; tafsilot yuqoridagi README'da.
+- 5 saqlanadigan layer canvas nazariy 1 912 000 bayt (1.82 MiB); maskalar faqat konstruktor vaqtida tayyorlanadi. Runtime idle12fps (B yo'li; dastlab20fps), o'z taymeri yo'q. Blink ko'z patch'i ayni bosh transformida chiziladi. CPU/process working set va keyingi B yo'li tekshiruvlari yuqoridagi README'da.
 
 ## Walk manbasi va qayta ishlov
 - Birinchi pilotdagi AYNI 4×2 atlas: built-in image_gen exec-66826a8c-d2f0-43c3-bc2b-2933a5e05709.png. Prompt va references walk-prompt.json'da. Yangi generatsiya, Higgsfield, video, MaoMao resurslari yo'q.
