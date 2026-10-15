@@ -3,6 +3,16 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-15 · Codex · d513816 review: to'rtta sifat tuzatishi
+- Shaxzod 'davom' dedi, Claude integratsiyadan oldin 4 tuzatish so'radi. Fayllar: chibi/pilot/idle-rig.js, 8 walk WebP, walk.json/walk-prompt.json, README'lar. Runtime va eski personajlar o'zgarmadi.
+- Walk to'g'ri y228 kesimi o'rniga soch/yoqa konturi; 2–3 px yumshoq alfa va 5 px tana overlap. To'liq generated torso saqlandi, butun kenglikdagi body complement mask chetdagi eski soch parchalarini ham olib tashlaydi. Yangi rasm yaratilmadi, ayni raw atlas va original walk-a.png.
+- Idle: y158 qattiq soch kesimi o'rniga yumshoq maskalar (tip y146, ichki cut y177), keng overlap; nafas/bosh/soch amplitudalari 2.5×. Nafas 0–3.5 source px (~1.5 screen px), bosh .015 rad, soch .035 rad. Oyoqlar statik.
+- Walk bosh bob [2,0,-2,0,2,0,-2,0] source px: contact past, passing yuqori, ekranda peak farq ~1.76 px. 8 lossless300×400 WebP jami540572 bayt; baseline398 saqlandi.
+- Tekshirildi: Electron'da old/yangi 64 vaqt nuqtasi, konsol toza, source/180px screenshotlar ko'z bilan. Yangi ildiz coverage auditi max0 (eski max65); t0 va t1.6 yangi0. Bu Claude 89 hisobining aynan nusxasi emas — algoritm pilot/README'da. Ichki alpha<24 yangi0; idle oyoq hududi barcha64 kadrda teng. 8 walk faza distinct, topY6/4/2/4/6/4/2/4, baseline398. Sintaksis va diff --check o'tdi.
+- GIF'lar: Codex visualizations/.../chibi-180-revision2/comparison.gif, idle.gif, walk.gif; 20fps/3.2s. Eski/yangi yonma-yon. Yakuniy review artifactlari saqlandi; sinov script/profil/capture/metrics tizim Temp'ida bo'ldi va o'chirildi.
+- Keyingi: runtime sequence integratsiyasi va resurs o'lchovi. Ushbu commit faqat so'ralgan sifat tuzatishlari/GIF; build, versiya, push/release yo'q.
+- Commit: shu yozuv bilan `Soften pilot seams and add visible motion`.
+
 ## 2026-10-15 · Codex · 1.8.0 A–D kelishuvi va sifat sinovi tayyor
 - Shaxzod orqali Claude tuzatishlari va Codex roziligi qabul qilindi.
 - A: idle stand.png qatlamlaridan (soch uchlari, bosh, tana), canvas'da protsedural nafas/soch tebranishi/bosh qiyshayishi. Alohida image_gen idle kadrlar yo'q; yoriq, yoqa, oyoq chizig'i tekshiriladi; resurs sarfi keyingi integratsiyada o'lchanadi.
@@ -65,7 +75,7 @@ Qoidalar: [AGENTS.md](AGENTS.md).
 - Commit: ushbu yozuv bilan `git log` dagi `Improve chibi frames, turning and animation`.
 
 ## Hozir band
-_Hech kim._ 1.8.0 sifat GIF'lari tayyor; kelishilgan C bandi bo'yicha Shaxzod bahosi kutiladi, runtime integratsiyasi boshlanmagan.
+_Hech kim._ Pilot review bo'yicha 4 tuzatish va yangi GIF tayyor; runtime integratsiyasi keyingi bosqich.
 
 ## Kontrakt: main → renderer kanallari
 Ikki tomon faqat shu orqali bog'lanadi. Kanal yoki ma'lumot shakli o'zgarsa, avval ikkinchi agent bilan Shaxzod orqali kelishiladi.

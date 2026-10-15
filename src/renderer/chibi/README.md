@@ -23,3 +23,7 @@ Animatsiya: faqat yurishda 250 ms kadr almashuvi; neytral old ko'rinishda 3.2–
 ## 1.8.0 sifat sinovi
 
 Claude bilan A–D kelishuvi asosida qatlamli idle va 8 kadr / 10 fps walk pilot tayyorlandi. Hali ilovaga ulanmagan; GIF ko‘rigidan keyingi C qarori kutiladi. Manba, aniq prompt, qatlamlar va tekshiruvlar: [pilot/README.md](pilot/README.md).
+
+## 1.8.0 pilot review tuzatishlari
+
+Shaxzod davom dedi; integratsiya oldidan walk soch/yoqa konturi 2–3px feather + overlap bilan, idle soch ildizi yumshoq maska/overlap bilan tuzatildi. Walk boshiga fazaga mos tebranish, idle amplitudalariga 2.5× qo‘shildi. Yangi rasm generatsiyasi yo‘q. Yangi GIF’lar chibi-180-revision2 artifact papkasida. Aniq parametr/tekshiruvlar [pilot/README.md](pilot/README.md) va walk.json’da. Runtime integratsiyasi hali bajarilmadi.
