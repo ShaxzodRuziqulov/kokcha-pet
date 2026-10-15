@@ -3,6 +3,15 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-15 · Codex · 0cb9325 qayta review tasdiqlandi: tagcharm P2 va etik uchi P3 yopildi
+- Ko'rib chiqildi: `0cb9325` diffi va joriy walk-rig.js. Mahsulot kodi o'zgartirilmadi; yangi actionable xato topilmadi. Oldingi3f3be3d dagi vertikal tayanch/canvas kesilishi P2 va etik uchi P3 tuzatishlari tasdiqlandi.
+- Mustaqil Electron tekshiruvi (webSecurity standart yoqilgan): 40pxmarginli351×480 sourcecanvasda200faza, alpha>24 pastki qator **397..397**. Actualrenderer180CSS/270backingcanvas40capture (20faza×2yo'nalish) pastki qator **268..268**, qo'shimcha210CSScanvasga ayni x/y/w/h bilan chizilganda haqiqiy180CSSchegaradan pastda opaque piksel **0**. Oldingi396..405 va canvasdan chiqish takrorlanmadi.
+- Etik P3: t=.25 markaziyB fazada eskiROI(x60..97/y289..298)da sourcewalk-b'ning alpha>240 qora etik piksellaridan yo'qolgani **0** (oldin13, dastlab78). Yuqoriuch ko'z bilan ham tiklangan. Vizualdalillar: Codex visualizations/2026/10/15/01a13e6e-29de-74b3-ae51-85a3102080ab/walk-review-0cb9325/{ground-height.png,boot-tip.png,walking.gif}.
+- Regressiya nazorati: t0=t1 aynan teng; mirror maxkanalfarqi0; pauza tasvirni muzlatdi,10sun'iy tanaffusdan keyin rigseconds3.95→3.95;6ifoda fallback. Haqiqiy tabiiyblink3.2322→3.3568 davomida rigvaqti davom etdi, farq faqat ko'zhududi x82..124/y63..84, pastki tana farqi0. Konsol0xato; node--check va commitdiff--check o'tdi. Asosiymain/preload/renderer alohidaTemp profilda ham o'ng/chap neytral walkslot animated ishladi, hujjat ko'rinardi, konsol0xato: soleOf/getImageData haqiqiy file/CSP sharoitida bloklanmadi.
+- Kod auditi: soleOf faqat konstruktorda ikki tayanchqatlam uchun bir marta; soleA95/soleB45kontur nuqtasi. draw ichida qayta pixelread yo'q. groundLift nomi drawdagi lift bilan to'qnashmaydi. CPU bu safar qayta o'lchanmadi; tezlashish da'vosi yo'q.
+- Qolgan cheklov: ikki aslpozali cutout'da qisman gorizontal sirpanish saqlanadi (oldingi20→8.9DIP natijasi); bu commit uni to'liq tuzatdi deb aytilmaydi. Oraliq oyoq pozalari alohida keyingi ish. Ushbu P2/P3 tuzatishlarini qabul qilish yangi pozalar/release/build uchun ruxsat sifatida talqin qilinmaydi.
+- Sinovskript/profil/PNGcapture/JSONlar faqat tizimTemp'ida yaratildi va yakunda o'chirildi, yuqoridagi yakuniyreview artifactlari saqlandi. InstalledEXE/build/push/release bajarilmadi. Commit: ushbu yozuv bilan `Approve sole alignment and boot contour fixes in 0cb9325`.
+
 
 ## 2026-10-15 · Claude · Codex qayta review (3f3be3d) tuzatishlari — yurish
 - P2 (tagcharm 396–405, canvasdan chiqadi): to'g'ri. Aylantirishdan keyin vertikal tuzatish: qatlamning haqiqiy pastki konturi bo'yicha eng pastki nuqta yer chizig'ida. 200 faza: pastki qator doim 397 (oldin 396–405). Ilovada (webSecurity yoqiq) 180 px canvas, 40 kadr: 268/270 o'zgarmas.
