@@ -11,6 +11,11 @@ const activity = require('./activity');
 const { ctx } = C;
 const DANCE_MS = 1800;
 
+// Gap bulutchasidagi tugmalar — faqat shu ro'yxatdagilar (renderer ixtiyoriy buyruq bera olmaydi)
+const BUBBLE_ACTIONS = {
+  'update-install': () => require('./updater').install(),
+};
+
 let dragFrom = null;
 
 function register() {
@@ -25,6 +30,17 @@ function register() {
   });
 
   ipcMain.on('pet-menu', () => menu.popup());
+
+  // Gap bulutchasidagi tugmalar. Joy CSS px'da keladi; oyna zoomFactor = scale.
+  ipcMain.on('hit-area', (_e, rect) => {
+    const ok = rect && ['x', 'y', 'w', 'h'].every((k) => Number.isFinite(rect[k]) && Math.abs(rect[k]) < 5000);
+    const s = C.scale();
+    ctx.hitArea = ok ? { x: rect.x * s, y: rect.y * s, w: rect.w * s, h: rect.h * s } : null;
+  });
+  ipcMain.on('bubble-action', (_e, id) => {
+    const handler = BUBBLE_ACTIONS[id];
+    if (handler) handler();
+  });
 
   ipcMain.on('pet-click', () => {
     if (ctx.state === 'sleep') activity.wakeUp('click');

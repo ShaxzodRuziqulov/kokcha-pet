@@ -29,6 +29,26 @@ html, body {
   transform-origin: 50% 100%;
 }
 #bubble.closing { animation: fade-out 0.2s ease-in forwards; }
+/* Tugmali bulutcha bosiladi (main shu joyda sichqonchani ushlaydi) */
+#bubble.has-actions { pointer-events: auto; z-index: 10; }
+#bubble-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+#bubble-actions button {
+  flex: 1;
+  padding: 5px 8px;
+  border: 1.5px solid #4e8a66;
+  border-radius: 9px;
+  background: #fff;
+  color: #2f6b49;
+  font: 600 12px/1.2 "Segoe UI", sans-serif;
+  cursor: pointer;
+}
+#bubble-actions button.primary { background: #4e8a66; color: #fff; }
+#bubble-actions button:hover { filter: brightness(1.08); }
+#bubble-actions button:active { transform: translateY(1px); }
 #bubble::after {
   content: "";
   position: absolute;

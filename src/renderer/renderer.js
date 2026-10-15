@@ -73,6 +73,7 @@ const body = document.body;
 const petEl = document.getElementById('pet');
 const petInner = document.getElementById('pet-inner');
 const bubble = document.getElementById('bubble');
+const bubbleActions = document.getElementById('bubble-actions');
 const bubbleText = document.getElementById('bubble-text');
 const sprite = document.getElementById('sprite');
 const mascot = document.getElementById('mascot');
@@ -184,6 +185,7 @@ function hideBubble(immediate = false) {
   clearTimeout(bubbleTimer);
   talking = false;
   clearSpeechMood();
+  setActions(null);
   render();
   if (immediate || bubble.classList.contains('hidden')) {
     bubble.classList.add('hidden');
@@ -205,9 +207,49 @@ function clearSpeechMood() {
   speechMood = null;
 }
 
-function say(text) {
+// Bulutchadagi tugmalar: [{ label, id?, run?, primary? }]. id — main'dagi ruxsat etilgan amal.
+let actionsHold = false;   // kursor tugmali bulutcha ustida — yopilmaydi
+function setActions(actions) {
+  bubbleActions.replaceChildren();
+  const has = !!actions?.length;
+  bubble.classList.toggle('has-actions', has);
+  bubbleActions.classList.toggle('hidden', !has);
+  if (!has) { actionsHold = false; window.pet.hitArea(null); return; }
+  for (const a of actions) {
+    const btn = document.createElement('button');
+    btn.textContent = a.label;
+    if (a.primary) btn.className = 'primary';
+    btn.addEventListener('click', () => {
+      if (a.id) window.pet.action(a.id);
+      hideBubble();
+      a.run?.();
+    });
+    bubbleActions.appendChild(btn);
+  }
+  // Joy pop-animatsiyasidan keyin o'lchanadi
+  setTimeout(reportBubbleArea, 220);
+}
+function reportBubbleArea() {
+  if (!bubble.classList.contains('has-actions') || bubble.classList.contains('hidden')) return;
+  const r = bubble.getBoundingClientRect();
+  window.pet.hitArea({ x: r.left, y: r.top, w: r.width, h: r.height + 4 });
+}
+bubble.addEventListener('mouseenter', () => {
+  if (!bubble.classList.contains('has-actions')) return;
+  actionsHold = true;
+  clearTimeout(bubbleTimer);
+});
+bubble.addEventListener('mouseleave', () => {
+  if (!actionsHold) return;
+  actionsHold = false;
+  clearTimeout(bubbleTimer);
+  bubbleTimer = setTimeout(() => hideBubble(), 4000);
+});
+
+// opts: { actions, force (uxlayotgan bo'lsa ham), hold (ms) }
+function say(text, opts = {}) {
   if (reminderActive) return;
-  if (state === 'sleep') return;
+  if (state === 'sleep' && !opts.force) return;
   speechFace = window.Phrases.faceOf(voice(), text);
   clearSpeechMood();
   if (character !== 'chibi-girl' && (speechFace === 'happy' || speechFace === 'angry') && !body.classList.contains(speechFace)) {
@@ -222,8 +264,10 @@ function say(text) {
   talking = true;
   render();
 
+  setActions(opts.actions);
+
   clearTimeout(bubbleTimer);
-  bubbleTimer = setTimeout(() => hideBubble(), bubbleTime(text));
+  bubbleTimer = setTimeout(() => hideBubble(), opts.hold || (opts.actions ? 20000 : bubbleTime(text)));
 }
 
 // Uzun gap ko'proq turadi
@@ -449,18 +493,32 @@ window.pet.on('persona', (p) => {
 });
 
 // Yangi versiya: o'rnatilganida — yuklab olindi, portable'da — chiqdi
-window.pet.on('update', ({ version, portable }) => {
+// Yangilanish: o'zi topganda faqat "tayyor"ni aytadi; menyudan so'ralganda — har bir bosqichni
+window.pet.on('update', ({ status, version, portable }) => {
+  sayQueue.forEach(clearTimeout); sayQueue = [];
+  const force = { force: true };
+  if (status === 'checking') return say('Yangi versiya bormi, qarab chiqyapman… 🔍', force);
+  if (status === 'downloading') return say(`Yangi versiya bor (${version})! Yuklab olyapman… ⏬`, force);
+  if (status === 'latest') return say(`Sizda eng yangi versiya turibdi (${version}) ✨`, force);
+  if (status === 'error') return say("Yangilanishni tekshira olmadim 😕 Internet bormi? Keyinroq yana urinib ko'raman.", force);
+  if (status === 'dev') return say("Bu sinov nusxasi — yangilanish tekshirilmaydi.", force);
+  if (status !== 'ready') return;
   mood('wave', 1600);
-  burst(['✦', '✧', '★'], 4);
-  sayAll(portable
-    ? [`Yangi versiya chiqdi (${version})! ✨`, "Yuklab olish: o'ng tugma → Yangi versiya."]
-    : [`Yangi versiya tayyor (${version})! ✨ Keyingi safar o'zi yangilanadi.`, "Hoziroq yangilash: o'ng tugma → Yangilash."]);
+  if (portable) {
+    say(`Yangi versiya chiqdi (${version})! ✨`, { force: true, actions: [
+      { label: 'Yuklab olish', id: 'update-install', primary: true }, { label: 'Keyinroq' }] });
+  } else {
+    say(`Yangi versiya tayyor (${version})! ✨`, { force: true, actions: [
+      { label: 'Yangilash', id: 'update-install', primary: true },
+      { label: 'Keyinroq', run: () => setTimeout(() => say("Mayli, dastur yopilganda o'zi yangilanadi 😊"), 300) }] });
+  }
 });
 
 // Oyna ekran chetidan chiqib tursa — pufakcha ichkariga suriladi
 window.pet.on('bubble-shift', (px) => {
   bubble.style.left = `${10 + px}px`;
   bubble.style.right = `${10 - px}px`;
+  reportBubbleArea();
 });
 window.pet.on('settings', (s) => { quiet = s.quiet; });
 

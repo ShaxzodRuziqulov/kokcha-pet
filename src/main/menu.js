@@ -115,6 +115,7 @@ function template() {
     check('Windows bilan birga ishga tushsin', getAutoStart(), setAutoStart, app.isPackaged),
     { type: 'separator' },
     { label: `Versiya ${app.getVersion()}`, enabled: false },
+    updater.checkItem(),
     { label: 'Chiqish', click: () => app.quit() },
   ];
 }

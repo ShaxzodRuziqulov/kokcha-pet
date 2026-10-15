@@ -14,6 +14,9 @@ contextBridge.exposeInMainWorld('pet', {
   click: () => ipcRenderer.send('pet-click'),
   menu: () => ipcRenderer.send('pet-menu'),
   dance: () => ipcRenderer.send('pet-dance'),
+  // Gap bulutchasidagi tugmalar: joyi (CSS px, oyna ichida yoki null) va bosilgan tugma
+  hitArea: (rect) => ipcRenderer.send('hit-area', rect),
+  action: (id) => ipcRenderer.send('bubble-action', id),
   on: (event, cb) => {
     if (EVENTS.includes(event)) ipcRenderer.on(event, (_e, data) => cb(data));
   },

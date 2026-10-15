@@ -127,7 +127,10 @@ function trackCursor() {
     if (!ctx.dragging) {
       const over = c.x >= r.x && c.x < r.x + r.w && c.y >= r.y && c.y < r.y + r.h;
       const nextGhost = over && native.isCtrlDown(); // Ctrl — orqadagi narsani bosish uchun
-      const nextCapture = over && !nextGhost;
+      // Tugmali gap bulutchasi ham sichqonchani ushlaydi (personajni "silash" hisoblanmaydi)
+      const [wx, wy] = ctx.win.getPosition(), h = ctx.hitArea;
+      const overBubble = !!h && c.x >= wx + h.x && c.x < wx + h.x + h.w && c.y >= wy + h.y && c.y < wy + h.y + h.h;
+      const nextCapture = (over && !nextGhost) || overBubble;
 
       if (over !== ctx.hovering) {
         ctx.hovering = over;
