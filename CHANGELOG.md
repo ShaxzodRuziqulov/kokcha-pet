@@ -1,5 +1,9 @@
 # O'zgarishlar
 
+## Keyingi versiya
+- Shaxsiy eslatmalar: menyudan matn va vaqt kiriting; saqlanadi, vaqti kelganda eslatadi. Yashirin holatda qolgan eslatmalar qaytgach ko'rsatiladi.
+- Tez sudrab qo'yib yuborilganda otish kuchiga qarab jahlning uch darajasi. Oddiy sudrash va oxirida to'xtab qo'yish jahlni yoqmaydi.
+
 ## 1.6.1
 - Yashil qizcha kadrlari alohida, 400 px gacha PNG'larga ajratildi; qo'shni kadrdan soch kirishi va osilishdagi taxta olib tashlandi. Rasmlar jami 6.54 MB dan 0.55 MB ga tushdi, ochilishdagi alfa skaneri olib tashlandi.
 - Yurishda ikki kadr, qirrada oyoq osiltirib o'tirish, ko'z pirpiratish va old/¾/yon orqali chapga burilish qo'shildi. Kursor chegarasida burilish titramaydi.
