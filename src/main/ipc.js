@@ -53,6 +53,15 @@ function register() {
     if (ctx.pose === 'sit' || ctx.pose === 'lie') motion.setPose('stand');
   });
 
+  // Midori mashg'ulot qilyapti (kitob, choy...): shu vaqt ichida yurish boshlanmaydi; o'tirgan bo'lsa — turadi
+  ipcMain.on('pet-busy', (_e, ms) => {
+    if (!Number.isFinite(ms) || ms <= 0 || ctx.dragging || ctx.state === 'sleep' || ctx.motion === 'fall' ||
+        ctx.motion === 'jump' || ctx.motion === 'climb' || ctx.pose === 'ledge' || ctx.pose === 'hang') return;
+    ctx.danceUntil = Math.max(ctx.danceUntil, Date.now() + Math.min(ms, 5000));
+    motion.stopWalk();
+    if (ctx.pose === 'sit' || ctx.pose === 'lie') motion.setPose('stand');
+  });
+
   ipcMain.on('drag-start', () => {
     if (!C.alive()) return;
     ctx.dragging = true;

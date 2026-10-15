@@ -15,6 +15,10 @@ const persona = require('./persona');
 const { ctx } = C;
 
 const SIZE_LABELS = { small: 'Kichik', medium: "Oʻrta", large: 'Katta' };
+// Midori'ning kadrli harakatlari (renderer: Chibi.playActivity)
+const ACTIVITY_LABELS = {
+  wave: 'Qoʻl silkitsin', read: 'Kitob oʻqisin', tea: 'Choy ichsin', water: 'Gul sugʻorsin', stretch: 'Choʻzilsin',
+};
 const BREAK_OPTIONS = [30, 45, 60, 0]; // daqiqa; 0 — o'chiq
 
 // ---- Windows bilan birga ishga tushish ----
@@ -78,6 +82,12 @@ function template() {
       : { ...i, panelIcon: '🙈', panelKind: 'tile' })),
     { type: 'separator' },
     { label: 'Personaj', panelIcon: '🧸', submenu: characterMenu() },
+    ...(s.character === 'chibi-girl' ? [{
+      label: 'Harakat',
+      panelIcon: '🎬',
+      enabled: ctx.state !== 'sleep' && !ctx.userHidden,
+      submenu: Object.entries(ACTIVITY_LABELS).map(([id, label]) => ({ label, click: () => C.send('activity', id) })),
+    }] : []),
     ...(s.character === 'chibi-girl' ? [{
       label: 'Kayfiyat',
       panelIcon: '💭',

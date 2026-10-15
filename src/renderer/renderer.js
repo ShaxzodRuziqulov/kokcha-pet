@@ -173,13 +173,32 @@ function wave() {
   if (character === 'chibi-girl') window.Chibi.playActivity('wave');
 }
 
-// Midori'ning o'z mashg'ulotlari (MaoMao'dagi kabi): tinch turganda vaqti-vaqti bilan
+// Midori'ning o'z mashg'ulotlari (MaoMao'dagi kabi). Main'ga "bandman" deyiladi: yurmaydi,
+// o'tirgan bo'lsa turadi; keyin kadrli harakat o'ynaydi. Menyudan ham chaqiriladi (`activity` kanali).
 const ACTIVITIES = ['read', 'tea', 'water', 'stretch'];
-async function doActivity() {
-  const name = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
-  const started = window.Chibi.playActivity(name);
-  if (!quiet && Math.random() < 0.6) setTimeout(() => { if (!talking) say(line('activity.' + name)); }, 400);
-  return started;
+let activityBusy = false;
+function runActivity(name, manual = false) {
+  if (character !== 'chibi-girl' || activityBusy || state === 'sleep' || body.classList.contains('dragging')) return;
+  activityBusy = true;
+  window.pet.busy(2800);
+  // main pozani "stand" ga qaytargach boshlanadi
+  setTimeout(async () => {
+    const shouldTalk = name !== 'wave' && (manual || (!quiet && Math.random() < 0.6));
+    if (shouldTalk) setTimeout(() => { if (!talking) say(line('activity.' + name)); }, 400);
+    try { await window.Chibi.playActivity(name); } finally { activityBusy = false; }
+  }, 250);
+}
+window.pet.on('activity', (name) => {
+  if (name === 'wave' || ACTIVITIES.includes(name)) runActivity(name, true);
+});
+// O'zi: har 45–90 soniyada (siz kursorni ustiga qo'yib turmasangiz va u gapirmayotgan bo'lsa)
+function scheduleActivity() {
+  setTimeout(() => {
+    if (state !== 'sleep' && !talking && !body.classList.contains('hover') && !document.hidden) {
+      runActivity(ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)]);
+    }
+    scheduleActivity();
+  }, 45000 + Math.random() * 45000);
 }
 
 // Bosh ustidagi belgi (❗ 💢 💗 ❓ 💫) — his-tuyg'uni bir qarashda ko'rsatadi
@@ -486,9 +505,8 @@ function scheduleFidget() {
     const free = state === 'idle' && !talking && !body.classList.contains('hover');
     if (free) {
       const r = Math.random();
-      if (character === 'chibi-girl' && r < 0.5) doActivity();
-      else if (r < 0.65) mood('yawn', 1800);
-      else if (r < 0.8) wave();
+      if (r < 0.35) mood('yawn', 1800);
+      else if (r < 0.6) wave();
       else mood('glance', 2600);
     }
     scheduleFidget();
@@ -651,6 +669,7 @@ window.pet.on('look', ({ dx, dy }) => {
   if (typeof init.persona?.id === 'string') persona = init.persona.id;
   applyAppearance(init);
   scheduleFidget();
+  scheduleActivity();
   scheduleBlink();
   if (init.firstRun) setTimeout(() => { wave(); sayAll(onboarding()); }, 600);
   else if (!quiet) setTimeout(() => say(greeting()), 600);
