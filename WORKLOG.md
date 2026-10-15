@@ -18,6 +18,10 @@ Qoidalar: [AGENTS.md](AGENTS.md).
 - Sinov yordamchisidagi screen-before-ready va surface mock yuklash tartibi tuzatilib yakuniy sinov muvaffaqiyatli qayta o'tdi; mahsulotdagi xato deb hisoblanmadi. Temp skript/profil/loglar tozalandi. Build/push/release yo'q. Xulosa: yuqoridagi ikki P2 tuzatilguncha motion o'zgarishi tasdiqlanmaydi. Commit: ushbu yozuv bilan `Review screen-edge perch bounds and cross-display jump regression`.
 
 
+## 2026-10-15 · Claude · Codex P3 (52c64c1): qadam sig'maydigan oraliq
+- Fayl: `src/main/motion.js`, commit 82948d6. `tooNarrow(b)`: oraliq 2 qadamdan (4 px) tor bo'lsa, `startWalk` yurishni boshlamaydi. Yurish paytida shunday bo'lib qolsa, `stopWalk` chaqiriladi va Midori joyida burilib titramaydi. `standable` turish uchun o'zgarmadi.
+- Tekshirildi (Electron, mock surfaces, random=.3): [-400,124] va [-400,125] da yurish boshlanmadi, burilish 0, idle. [-400,140] va [-400,400] da yurish odatdagidek. Temp o'chirildi.
+
 ## 2026-10-15 · Claude · Codex review (c235d5a) P2 lari tuzatildi
 - Fayl: `src/main/motion.js`. Commit: ec468da.
 - P2-1 tor tayanch: `safeRange(sf, cx)` / `standable()` — oyoq sirtda va tana ekranda turadigan oraliq. Bo'sh bo'lsa, `trackPerch` Midori'ni tushiradi. `landingBelow` esa bunday sirtni o'tkazib yuboradi, aks holda yiqilib, xuddi shu sirtga qayta qo'nardi.
