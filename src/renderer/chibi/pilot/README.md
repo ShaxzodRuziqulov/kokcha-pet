@@ -1,6 +1,6 @@
 # 1.8.0 — tasdiqlangan pilot va runtime integratsiyasi
 
-**Joriy yurish:** 2026-10-15 tuzatishida eski8atlas o'rniga original yuqori tana + kod orqali ikki bo'g'imli oyoqlardan12WebP/20fps sikl ulandi. `walk.json` va `scripts/build-chibi-walk.py` joriy manba; eskiAIatlasning takroriy oyoq/tana fazalari ishlatilmaydi. Yangi generatsiya sinovi rad etildi (`walk-prompt.json`). Tafsilot va tekshiruvlar [../README.md](../README.md#yurish-tuzatishi--2026-10-15). Quyidagi8kadr/10fps ma'lumotlari oldingi pilot tarixi.
+**Joriy yurish (Claude, Shaxzod tanlovi):** `../walk-rig.js` — asl walk-a/walk-b qismlaridan cutout: ustki qism doim walk-a (bosh/tana bir bo'lak), oyoqlar yerga tegishda walk-a, oraliqda walk-b; tana 12 px bob, qo'llar ±5°; 20 fps, 1 s sikl (100 px/s ga mos). Rasm fayli yo'q. Quyidagi walk bandlari — olib tashlangan AI/kod-oyoq variantlari tarixi (Git'da).
 
 A–D kelishuvi: qatlamli idle; 8 walk kadr / 10 fps; erta GIF ko'rigi; neutral-only animatsiya, boshqa ifodalarda eski poza + overlay. d513816 review'dan keyingi 4 sifat tuzatishi 8eb8033'da. Shaxzod 'ha, integratsiya qil' degach ushbu assetlar runtime'ga ulandi. Quyidagi manba va sifat auditi 8eb8033 holatiga tegishli; runtime kontrakti va o'lchovi [../README.md](../README.md)'da.
 
@@ -11,7 +11,7 @@ A–D kelishuvi: qatlamli idle; 8 walk kadr / 10 fps; erta GIF ko'rigi; neutral-
 - Harakat 2.5× oshirildi: nafas 0–3.5 source px, bosh ±0.015 rad, soch uchlari ±0.035 rad. 3.2 s sikl. 180 px canvasda nafasning peak siljishi taxminan 1.5 px. Yoqa overlap'i saqlandi; oyoqlar statik qatlamda.
 - 5 saqlanadigan layer canvas nazariy 1 912 000 bayt (1.82 MiB); maskalar faqat konstruktor vaqtida tayyorlanadi. Runtime idle12fps (B yo'li; dastlab20fps), o'z taymeri yo'q. Blink ko'z patch'i ayni bosh transformida chiziladi. CPU/process working set va keyingi B yo'li tekshiruvlari yuqoridagi README'da.
 
-## Walk manbasi va qayta ishlov
+## Tarix: 8 kadrli AI walk (olib tashlangan)
 - Birinchi pilotdagi AYNI 4×2 atlas: built-in image_gen exec-66826a8c-d2f0-43c3-bc2b-2933a5e05709.png. Prompt va references walk-prompt.json'da. Yangi generatsiya, Higgsfield, video, MaoMao resurslari yo'q.
 - Neytral bosh original walk-a.png'dan olinadi; y=228 da to'g'ri qirqish YO'Q. walk.json headContour soch uchlari va yoqa chizig'ini kuzatadi; Gaussian radius 1 px bilan taxminan 2–3 px yumshoq alfa o'tishi. Tana raw atlasning to'liq bo'yidan saqlanib, ayni konturdan 5 px yuqoriga siljitilgan complement mask bilan bosh/sochdan ajratiladi. Body mask butun canvas kengligini qoplaydi: eski generatsiya sochidan chetda parcha qolmaydi. Yoqa/kofta konturi overlap ichida tutashadi.
 - Bosh x=14, y=2 + [2,0,-2,0,2,0,-2,0] source px. Contact 1/5 pastda, passing 3/7 yuqorida. 4 source px peak farq 176/400 masshtabda 1.76 ekran px. Tana/oyoq ko'tarilmaydi.

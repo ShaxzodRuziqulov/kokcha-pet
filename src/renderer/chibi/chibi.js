@@ -12,7 +12,8 @@
   let lookTarget = 0, facing = 0, previous = '', previousTime = 0;
   let turnTimer = null, blinkTimer = null, blinkEnd = null;
   let blinking = false;
-  let slots = {}, clock = null, cache = null, rig = null, animationTimer = null;
+  let slots = {}, clock = null, cache = null, animationTimer = null;
+  const rigs = {};   // procedural slotlar: idle (idle-rig.js), walk (walk-rig.js)
   const blinkPatches = {};
   const disabledSlots = new Set();
 
@@ -43,7 +44,7 @@
     return patch;
   }
 
-  function draw(name, mirrored = false, seconds = null, blink = false) {
+  function draw(name, mirrored = false, seconds = null, blink = false, procedural = null) {
     const frame = { ...frames[name], image: frames[name].image || cache?.get(name) };
     const maxHeight = name.startsWith('walk-') ? 164 : SIZE - 4;
     const scale = Math.min(HEAD / frame.head, (SIZE - 4) / frame.width, maxHeight / frame.height);
@@ -51,7 +52,9 @@
     const x = (SIZE - width) / 2, y = SIZE - height;
     context.save();
     if (mirrored) { context.translate(SIZE, 0); context.scale(-1, 1); }
-    if (seconds !== null && rig) rig.draw(context, seconds, x, y, width, height, blink ? blinkPatches.stand : null);
+    const rig = procedural && rigs[procedural];
+    // Rig kadr nomidagi (stand / walk-a) koordinatalarda; yopiq ko'z tana harakati bilan birga chiziladi.
+    if (seconds !== null && rig) rig.draw(context, seconds, x, y, width, height, blink ? blinkPatches[name] : null);
     else {
       context.drawImage(frame.image, x, y, width, height);
       const anchor = blink && frame.blink;
@@ -113,14 +116,15 @@
     if (pose === 'climb' && state !== 'sleep') slotName = 'climb';
     else if (requested === 'neutral' && !latest.dancing && pose === 'stand') {
       if (state === 'walk' && facing !== 0) slotName = 'walk';
-      else if (state === 'idle' && facing === 0 && rig) slotName = 'idle';
+      else if (state === 'idle' && facing === 0) slotName = 'idle';
     }
-    if (!slots[slotName] || disabledSlots.has(slotName)) slotName = null;
+    const procedural = slots[slotName]?.procedural;
+    if (!slots[slotName] || disabledSlots.has(slotName) || (procedural && !rigs[procedural])) slotName = null;
     clock.request(slotName);
     const phase = slotName ? clock.sample() : null;
     if (phase) name = phase.frame;
     const sequenceBlink = blinking && expression === 'neutral' &&
-      ((phase?.slot.procedural === 'idle' && blinkPatches.stand) ||
+      ((phase?.slot.procedural && blinkPatches[name]) ||
        (phase && blinkPatches[frames[name].blink?.source]));
     if (blinking && expression === 'neutral' && !sequenceBlink) requested = 'sleeping';
     const head = frames[name].face;
@@ -130,7 +134,8 @@
     if (key !== previous) {
       previous = key;
       context.clearRect(0, 0, SIZE, SIZE);
-      const base = draw(name, mirrored, phase?.slot.procedural === 'idle' ? phase.seconds : null, Boolean(sequenceBlink));
+      const base = draw(name, mirrored, phase?.slot.procedural ? phase.seconds : null, Boolean(sequenceBlink),
+        phase?.slot.procedural || null);
       if (emotion !== 'neutral') {
         const face = frames[faceName];
         // Har pozaning o'z bosh/yoqa chegarasi bor. Chap kadrga yuz ham birga akslanadi.
@@ -171,7 +176,7 @@
       if (image.naturalWidth !== frame.width || image.naturalHeight !== frame.height) throw new Error(`Kadr o‘lchami noto‘g‘ri: ${name}`);
       frames[name] = { ...frame, image };
     }));
-    // 12 yurish WebP: bir martalik decode; slot almashganda kutish va qayta decode yo'q.
+    // Kadrli (sequenceOnly) slotlar uchun: bir martalik decode; slot almashganda kutish va qayta decode yo'q.
     cache = new window.ChibiSequences.FrameCache({ mode: 'all', load: async name => {
       const frame = frames[name];
       const response = await fetch(`chibi/${frame.src}`);
@@ -187,8 +192,10 @@
       for (const [name, slot] of Object.entries(slots)) if (slot.frames.some(id => frames[id].sequenceOnly)) disabledSlots.add(name);
       console.warn('Animatsiya yuklanmadi, asl poza ishlatiladi:', error);
     }
-    try { if (window.PilotIdleRig) rig = new window.PilotIdleRig(frames.stand.image); }
+    try { if (window.PilotIdleRig) rigs.idle = new window.PilotIdleRig(frames.stand.image); }
     catch (error) { console.warn('Idle qatlamlari tayyorlanmadi:', error); }
+    try { if (window.ChibiWalkRig) rigs.walk = new window.ChibiWalkRig(frames['walk-a'].image, frames['walk-b'].image); }
+    catch (error) { console.warn('Yurish qatlamlari tayyorlanmadi, oddiy poza ishlatiladi:', error); }
     blinkPatches.stand = makeBlinkPatch(239, 400, '#fbe3d2', [
       { outline: [[58,137],[64,129],[72,123],[86,122],[96,126],[103,134],[104,150],[100,158],[88,162],[74,162],[65,156],[61,148]],
         lid: [63,143,82,155,101,141] },

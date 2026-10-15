@@ -228,150 +228,6 @@
       "width": 299,
       "height": 320,
       "head": 299
-    },
-    "walk-seq-00": {
-      "src": "pilot/walk/00.webp",
-      "width": 300,
-      "height": 400,
-      "head": 265.53465346534654,
-      "sequenceOnly": true,
-      "blink": {
-        "source": "walk-a",
-        "x": 14,
-        "y": 4
-      }
-    },
-    "walk-seq-01": {
-      "src": "pilot/walk/01.webp",
-      "width": 300,
-      "height": 400,
-      "head": 265.53465346534654,
-      "sequenceOnly": true,
-      "blink": {
-        "source": "walk-a",
-        "x": 14,
-        "y": 3
-      }
-    },
-    "walk-seq-02": {
-      "src": "pilot/walk/02.webp",
-      "width": 300,
-      "height": 400,
-      "head": 265.53465346534654,
-      "sequenceOnly": true,
-      "blink": {
-        "source": "walk-a",
-        "x": 14,
-        "y": 2
-      }
-    },
-    "walk-seq-03": {
-      "src": "pilot/walk/03.webp",
-      "width": 300,
-      "height": 400,
-      "head": 265.53465346534654,
-      "sequenceOnly": true,
-      "blink": {
-        "source": "walk-a",
-        "x": 14,
-        "y": 1
-      }
-    },
-    "walk-seq-04": {
-      "src": "pilot/walk/04.webp",
-      "width": 300,
-      "height": 400,
-      "head": 265.53465346534654,
-      "sequenceOnly": true,
-      "blink": {
-        "source": "walk-a",
-        "x": 14,
-        "y": 2
-      }
-    },
-    "walk-seq-05": {
-      "src": "pilot/walk/05.webp",
-      "width": 300,
-      "height": 400,
-      "head": 265.53465346534654,
-      "sequenceOnly": true,
-      "blink": {
-        "source": "walk-a",
-        "x": 14,
-        "y": 3
-      }
-    },
-    "walk-seq-06": {
-      "src": "pilot/walk/06.webp",
-      "width": 300,
-      "height": 400,
-      "head": 265.53465346534654,
-      "sequenceOnly": true,
-      "blink": {
-        "source": "walk-a",
-        "x": 14,
-        "y": 4
-      }
-    },
-    "walk-seq-07": {
-      "src": "pilot/walk/07.webp",
-      "width": 300,
-      "height": 400,
-      "head": 265.53465346534654,
-      "sequenceOnly": true,
-      "blink": {
-        "source": "walk-a",
-        "x": 14,
-        "y": 3
-      }
-    },
-    "walk-seq-08": {
-      "src": "pilot/walk/08.webp",
-      "width": 300,
-      "height": 400,
-      "head": 265.53465346534654,
-      "sequenceOnly": true,
-      "blink": {
-        "source": "walk-a",
-        "x": 14,
-        "y": 2
-      }
-    },
-    "walk-seq-09": {
-      "src": "pilot/walk/09.webp",
-      "width": 300,
-      "height": 400,
-      "head": 265.53465346534654,
-      "sequenceOnly": true,
-      "blink": {
-        "source": "walk-a",
-        "x": 14,
-        "y": 1
-      }
-    },
-    "walk-seq-10": {
-      "src": "pilot/walk/10.webp",
-      "width": 300,
-      "height": 400,
-      "head": 265.53465346534654,
-      "sequenceOnly": true,
-      "blink": {
-        "source": "walk-a",
-        "x": 14,
-        "y": 2
-      }
-    },
-    "walk-seq-11": {
-      "src": "pilot/walk/11.webp",
-      "width": 300,
-      "height": 400,
-      "head": 265.53465346534654,
-      "sequenceOnly": true,
-      "blink": {
-        "source": "walk-a",
-        "x": 14,
-        "y": 3
-      }
     }
   },
   "slots": {
@@ -387,22 +243,13 @@
     },
     "walk": {
       "frames": [
-        "walk-seq-00",
-        "walk-seq-01",
-        "walk-seq-02",
-        "walk-seq-03",
-        "walk-seq-04",
-        "walk-seq-05",
-        "walk-seq-06",
-        "walk-seq-07",
-        "walk-seq-08",
-        "walk-seq-09",
-        "walk-seq-10",
-        "walk-seq-11"
+        "walk-a"
       ],
       "fps": 20,
       "loop": true,
-      "next": null
+      "next": null,
+      "procedural": "walk",
+      "duration": 1.0
     },
     "climb": {
       "frames": [

@@ -1,6 +1,6 @@
 # Chibi kadrlar
 
-Runtime: `frames/*.png`, `pilot/walk/*.webp` va `frames/manifest.json`. 33 PNG + 12 WebP; jami 1 219 457 bayt. Eng katta tomoni 400 px, shaffof alfa. Bitmaplarning nazariy hajmi 20 497 920 bayt (19.55 MiB), idle qatlamlari yana 1.82 MiB; Chromium/GPU overhead'i bundan tashqari. Runtime'da atlas yoki alfa skaneri yo'q. `head` — kadr masshtabi uchun bosh kengligi. Chetda shaffof gutter bor.
+Runtime: `frames/*.png` va `frames/manifest.json` (33 PNG, jami 855 969 bayt) + kod bilan jonlantirish: `pilot/idle-rig.js` (idle), `walk-rig.js` (yurish). Yurish uchun alohida rasm fayli yo'q.
 
 Oldingi 4 atlas Git tarixida (`8fd6fb3`, `src/renderer/chibi/`) saqlangan. Kadrlar alfa siluet komponentlari bo'yicha ajratildi: ¾ va yon ko'rinishlar qo'shni soch bo'laklarini olmaydi, o'tirish katagiga pastdagi sakrashning sochi kirmaydi. Ranglar 256 rangli RGBA PNG palitrasiga tushirilgan.
 
@@ -10,9 +10,18 @@ Yangi rasmlar built-in `image_gen` orqali yaratildi, keyin alfa bo'yicha qirqild
 - `walk-b.png`: o'ngga qaragan ayni personaj, yurishning o'tish qadami; oyoqlar bir-biriga yaqin, biri tekis pastga tayangan, ikkinchisining tizzasi bukilgan va tovoni boldir ortiga ko'tarilgan; old qo'l yoniga tushirilgan; bosh, soch, yuz, kiyim va uslub saqlanadi; shaffof fon, to'liq bitta personaj. Dastlabki keng qadam varianti ishlatilmaydi.
 - `ledge.png`: o'ng ¾ ko'rinish, ko'rinmas qirrada o'tirgan ayni personaj; kaftlar ikki yonida, sonlar gorizontal, tizzalar birga, boldirlar va etiklar vertikal pastga osilgan; tagcharm kameraga qaramaydi; stol, qirra, taxta, soya yoki matn chizilmaydi; shaffof fon.
 
-Animatsiya: qatlamli idle 12 fps, 12 kadrli yurish 20 fps (0.6 s sikl), climb 4 fps; 3.2–6 s oralig'ida 135 ms pirpirash; burilishda 95 ms oraliqdagi old/¾/yon kadrlar; kursor uchun 300/190 va 1050/880 px histerezis. Boshqa personaj yoki yashirin hujjatda taymerlar to'xtatiladi. Qizcha 180 px. Qirrada yangi kadrning oyoqlari uchun 46 px pastga siljish.
+Animatsiya: qatlamli idle 12 fps, cutout yurish (`walk-rig.js`) 20 fps (1 s sikl), climb 4 fps; 3.2–6 s oralig'ida 135 ms pirpirash; burilishda 95 ms oraliqdagi old/¾/yon kadrlar; kursor uchun 300/190 va 1050/880 px histerezis. Boshqa personaj yoki yashirin hujjatda taymerlar to'xtatiladi. Qizcha 180 px. Qirrada yangi kadrning oyoqlari uchun 46 px pastga siljish.
 
-## Yurish tuzatishi — 2026-10-15
+## Yurish — cutout (joriy, Claude)
+
+Shaxzod uch variantni (eski 2 kadr, Codex 12 kadr, Claude cutout) jonli solishtirib, cutout'ni tanladi. `walk-rig.js` faqat asl `walk-a.png` / `walk-b.png` piksellaridan foydalanadi:
+- Ustki qism (bosh, gavda, yubka) doim walk-a — bosh/tana nomuvofiqligi bo'lmaydi.
+- Oyoqlar: yerga tegish fazasida walk-a, oraliqda walk-b (B_DX=-4). Oyoqlar yerda qoladi; tana `12·sin²` bilan ko'tariladi, son yuqorisi yubka ostiga cho'zilgan (bo'shliq ochilmaydi).
+- Qo'llar ±0.09 rad siltanadi; tanadan faqat fon ustidagi yeng o'chiriladi, orqa yeng ostiga yubka rangidagi taglik.
+- Blink: `blinkPatches['walk-a']` tana transformida chiziladi. Manifest: `slots.walk = { frames: ['walk-a'], procedural: 'walk', fps: 20, duration: 1 }`.
+- Cheklov: oyoq uchun asl rasmda faqat 2 poza — oyoqlar siklda 4 marta almashadi (tana/qo'llar silliq).
+
+## Tarix: 12 kadrli kod-oyoq yurishi (olib tashlangan)
 
 Oldingi 8 kadrli atlasda oyoq fazalari takrorlangan, qo'l/kofta/yubka shakli kadrlar orasida keskin o'zgargan. Shaxzod yurishni tuzatishni topshirdi. Yangi built-in image_gen atlasida ham fazalar takrorlandi; u rad etildi va runtime'ga kiritilmadi. Prompt va qaror `pilot/walk-prompt.json` da.
 

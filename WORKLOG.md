@@ -3,6 +3,14 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+
+## 2026-10-15 · Claude · Yurish: cutout rig (Shaxzod tanlovi)
+- Shaxzod uch variantni (eski 2 kadr, Codex 12 kadr, Claude cutout) jonli solishtirib Claude variantini tanladi; Codex integratsiyaga rozi bo'ldi (chibi/ da ochiq ishi yo'q edi).
+- Fayllar: yangi src/renderer/chibi/walk-rig.js; chibi.js (procedural rig'lar umumlashtirildi: idle + walk, blink patch kadr nomi bo'yicha), frames/manifest.json (walk → procedural, walk-seq-* olib tashlandi), index.html, chibi/README.md, pilot/README.md, docs/PROJECT.md, CHANGELOG.md.
+- Olib tashlandi (Git tarixida): pilot/walk/*.webp (12), pilot/walk.json, pilot/walk-prompt.json, scripts/build-chibi-walk.py.
+- Usul: faqat asl walk-a/walk-b piksellari. Ustki qism doim walk-a; oyoqlar yerga tegishda walk-a, oraliqda walk-b; tana 12·sin² bob, son yubka ostiga cho'zilgan; qo'llar ±0.09 rad; orqa yeng ostida yubka rangidagi taglik. 20 fps, 1 s sikl (100 px/s ga mos).
+- Tekshirildi (Electron, Temp profil): o'ng/chap yurish, yurishda blink (harakat davom etadi), jahl → statik walk-a + yuz, idle, setActive(false) da kadr muzlaydi, konsol 0 xato/0 ogohlantirish. CPU (yurish, 30 s × 2): 11.5/11.3% → 10.8/10.6%. Dekodlangan 12 WebP (~5.5 MiB) o'rniga rig qatlamlari ~2.6 MiB.
+- Cheklov: oyoqlar uchun 2 asl poza — siklda 4 marta almashadi. Codex review kutilmoqda.
 ## 2026-10-15 · Codex · Qizchaning navbatma-navbat yurishi tuzatildi
 - Shaxzod rasm/storyboard usulida yurish xatolarini tuzatishni topshirdi va 'darajani ko'tardim, bajaraver' dedi. Faqat chibi yurish assetlari, manifest, builder va tegishli hujjatlar o'zgardi; main, umumiy renderer va Claude personaj kodi o'zgarmadi. `chibi.js` da faqat kadr soni izohi yangilandi.
 - Eski atlasda bir xil oyoq fazalari va tana/qo'l shaklining keskin o'zgarishi bor edi. Built-in image_gen bilan yangi8atlas sinovi ham takroriy fazalar berdi; rad etildi, runtime'ga kirmadi. Prompt/qaror `pilot/walk-prompt.json` da; Higgsfield ishlatilmadi.
