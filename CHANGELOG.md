@@ -1,5 +1,21 @@
 # O'zgarishlar
 
+## Keyingi versiya
+### 🔄 Yangilanish
+- Menyuda **"Yangilanishni tekshirish"** — personaj natijani aytadi; yuklanish foizi menyuda ko'rinadi.
+- Yangi versiya tayyor bo'lsa, gap bulutchasida **"Yangilash"** tugmasi chiqadi — bir bosishda o'rnatiladi.
+
+### 💬 Gaplar va bulutcha
+- Gaplar hamma uchun qayta yozildi: ish, o'qish, dam olish, salomatlik. Imlo tuzatildi, toʻgʻri oʻzbek harflari (oʻ, gʻ, ʼ), har kayfiyatda gaplar ko'paydi.
+- Yangi gap bulutchasi: boshni yopmaydi, matn harfma-harf chiqadi, chet rangi kayfiyatga mos, ekran chetida ham to'liq ko'rinadi.
+
+### 🧸 Yangi o'ng tugma paneli
+- Oddiy menyu o'rniga personajning o'z paneli: rasm va kayfiyat, tez tugmalar (Gapir, Uxlat, Yashirish), almashtirgichlar, ochiladigan tanlovlar.
+
+### ✨ Harakat
+- Ko'tarib olinganda Midori qo'llarini ko'tarib osilib turadi; har ikki personaj sudralganda mayatnikdek tebranadi.
+- Bosh ustida his-tuyg'u belgilari: ❗ 💗 ❓ 💫 💢.
+
 ## 1.9.1
 - Midori endi ekran chetidan chiqib ketmaydi: oyna ustiga sakraganda, chiqqanda, oyna bilan birga ko'chganda, oyna ustida yurganda va uxlab yotganda ham to'liq ko'rinadi.
 - Gapirayotganda yuzi gapga mos: quvnoq gapda kuladi, jahldorida jahli chiqadi, uyatchanida qizaradi, hayratlanganda ko'zini katta ochadi. Ko'kcha ham quvnoq va jahldor gaplarda shunga mos yuz qiladi.

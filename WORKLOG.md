@@ -18,6 +18,20 @@ Qoidalar: [AGENTS.md](AGENTS.md).
 - Sinov yordamchisidagi screen-before-ready va surface mock yuklash tartibi tuzatilib yakuniy sinov muvaffaqiyatli qayta o'tdi; mahsulotdagi xato deb hisoblanmadi. Temp skript/profil/loglar tozalandi. Build/push/release yo'q. Xulosa: yuqoridagi ikki P2 tuzatilguncha motion o'zgarishi tasdiqlanmaydi. Commit: ushbu yozuv bilan `Review screen-edge perch bounds and cross-display jump regression`.
 
 
+## 2026-10-15 · Claude · Yangilash tugmasi, umumiy gaplar, yangi bulutcha, o'ng tugma paneli, osilish
+- Shaxzod: "hammasini o'zing qil"; gaplar faqat umumiy; til hozircha o'zbekcha; MaoMao'dan bizga moslarini olish (harakat, gaplashish, bulutcha, animatsiya, o'ng tugma paneli). MaoMao faqat o'qildi (README, persona, pack.json) — ishga tushirilmadi, rasmlari olinmadi.
+- Boshqa agent fayllari (main) ham o'zgardi — Shaxzod ruxsati bilan: `updater.js` (holat mashinasi, qo'lda tekshirish), `menu.js` (bitta template + panel ishoralari), yangi `panel.js`, `ipc.js` (`hit-area`, `bubble-action` — faqat ruxsat etilgan ro'yxat), `activity.js` (bulutcha ustida ham sichqonchani ushlash), `context.js` (`BASE_H` 280→340, `hitArea`), `main.js` (panel.register). Matnlar main'da ham ʻ/ʼ ga o'tkazildi.
+- Commitlar: c428553 (yangilanish), d8eae33 (gaplar/imlo), 220b725 (bulutcha), 4a12693 (panel), 6e40e3a (osilish/emote).
+- Tekshirildi (Electron, Temp profil, hammasi o'chirildi):
+  - Yangilanish: soxta 1.9.0 → GitHub'dagi haqiqiy 1.9.1 topildi, 0→92% yuklandi, bulutchada "Yangilash/Keyinroq", bosilganda install chaqirildi (stub); 1.9.1 da "eng yangi"; noto'g'ri repo → xato xabari; keshdan qayta — darhol tayyor. Soxta kursor bilan: bulutcha ustida oyna sichqonchani ushlaydi, chetda — yo'q, yopilgach — yo'q. Test keshi (`kokcha-test-updater`) o'chirildi.
+  - Gaplar: 6 ovoz × 28 kalit bo'sh qolmaydi; 239 satr, dasturchi so'zlari 0; yuz taqsimoti ko'rildi.
+  - Bulutcha: uzun gap, jahl (qizil chet), tugmali, ekran chap chetida (torayadi, dum personajga) — Midori va Ko'kcha skrinshotlari.
+  - Panel: ochilish, Kayfiyat → Sho'x (persona o'zgardi), "O'zi yursin" o'chdi, Uxlat (panel yopildi, uyquda "Uyg'ot"), Esc; Ko'kcha'da Rang bor, Kayfiyat yo'q.
+  - Osilish: sun'iy sudrashda hang kadri + tebranish, qo'yib yuborilgach inline transform tozalandi; emote'lar.
+  - CPU (jim, yurishsiz, 15 s, 3 martadan, Temp worktree'da 1.9.1 bilan): 23.8/23.8/23.9% → 23.5/24.8/25.9% — farq shovqin darajasida. Konsol xatolari 0.
+- Tekshirilmadi (haqiqiy sichqoncha kerak): haqiqiy o'ng tugma bilan panel, panel tashqarisini bosib yopish, haqiqiy sudrashdagi tebranish hissi, bulutcha tugmasini qo'l bilan bosish. Shaxzod sinab ko'rsin.
+- Codex'ga: main o'zgarishlarini review qiling (ayniqsa panel.js act()/serialize, updater holatlari, hit-area). Rasm topshirig'i (yangi yuz ifodalari, mashg'ulot animatsiyalari) Shaxzod orqali alohida beriladi.
+
 ## 2026-10-15 · Claude · Ko'kcha 1.9.1 chiqarildi
 - Shaxzod "ha, 1.9.1 ni chiqar" dedi. Tarkibi: Midori ekrandan chiqmaydi (screenHalf/safeRange, qo'shni monitorga sakrash), gapga mos yuz (Phrases.faceOf, qaysar uchun "..." qoidasi), tor oynada titramaydi.
 - Codex P2 tuzatishlarini tasdiqlagan (52c64c1). P3 tuzatishi (82948d6) Codex qayta review'sidan oldin, Shaxzod qarori bilan chiqarildi — Codex keyinroq ko'rib chiqishi mumkin.

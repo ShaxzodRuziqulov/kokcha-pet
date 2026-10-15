@@ -23,15 +23,19 @@ src/main/               asosiy jarayon (Node)        — Codex egaligida (WORKLO
   activity.js           uyqu/uyg'onish, dam olish eslatmasi, o'zi gapirishi, kursor (hover, silash, ko'z qarashi)
   persona.js            Midori fe'li, saqlanadigan 3–4h navbat, vaqtinchalik otish/silash holati
   appearance.js         personaj, rang, "O'z rasmim" (tekshirish, qirqish, nusxalash)
-  menu.js               tray va o'ng tugma menyusi (bir xil), Windows bilan birga ishga tushish
-  ipc.js                renderer'dan kelgan xabarlar: bosish, sudrash, menyu, raqs
-  updater.js            electron-updater, GitHub Releases
+  menu.js               bandlar ro'yxati (template) — tray menyusi va o'ng tugma paneli shundan quriladi
+  panel.js              o'ng tugma paneli (frameless oyna); amal id+yorliq bo'yicha main'da topiladi
+  ipc.js                renderer'dan kelgan xabarlar: bosish, sudrash, menyu, raqs, bulutcha tugmalari
+  updater.js            electron-updater, GitHub Releases; holatlar checking/downloading/ready/latest/error
 src/preload.js          xavfsiz ko'prik: window.pet; renderer faqat EVENTS ro'yxatidagi kanallarni oladi
+src/panel-preload.js    panel ko'prigi: window.panel (onModel, act, close, height)
 src/renderer/           ko'rinish                       — Claude egaligida
   index.html            CSP qat'iy: faqat 'self'
   characters.js         4 ta SVG personaj, bitta umumiy "skelet" (build())
   style.css             barcha animatsiya, pozalar, ranglar (CSS o'zgaruvchilari)
-  renderer.js           gap pufakchasi, matnlar, sudrash/bosish, main xabarlariga javob
+  renderer.js           gap bulutchasi (harfma-harf, tugmalar), sudrash/tebranish, emote, main xabarlariga javob
+  phrases.js            barcha gaplar (ovozlar) va gap → yuz ifodasi (faceOf)
+  panel.html/css/js     o'ng tugma paneli ko'rinishi
 scripts/release.mjs     GitHub Release yaratish (CHANGELOG'dan tavsif oladi)
 ```
 - **Modullar aylanma bog'liqligi:** `Object.assign(module.exports, ...)` bilan eksport qilinadi; boshqa modul funksiyasi faqat chaqiruv paytida olinadi (`motion.fall()`), yuklanishda emas. Yangi modul ham shunday yozilsin.
@@ -40,7 +44,10 @@ scripts/release.mjs     GitHub Release yaratish (CHANGELOG'dan tavsif oladi)
 ## main ↔ renderer
 - main → renderer: `C.send(kanal, ma'lumot)` (context.js). Renderer faqat `preload.js` dagi `EVENTS` ro'yxatini oladi:
   `state, woke, welcome, say, hover, ghost, look, clicked, landed, petted, settings, appearance, bubble-shift, update, mood, remind, persona` (`mood`/`remind` — X0, `d87f5c0`).
-- renderer → main: `getInit, dragStart, dragMove, dragEnd, click, menu, dance`.
+- renderer → main: `getInit, dragStart, dragMove, dragEnd, click, menu, dance, hitArea, action`.
+- **Bulutcha tugmalari:** renderer `say(text, { actions })` bilan tugma chiqaradi va bulutcha joyini `hitArea({x,y,w,h})` (CSS px) bilan yuboradi — main (`activity.trackCursor`) o'sha joyda ham sichqonchani ushlaydi. Tugma `action(id)` yuboradi; main faqat `ipc.js` `BUBBLE_ACTIONS` ro'yxatidagilarni bajaradi (hozir `update-install`).
+- `update` = `{ status: checking|downloading|ready|latest|error|dev, version, portable, manual }`. O'zi tekshirganda faqat `ready` aytiladi (tugma bilan); menyudan so'ralganda har bosqich aytiladi.
+- **Oyna:** 240×340 (o'rta o'lchamda). Personaj pastda, tepasidagi 60+ px — bulutcha uchun shaffof joy (bosishni o'tkazadi). Bulutcha `bottom` bilan boshning ustiga bog'langan.
 - `state` = `{ state: idle|walk|sleep, dir, pose: stand|sit|ledge|lie|climb|hang|jump|fall, side }` → renderer `body` klasslariga aylantiradi (`pose-sit`, `side-left`...).
 - `look` = `{ dx, dy }` — kursorning personajga nisbatan joyi; ko'zlar shunga qaraydi.
 - `say` = matn turi (`'random'`, `'break'`, `'here'`, harakat turlari, `'image-*'`). **Matnning o'zi renderer'da** — main faqat turini yuboradi.
@@ -78,6 +85,8 @@ scripts/release.mjs     GitHub Release yaratish (CHANGELOG'dan tavsif oladi)
 - **Portable exe** o'zini Temp'ga ochadi: asl joy `PORTABLE_EXECUTABLE_DIR` / `PORTABLE_EXECUTABLE_FILE`.
 - Renderer'da `window.pet` nomi band (preload) — global `pet` o'zgaruvchi yaratilmasin (bir marta shu sababli hammasi ishlamay qolgan).
 - Ekran chetida titrash: burilish faqat chetga **qarab** yurganda bo'lishi kerak.
+- **Matnlar (foydalanuvchiga ko'rinadi):** hamma uchun (kasbga xos hazil yo'q), oʻ/gʻ — U+02BB, tutuq — U+02BC, oddiy `'` emas; undovlar o'zbekcha; qo'pol so'z yo'q. Gapning oxirgi his-tuyg'u emojisi yuz ifodasini belgilaydi (`Phrases.faceOf`).
+- **Bash heredoc** bu muhitda ikki teskari chiziqni bittaga aylantiradi — teskari chiziqli skriptlar Write vositasi bilan faylga yoziladi.
 - Avtomatik test yo'q. Tekshiruv: `npm start` + qo'lda; harakat mantiqi o'zgarsa, sinov oynasi ochib tekshirish. Haqiqiy sichqoncha talab qiladigan narsalarni (o'ng tugma, silash, Ctrl) Shaxzod tekshiradi — buni WORKLOG'da "tekshirilmadi" deb aniq yozish kerak.
 
 ## Yo'nalish va qarorlar
