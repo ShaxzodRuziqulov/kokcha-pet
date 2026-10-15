@@ -1,0 +1,98 @@
+{
+  "stand": {
+    "width": 239,
+    "height": 400,
+    "head": 237.45049504950495,
+    "neck": 192.2970297029703
+  },
+  "quarter": {
+    "width": 221,
+    "height": 400,
+    "head": 208.0910891089109
+  },
+  "profile": {
+    "width": 194,
+    "height": 400,
+    "head": 208.34851485148513
+  },
+  "back": {
+    "width": 223,
+    "height": 400,
+    "head": 208.34851485148513
+  },
+  "walk-a": {
+    "width": 271,
+    "height": 400,
+    "head": 265.53465346534654
+  },
+  "sit": {
+    "width": 297,
+    "height": 400,
+    "head": 306.24653465346535
+  },
+  "lie": {
+    "width": 400,
+    "height": 249,
+    "head": 267.12475247524753
+  },
+  "jump": {
+    "width": 307,
+    "height": 400,
+    "head": 286.5732673267327
+  },
+  "fall": {
+    "width": 338,
+    "height": 400,
+    "head": 283.5376237623762
+  },
+  "face-happy": {
+    "width": 400,
+    "height": 397,
+    "head": 395.7029702970297
+  },
+  "face-sad": {
+    "width": 400,
+    "height": 395,
+    "head": 392.9920792079208
+  },
+  "face-angry": {
+    "width": 400,
+    "height": 398,
+    "head": 396.6148514851485
+  },
+  "face-sleeping": {
+    "width": 400,
+    "height": 398,
+    "head": 395.7029702970297
+  },
+  "face-surprised": {
+    "width": 400,
+    "height": 396,
+    "head": 394.7950495049505
+  },
+  "face-talking": {
+    "width": 400,
+    "height": 395,
+    "head": 392.9920792079208
+  },
+  "face-embarrassed": {
+    "width": 400,
+    "height": 397,
+    "head": 394.7950495049505
+  },
+  "hang": {
+    "width": 229,
+    "height": 400,
+    "head": 223.988
+  },
+  "ledge": {
+    "width": 245,
+    "height": 400,
+    "head": 240.876
+  },
+  "walk-b": {
+    "width": 253,
+    "height": 400,
+    "head": 249.409
+  }
+}

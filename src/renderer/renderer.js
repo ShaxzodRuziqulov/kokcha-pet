@@ -104,6 +104,7 @@ let quiet = false;
 let state = 'idle';
 let currentPose = 'stand';
 let currentSide = null;
+let currentDir = 1;
 let chibiReady = false;
 let talking = false;
 let bubbleTimer = null;
@@ -117,13 +118,16 @@ function render() {
 
   const isChibi = character === 'chibi-girl';
   body.classList.toggle('chibi-mode', isChibi);
+  window.Chibi.setActive(isChibi && chibiReady && !document.hidden);
   document.getElementById('chibi').classList.toggle('hidden', !isChibi || !chibiReady);
   if (isChibi && chibiReady) {
     body.classList.remove('sprite-mode');
     sprite.classList.add('hidden');
     mascot.classList.add('hidden');
-    window.Chibi.paint({ state, pose: currentPose, side: currentSide,
-      expression: body.classList.contains('angry') ? 'angry' : talking ? 'talking' :
+    window.Chibi.paint({ state, pose: currentPose, side: currentSide, dir: currentDir,
+      expression: body.classList.contains('angry') ? 'angry' :
+        body.classList.contains('surprised') ? 'surprised' :
+        body.classList.contains('sad') ? 'sad' : talking ? 'talking' :
         body.classList.contains('yawn') ? 'sleeping' :
         body.classList.contains('happy') ? 'happy' : body.classList.contains('hover') ? 'embarrassed' : 'neutral' });
     return;
@@ -262,6 +266,7 @@ window.addEventListener('mousemove', (e) => {
   if (!dragState.moved && dx + dy > 4) {
     dragState.moved = true;
     body.classList.add('dragging');
+    mood('surprised', 1100);
     window.pet.dragStart();
   }
   if (dragState.moved) window.pet.dragMove();
@@ -334,6 +339,7 @@ window.pet.on('state', ({ state: s, dir, pose, side }) => {
   state = s;
   currentPose = pose || 'stand';
   currentSide = side;
+  currentDir = dir < 0 ? -1 : 1;
   for (const p of POSES) body.classList.toggle(`pose-${p}`, p === pose);
   body.classList.toggle('side-left', side === 'left');
   body.classList.toggle('side-right', side === 'right');
@@ -376,7 +382,7 @@ window.pet.on('say', (kind) => {
   }
   else if (kind === 'image-tips') { mood('wave', 1600); sayAll(IMAGE_TIPS); }
   else if (kind === 'image-cancel') sayAll([IMAGE_CANCEL]);
-  else if (kind === 'image-error') sayAll([IMAGE_ERROR]);
+  else if (kind === 'image-error') { mood('sad', 2400); sayAll([IMAGE_ERROR]); }
   else sayRandom();
 });
 
@@ -388,9 +394,9 @@ window.pet.on('clicked', () => {
 window.pet.on('landed', () => play('land', 350));
 window.pet.on('hover', (over) => { body.classList.toggle('hover', over); render(); });
 window.pet.on('mood', (data) => {
-  if (character !== 'chibi-girl' || data?.mood !== 'angry' || state === 'sleep') return;
+  if (character !== 'chibi-girl' || !['angry', 'sad', 'surprised'].includes(data?.mood) || state === 'sleep') return;
   const level = [1, 2, 3].includes(data.level) ? data.level : 1;
-  mood('angry', 1500 + level * 700);
+  mood(data.mood, 1500 + level * 700);
 });
 window.pet.on('ghost', (on) => body.classList.toggle('ghost', on));
 

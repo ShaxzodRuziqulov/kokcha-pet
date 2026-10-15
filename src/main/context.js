@@ -9,6 +9,7 @@ const { screen } = require('electron');
 const BASE_W = 240;     // oyna o'lchami (o'rta o'lchamda)
 const BASE_H = 280;
 const PET_SIZE = 150;   // personaj qutisi — oynaning pastki o'rtasida
+const petSize = () => ctx.settings.character === 'chibi-girl' ? 180 : PET_SIZE;
 const SIZES = { small: 0.75, medium: 1, large: 1.3 };
 
 const ctx = {
@@ -89,11 +90,12 @@ function rememberPosition() {
 function petRect() {
   const [x, y] = ctx.win.getPosition();
   const s = scale();
+  const size = petSize();
   return {
-    x: x + ((BASE_W - PET_SIZE) / 2) * s,
-    y: y + (BASE_H - PET_SIZE) * s,
-    w: PET_SIZE * s,
-    h: PET_SIZE * s,
+    x: x + ((BASE_W - size) / 2) * s,
+    y: y + (BASE_H - size) * s,
+    w: size * s,
+    h: size * s,
   };
 }
 
@@ -102,6 +104,7 @@ Object.assign(module.exports, {
   BASE_W,
   BASE_H,
   PET_SIZE,
+  petSize,
   SIZES,
   alive,
   send,

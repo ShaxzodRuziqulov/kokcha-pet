@@ -48,7 +48,7 @@ function stopWalk() {
 function setPose(next, side = null) {
   if (!C.alive()) return;
   // Chekkada o'tirganda oyna biroz pastga tushadi — oyoqlari qirradan osilib turadi
-  const drop = Math.round(LEDGE_DROP * C.scale());
+  const drop = Math.round((ctx.settings.character === 'chibi-girl' ? 46 : LEDGE_DROP) * C.scale());
   if (ctx.pose === 'ledge' && next !== 'ledge') {
     const [x, y] = ctx.win.getPosition();
     C.placeAt(x, y - drop);
@@ -72,7 +72,7 @@ const centerX = () => ctx.win.getPosition()[0] + C.winW() / 2;
 const feetY = () => ctx.win.getPosition()[1] + C.winH();
 
 // Tana qirrasi oyna markazidan qancha uzoqda (personaj qutisi ichida tana ~26 px ichkarida)
-const bodyHalf = () => (C.PET_SIZE / 2 - 26) * C.scale();
+const bodyHalf = () => (C.petSize() / 2 - 26) * C.scale();
 
 // Tana ekrandan chiqmasin (oynaning shaffof qismi chiqib tursa mayli)
 function clampBodyX(x, wa) {
@@ -84,7 +84,7 @@ function clampBodyX(x, wa) {
 // ---- Sirtlar: yer (taskbar ustida) va oynalarning yuqori qirralari ----
 function usableSurfaces() {
   if (!getSurfaces || !ctx.settings.climb) return [];
-  const petH = C.PET_SIZE * C.scale();
+  const petH = C.petSize() * C.scale();
   return getSurfaces().filter((sf) => {
     const wa = C.workAreaAt((sf.x1 + sf.x2) / 2, sf.y + 1);
     return sf.y - petH >= wa.y               // personaj ekran tepasidan chiqib ketmasin
@@ -268,7 +268,7 @@ function startClimb(wallSide) {
   const goal = usableSurfaces()
     .filter((sf) => (right ? sf.x2 >= wallX - edge : sf.x1 <= wallX + edge) && sf.y < fy0 - 40 * s)
     .sort((a, b) => b.y - a.y)[0]; // eng yaqini
-  const highest = wa.y + C.PET_SIZE * s + 20;
+  const highest = wa.y + C.petSize() * s + 20;
   const stopFeet = goal ? goal.y : Math.max(highest, fy0 - (200 + Math.random() * 250) * s);
 
   ctx.motion = 'climb';

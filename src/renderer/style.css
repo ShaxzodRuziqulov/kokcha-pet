@@ -67,7 +67,8 @@ html, body {
   cursor: grab;
   transition: transform 0.15s;
 }
-body.dir-left #pet { transform: scaleX(-1); }
+body.dir-left:not(.chibi-mode) #pet { transform: scaleX(-1); }
+body.chibi-mode #pet { width: 180px; height: 180px; margin-left: -90px; }
 body.dragging #pet { cursor: grabbing; }
 
 #pet-inner {

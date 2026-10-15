@@ -1,99 +1,130 @@
-// PNG atlaslar bir marta o'qiladi. Canvas faqat poza/ifoda o'zgarganda chiziladi.
+// Oldindan kesilgan PNG kadrlar; ishga tushishda piksel skaneri kerak emas.
 (() => {
-  const SIZE = 150;
-  const HEAD = 88;
+  const SIZE = 180;
+  const HEAD = 110;
   const canvas = document.getElementById('chibi');
   const ratio = Math.min(window.devicePixelRatio || 1, 2);
   canvas.width = canvas.height = SIZE * ratio;
   const context = canvas.getContext('2d');
   context.scale(ratio, ratio);
-  const atlases = {};
-  let loaded = false;
-  let latest = { state: 'idle', pose: 'stand', expression: 'neutral' };
-  let lookX = 0;
-  let previous = '';
+  let frames = {}, loaded = false, active = false;
+  let latest = { state: 'idle', pose: 'stand', expression: 'neutral', dir: 1 };
+  let lookTarget = 0, facing = 0, previous = '', previousTime = 0;
+  let turnTimer = null, stepTimer = null, blinkTimer = null, blinkEnd = null;
+  let step = 0, blinking = false;
 
-  // Alfa bo'yicha chegara: generator qoldirgan juda xira piksel chetlari o'lchamni buzmaydi.
-  function bounds(pixels, width, x, y, w, h) {
-    let left = x + w, top = y + h, right = x, bottom = y;
-    for (let py = y; py < y + h; py++) for (let px = x; px < x + w; px++) {
-      if (pixels[(py * width + px) * 4 + 3] <= 24) continue;
-      left = Math.min(left, px); top = Math.min(top, py);
-      right = Math.max(right, px + 1); bottom = Math.max(bottom, py + 1);
-    }
-    if (left >= right || top >= bottom) throw new Error('Atlas katagi bo‘sh');
-    return { x: left, y: top, w: right - left, h: bottom - top };
-  }
-
-  async function load(name, columns, rows, headFraction) {
-    const image = new Image();
-    image.src = `chibi/${name}.png`;
-    await image.decode();
-    const scan = document.createElement('canvas');
-    scan.width = image.width; scan.height = image.height;
-    const reader = scan.getContext('2d', { willReadFrequently: true });
-    reader.drawImage(image, 0, 0);
-    const pixels = reader.getImageData(0, 0, image.width, image.height).data;
-    const frames = [];
-    for (let row = 0; row < rows; row++) for (let column = 0; column < columns; column++) {
-      const x = Math.floor(column * image.width / columns), y = Math.floor(row * image.height / rows);
-      const w = Math.floor((column + 1) * image.width / columns) - x;
-      const h = Math.floor((row + 1) * image.height / rows) - y;
-      frames.push({ ...bounds(pixels, image.width, x, y, w, h), head: w * headFraction });
-    }
-    atlases[name] = { image, frames };
-    scan.width = scan.height = 0; // Alfa skaneri va katta bitmap vaqtinchalik.
-  }
-
-  function draw(name, index, mirrored = false) {
-    const { image, frames } = atlases[name];
-    const frame = frames[index];
-    const scale = Math.min(HEAD / frame.head, (SIZE - 4) / frame.w, (SIZE - 4) / frame.h);
-    const width = frame.w * scale, height = frame.h * scale;
+  function draw(name, mirrored = false) {
+    const frame = frames[name];
+    const maxHeight = name.startsWith('walk-') ? 164 : SIZE - 4;
+    const scale = Math.min(HEAD / frame.head, (SIZE - 4) / frame.width, maxHeight / frame.height);
+    const width = frame.width * scale, height = frame.height * scale;
     const x = (SIZE - width) / 2, y = SIZE - height;
     context.save();
     if (mirrored) { context.translate(SIZE, 0); context.scale(-1, 1); }
-    context.drawImage(image, frame.x, frame.y, frame.w, frame.h, x, y, width, height);
+    context.drawImage(frame.image, x, y, width, height);
     context.restore();
-    return { frame, image, scale, x, y };
+    return { frame, scale, x, y, width, height };
   }
 
-  const expressions = { neutral: 0, happy: 1, sad: 2, angry: 3, sleeping: 4, surprised: 5, talking: 6, embarrassed: 7 };
+  // Har safar bitta ko'rinishdan o'tiladi: chap yon → chap ¾ → old → o'ng ¾ → o'ng yon.
+  function targetFacing() {
+    if (latest.state === 'walk' || ['jump', 'ledge'].includes(latest.pose)) return latest.dir < 0 ? -1 : 1;
+    if (latest.expression !== 'neutral' || blinking || latest.pose !== 'stand') return 0;
+    return lookTarget;
+  }
+  function turn() {
+    clearTimeout(turnTimer); turnTimer = null;
+    if (!active || !loaded) return;
+    const target = targetFacing();
+    if (facing === target) return;
+    const delay = Math.max(0, 95 - (performance.now() - previousTime));
+    turnTimer = setTimeout(() => {
+      facing += Math.sign(targetFacing() - facing);
+      previousTime = performance.now();
+      paint();
+    }, delay);
+  }
+
+  function scheduleBlink() {
+    clearTimeout(blinkTimer);
+    if (!active) return;
+    blinkTimer = setTimeout(() => {
+      if (latest.state === 'idle' && latest.pose === 'stand' && latest.expression === 'neutral' && facing === 0) {
+        blinking = true; paint();
+        blinkEnd = setTimeout(() => { blinking = false; paint(); scheduleBlink(); }, 135);
+      } else scheduleBlink();
+    }, 3200 + Math.random() * 2800);
+  }
+
   function paint(options = latest) {
     latest = options;
-    if (!loaded) return;
-    const { state, pose, side, expression } = options;
-    let name = 'standing', index = 0, mirrored = false;
-    if (state === 'sleep' || pose === 'lie') { name = 'poses'; index = 2; }
-    else if (pose === 'sit' || pose === 'ledge') { name = 'poses'; index = 1; }
-    else if (pose === 'hang') { name = 'poses'; index = 3; mirrored = side === 'left'; }
-    else if (pose === 'jump') { name = 'poses'; index = 4; }
-    else if (pose === 'fall') { name = 'poses'; index = 5; }
-    else if (pose === 'climb') { name = 'turnaround'; index = 3; }
-    else if (state === 'walk') { name = 'poses'; index = 0; }
-    else if (expression === 'neutral' && Math.abs(lookX) > 250) {
-      name = 'turnaround'; index = Math.abs(lookX) > 1000 ? 2 : 1; mirrored = lookX < 0;
+    if (!loaded || !active) return;
+    const { state, pose, side, expression = 'neutral' } = latest;
+    let name = 'stand', mirrored = false;
+    if (state === 'sleep' || pose === 'lie') name = 'lie';
+    else if (pose === 'sit') name = 'sit';
+    else if (pose === 'ledge') { name = 'ledge'; mirrored = facing < 0; }
+    else if (pose === 'hang') { name = 'hang'; mirrored = side === 'left'; }
+    else if (pose === 'jump') { name = 'jump'; mirrored = facing < 0; }
+    else if (pose === 'fall') name = 'fall';
+    else if (pose === 'climb') name = 'back';
+    else if (state === 'walk') { name = facing === 0 ? 'stand' : step ? 'walk-b' : 'walk-a'; mirrored = facing < 0; }
+    else if (facing !== 0) { name = Math.abs(facing) === 2 ? 'profile' : 'quarter'; mirrored = facing < 0; }
+    const emotion = name === 'stand' ? (blinking && expression === 'neutral' ? 'sleeping' : expression) : 'neutral';
+    const key = `${name}:${mirrored}:${emotion}`;
+    if (key !== previous) {
+      previous = key;
+      context.clearRect(0, 0, SIZE, SIZE);
+      const base = draw(name, mirrored);
+      if (emotion !== 'neutral' && frames[`face-${emotion}`]) {
+        const face = frames[`face-${emotion}`];
+        // Yuz + yoqa tanaga bir xil balandlikda ulanadi, bosh masshtabi o'zgarmaydi.
+        const height = base.height * 0.555, width = height * face.width / face.height;
+        context.clearRect(0, 0, SIZE, base.y + base.frame.neck * base.scale);
+        context.drawImage(face.image, (SIZE - width) / 2, base.y, width, height);
+      }
+      canvas.dataset.frame = name;
+      canvas.dataset.expression = emotion;
+      canvas.dataset.facing = String(facing);
     }
-    const emotion = name === 'standing' ? expression : 'neutral';
-    const key = `${name}:${index}:${mirrored}:${emotion}`;
-    if (key === previous) return;
-    previous = key;
-    context.clearRect(0, 0, SIZE, SIZE);
-    const base = draw(name, index, mirrored);
-    if (emotion !== 'neutral' && expressions[emotion] !== undefined) {
-      // Yuz ifodasi o'sha PNG sheet'dan; tananing pastki qismi original rasmdan qoladi.
-      const neck = Math.round(base.image.height * 0.48);
-      context.clearRect(0, 0, SIZE, base.y + (neck - base.frame.y) * base.scale);
-      const atlas = atlases.expressions, face = atlas.frames[expressions[emotion]];
-      const width = HEAD * 1.04, height = width * face.h / face.w;
-      context.drawImage(atlas.image, face.x, face.y, face.w, face.h,
-        (SIZE - width) / 2, base.y, width, height);
-    }
-    canvas.dataset.frame = `${name}:${index}`;
-    canvas.dataset.expression = emotion;
+    const walking = state === 'walk' && pose === 'stand';
+    if (walking && !stepTimer) stepTimer = setInterval(() => { step ^= 1; paint(); }, 250);
+    if (!walking && stepTimer) { clearInterval(stepTimer); stepTimer = null; step = 0; }
+    turn();
   }
 
-  const ready = Promise.all([load('standing', 1, 1, 0.59), load('poses', 3, 2, 0.66),
-    load('expressions', 4, 2, 0.98), load('turnaround', 4, 1, 0.92)]).then(() => { loaded = true; paint(); });
-  window.Chibi = { ready, paint, look(dx) { lookX = dx; paint(); } };
+  const ready = fetch('chibi/frames/manifest.json').then(r => {
+    if (!r.ok) throw new Error('Kadrlar ro‘yxati yuklanmadi');
+    return r.json();
+  }).then(async manifest => {
+    await Promise.all(Object.entries(manifest).map(async ([name, frame]) => {
+      const image = new Image(); image.src = `chibi/frames/${name}.png`; await image.decode();
+      if (image.naturalWidth !== frame.width || image.naturalHeight !== frame.height) throw new Error(`Kadr o‘lchami noto‘g‘ri: ${name}`);
+      frames[name] = { ...frame, image };
+    }));
+    loaded = true; paint();
+  });
+  window.Chibi = { ready, paint,
+    setActive(on) {
+      if (active === on) return;
+      active = on;
+      clearTimeout(turnTimer); clearInterval(stepTimer); stepTimer = null;
+      clearTimeout(blinkTimer); clearTimeout(blinkEnd); blinking = false;
+      if (on) { previous = ''; paint(); scheduleBlink(); }
+    },
+    look(dx) {
+      if (!Number.isFinite(dx)) return;
+      // Kirish/chiqish chegaralari turlicha: 250 px atrofidagi kursor sakramaydi.
+      const sign = Math.sign(dx), distance = Math.abs(dx);
+      if (lookTarget && sign !== Math.sign(lookTarget)) lookTarget = 0;
+      const level = Math.abs(lookTarget);
+      if (distance > (level === 2 ? 880 : 1050)) lookTarget = sign * 2;
+      else if (distance > (level ? 190 : 300)) lookTarget = sign;
+      else lookTarget = 0;
+      paint();
+    }
+  };
+  document.addEventListener('visibilitychange', () => {
+    window.Chibi.setActive(!document.hidden && document.body.classList.contains('chibi-mode'));
+  });
 })();

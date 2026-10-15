@@ -3,6 +3,18 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-15 · Codex · Qizcha kadrlari va animatsiyalar to'liq yangilandi
+- Shaxzod rasm hamda Claude uchun taklif qilingan renderer ishlarining barchasini Codex'ga topshirdi; band fayllar yo'q edi. Claude renderer kodi shu topshiriq uchun o'zgartirildi.
+- Fayllar: src/renderer/chibi/ (19 PNG + manifest + README), renderer.js, style.css; src/main/{appearance,context,motion}.js; CHANGELOG.md.
+- Atlaslar qo'shni siluetdan ajratilib, alohida 400 px gacha shaffof PNG'larga almashtirildi. Taxtasiz osilish, yurishning ikkinchi (o'tish) qadami va qirrada oyoq osiltirish kadrlari built-in image_gen orqali yaratildi va ko'z bilan tekshirildi. Promptlar/manba: src/renderer/chibi/README.md. Eski atlaslar Git tarixida.
+- PNG jami 6 542 129 → 550 298 bayt (~92% kam). Dekodlangan kadrlar 9 347 200 bayt (8.91 MiB); bu haqiqiy process RAM o'lchovi emas. Runtime getImageData/alfa skani olib tashlandi; 1000 bir xil paint chaqiruvida 0 qayta chizish.
+- 250 ms yurish kadrlari, 135 ms ko'z pirpirashi, 95 ms old/¾/yon orqali burilish; scaleX orqali siqilish yo'q. Kursor uchun 300/190 va 1050/880 px histerezis. Boshqa personaj/yashirin hujjatda taymerlar o'chadi.
+- Xafa ifoda image-error va mood:sad'ga, hayron ifoda sudrash/mood:surprised'ga ulandi. Qizcha 180 px; eski personajlar 150 px. Main'dagi ushlash/geometriya va qirra siljishi (qizcha 46 px) moslandi; qirrada personaj almashtirilsa avval joyi tiklanadi. appearance fallback endi frames/stand.png'ga qaraydi.
+- Tekshirildi: 5 JS fayl node --check; haqiqiy Electron'da 30 tekshiruv (7 ifoda, pozalar, kursor histerezisi, old ko'rinish orqali chapga burilish, ikki yurish kadri, CSS siqilish yo'qligi, cache, avtomatik pirpirash, sad hodisasi, eski personaj va 180/150 px hit area, konsol xatosi yo'q). Screenshotlar ko'z bilan ko'rildi. Qirra geometriyasi: 2 personaj × 3 o'lcham, kirish/chiqish 12 tekshiruv. Barcha 19 kadr yo'li va <=400 px mezoni o'tdi.
+- npm start alohida vaqtinchalik profil bilan ochildi: haqiqiy get-init chibi-girl, stand ko'rinadi, 180px. Test launcher'dagi Electron-as-Node muhit bayrog'i va inspector require cheklovi tuzatilib qayta tekshirildi; dastur kodi bu sabab o'zgarmadi. Test ilovasi yopildi, vaqtinchalik profil/skript/screenshotlar tizim Temp'idan tozalandi.
+- Tekshirilmadi: haqiqiy sichqoncha bilan sudrash/silash/Ctrl va desktopdagi qirra hissi; Shaxzod baholaydi. CPU/RAM benchmark bajarilmadi. Exe/release/push yo'q, versiya o'zgarmadi.
+- Commit: ushbu yozuv bilan `git log` dagi `Improve chibi frames, turning and animation`.
+
 ## Hozir band
 _Hech kim._ Barcha ish `main` branch'da, alohida worktree yo'q.
 - Umumiy fayllar (`package.json`, `CHANGELOG.md`): o'zgartirishdan oldin Shaxzod orqali kelishiladi.

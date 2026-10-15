@@ -74,7 +74,7 @@ function current() {
   let character = ctx.settings.character;
   let sprites = {};
   if (character === 'chibi-girl') {
-    const image = path.join(app.getAppPath(), 'src', 'renderer', 'chibi', 'standing.png');
+    const image = path.join(app.getAppPath(), 'src', 'renderer', 'chibi', 'frames', 'stand.png');
     if (fs.existsSync(image)) sprites.idle = fileUrl(image);
     else character = 'kokcha';
   }
@@ -100,6 +100,7 @@ function apply(change, report = null) {
 }
 
 function setCharacter(character) {
+  if (ctx.pose === 'ledge') require('./motion').setPose('stand');
   ctx.settings.character = character;
   apply('character');
 }
@@ -212,6 +213,7 @@ async function chooseImage() {
     const dest = path.join(dir, `my-pet${path.extname(tmp)}`);
     fs.renameSync(tmp, dest);
     ctx.settings.customImage = dest;
+    if (ctx.pose === 'ledge') require('./motion').setPose('stand');
     ctx.settings.character = 'custom';
     apply('custom', report);
   } catch (err) {
