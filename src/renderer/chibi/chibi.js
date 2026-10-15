@@ -103,7 +103,8 @@
     if (!loaded || !active) return;
     const { state, pose, side, expression = 'neutral' } = latest;
     let name = 'stand', mirrored = false;
-    if (state === 'sleep' || pose === 'lie') name = 'lie';
+    if (latest.dragging) name = 'hang';                 // ko'tarib olinganda — qo'llari tepada osilib turadi
+    else if (state === 'sleep' || pose === 'lie') name = 'lie';
     else if (pose === 'sit') name = 'sit';
     else if (pose === 'ledge') { name = 'ledge'; mirrored = facing < 0; }
     else if (pose === 'hang') { name = 'hang'; mirrored = side === 'left'; }

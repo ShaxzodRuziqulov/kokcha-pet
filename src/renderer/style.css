@@ -278,6 +278,27 @@ body.dancing .arm-r { animation-direction: alternate-reverse; }
   to   { transform: translateY(-14px); }
 }
 
+/* ---- Bosh ustidagi belgi (emote) ---- */
+.emote {
+  position: absolute;
+  bottom: 128px;                 /* 150 px personaj boshining yonida */
+  left: calc(50% + 30px);
+  font-size: 22px;
+  line-height: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+  animation: emote-pop 1.2s ease-out forwards;
+  z-index: 5;
+}
+body.chibi-mode .emote { bottom: 150px; left: calc(50% + 36px); }
+@keyframes emote-pop {
+  0%   { transform: translateY(6px) scale(0.3); opacity: 0; }
+  18%  { transform: translateY(0) scale(1.25); opacity: 1; }
+  30%  { transform: scale(1); }
+  80%  { transform: translateY(-4px); opacity: 1; }
+  100% { transform: translateY(-10px); opacity: 0; }
+}
+
 /* ---- Uchib chiqadigan yurakcha va notalar ---- */
 .particle {
   position: absolute;

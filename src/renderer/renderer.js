@@ -112,6 +112,7 @@ function render() {
     mascot.classList.add('hidden');
     window.Chibi.paint({ state, pose: currentPose, side: currentSide, dir: currentDir,
       dancing: body.classList.contains('dancing'),
+      dragging: body.classList.contains('dragging'),
       expression: body.classList.contains('angry') ? 'angry' :
         body.classList.contains('surprised') ? 'surprised' :
         body.classList.contains('sad') ? 'sad' : talking ? speechFace :
@@ -163,6 +164,46 @@ function mood(cls, ms) {
   body.classList.add(cls);
   bodyTimers[cls] = setTimeout(() => { body.classList.remove(cls); render(); }, ms);
   render();
+}
+
+// Bosh ustidagi belgi (❗ 💢 💗 ❓ 💫) — his-tuyg'uni bir qarashda ko'rsatadi
+function emote(ch) {
+  document.querySelector('.emote')?.remove();
+  const el = document.createElement('div');
+  el.className = 'emote';
+  el.textContent = ch;
+  el.addEventListener('animationend', () => el.remove());
+  body.appendChild(el);
+}
+
+// Ko'tarib sudralganda — mayatnikdek tebranadi (tezlikka qarab), qo'yib yuborilsa asta to'xtaydi.
+// Burchak tushgan tomonga: o'ngga tortilsa, oyoqlari chapda qoladi.
+const swing = { a: 0, v: 0, target: 0, lastX: null, lastT: 0, raf: null };
+function swingTo(screenX) {
+  const now = performance.now();
+  if (swing.lastX !== null && now > swing.lastT) {
+    const vx = (screenX - swing.lastX) / (now - swing.lastT);       // px/ms
+    swing.target = Math.max(-32, Math.min(32, vx * 26));
+  }
+  swing.lastX = screenX;
+  swing.lastT = now;
+  if (!swing.raf) swing.raf = requestAnimationFrame(swingStep);
+}
+function swingStep() {
+  const held = body.classList.contains('dragging');
+  swing.target *= held ? 0.9 : 0;                                    // sichqoncha to'xtasa — tik osiladi
+  swing.v = (swing.v + (swing.target - swing.a) * 0.12) * 0.86;
+  swing.a += swing.v;
+  const flip = body.classList.contains('dir-left') && !body.classList.contains('chibi-mode') ? -1 : 1;
+  if (!held && Math.abs(swing.a) < 0.2 && Math.abs(swing.v) < 0.05) {
+    petInner.style.transform = petInner.style.transformOrigin = petInner.style.transition = '';
+    swing.a = swing.v = 0; swing.lastX = null; swing.raf = null;
+    return;
+  }
+  petInner.style.transition = 'none';
+  petInner.style.transformOrigin = '50% 6%';
+  petInner.style.transform = `rotate(${(swing.a * flip).toFixed(2)}deg)`;
+  swing.raf = requestAnimationFrame(swingStep);
 }
 
 // Yurakcha, nota kabi uchib chiqadigan zarrachalar
@@ -367,9 +408,10 @@ window.addEventListener('mousemove', (e) => {
     dragState.moved = true;
     body.classList.add('dragging');
     mood('surprised', 1100);
+    emote('❗');
     window.pet.dragStart();
   }
-  if (dragState.moved) window.pet.dragMove();
+  if (dragState.moved) { window.pet.dragMove(); swingTo(e.screenX); }
 });
 
 // Bitta bosish — gapiradi, ikki marta — raqs tushadi
@@ -393,6 +435,7 @@ window.addEventListener('mouseup', () => {
   const wasDrag = dragState.moved;
   dragState = null;
   body.classList.remove('dragging');
+  render();
   if (wasDrag) window.pet.dragEnd();
   else handleClick();
 });
@@ -463,6 +506,7 @@ window.pet.on('state', ({ state: s, dir, pose, side }) => {
 
 window.pet.on('woke', ({ reason }) => {
   play('stretch', 1000);
+  if (reason === 'click' || reason === 'drag') emote('❓');
   if (reason === 'click') say(line('wake.click'));
   else if (reason === 'drag') say(line('wake.drag'));
   else if (reason === 'morning' || reason === 'back') setTimeout(() => welcome(reason), 900);
@@ -473,7 +517,8 @@ window.pet.on('welcome', welcome);
 
 // Silashsa — yurakchalar
 window.pet.on('petted', () => {
-  burst(['♥'], 3);
+  burst(['♥'], 2);
+  emote('💗');
   if (state === 'sleep') return; // uxlab yotgan bo'lsa ham yoqadi, lekin uyg'onmaydi
   mood('happy', 1500);
   if (Math.random() < 0.3) play('hop', 600);
@@ -499,13 +544,14 @@ window.pet.on('clicked', () => {
   sayRandom();
 });
 
-window.pet.on('landed', () => play('land', 350));
+window.pet.on('landed', () => { play('land', 350); emote('💫'); });
 window.pet.on('hover', (over) => { body.classList.toggle('hover', over); render(); });
 window.pet.on('mood', (data) => {
   if (!['angry', 'sad', 'surprised'].includes(data?.mood) || state === 'sleep') return;
   if (character !== 'chibi-girl' && data.mood !== 'angry') return; // Ko'kchada faqat jahl yuzi bor
   const level = [1, 2, 3].includes(data.level) ? data.level : 1;
   mood(data.mood, 1500 + level * 700);
+  emote(data.mood === 'angry' ? '💢' : data.mood === 'sad' ? '💧' : '❗');
   if (data.mood === 'angry' && !quiet) say(line('angry.' + level));
   if (character !== 'chibi-girl') {
     body.style.setProperty('--shake', `${level * 2}px`); // kuchli otilsa — qattiqroq silkinadi
