@@ -67,7 +67,7 @@
     else if (pose === 'hang') { name = 'hang'; mirrored = side === 'left'; }
     else if (pose === 'jump') { name = 'jump'; mirrored = facing < 0; }
     else if (pose === 'fall') name = 'fall';
-    else if (pose === 'climb') name = 'back';
+    else if (pose === 'climb') { name = step ? 'climb-b' : 'climb-a'; mirrored = side === 'left'; }
     else if (state === 'walk') { name = facing === 0 ? 'stand' : step ? 'walk-b' : 'walk-a'; mirrored = facing < 0; }
     else if (facing !== 0) { name = Math.abs(facing) === 2 ? 'profile' : 'quarter'; mirrored = facing < 0; }
     const emotion = name === 'stand' ? (blinking && expression === 'neutral' ? 'sleeping' : expression) : 'neutral';
@@ -87,9 +87,9 @@
       canvas.dataset.expression = emotion;
       canvas.dataset.facing = String(facing);
     }
-    const walking = state === 'walk' && pose === 'stand';
-    if (walking && !stepTimer) stepTimer = setInterval(() => { step ^= 1; paint(); }, 250);
-    if (!walking && stepTimer) { clearInterval(stepTimer); stepTimer = null; step = 0; }
+    const moving = (state === 'walk' && pose === 'stand') || (state !== 'sleep' && pose === 'climb');
+    if (moving && !stepTimer) stepTimer = setInterval(() => { step ^= 1; paint(); }, 250);
+    if (!moving && stepTimer) { clearInterval(stepTimer); stepTimer = null; step = 0; }
     turn();
   }
 

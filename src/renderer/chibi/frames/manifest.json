@@ -94,5 +94,15 @@
     "width": 253,
     "height": 400,
     "head": 249.409
+  },
+  "climb-a": {
+    "width": 222,
+    "height": 400,
+    "head": 181.959
+  },
+  "climb-b": {
+    "width": 220,
+    "height": 400,
+    "head": 181.959
   }
 }

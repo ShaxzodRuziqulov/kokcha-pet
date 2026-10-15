@@ -1,0 +1,18 @@
+{
+  "tool": "built-in image_gen",
+  "source": "frames/back.png at 5a605e3",
+  "assets": [
+    {
+      "files": [
+        "frames/climb-a.png"
+      ],
+      "prompt": "Use case: identity-preserve. Asset type: one full-body desktop pet sprite. Input is exact green-haired chibi girl's BACK view identity. Transform her standing back view into a CLIMBING pose viewed from behind. Same hair silhouette and tuft, pale green turtleneck, black skirt, green socks, black boots, chibi proportions, linework and colors. Her LEFT arm reaches HIGH overhead, hand open against an invisible wall. Her RIGHT arm is bent at shoulder height. Her RIGHT knee is raised and bent against invisible wall, LEFT leg stretches down. Both hands visible outside hair silhouette, at different heights. Entire body including hands and boots inside frame. No wall, ladder, rope, plank, background, shadow, glow, text. Genuine transparent background. One sprite only."
+    },
+    {
+      "files": [
+        "frames/climb-b.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Asset type: second frame of two-frame climbing animation. Edit input 1 climbing BACK-view green-haired chibi girl. Keep identical identity, exact head silhouette, hair tuft and head height/scale, green turtleneck sweater, black skirt, green socks and black boots, shading and canvas framing. Change ONLY arms and legs into the OPPOSITE climbing stride: screen LEFT hand now reaches high above head at upper left, screen RIGHT hand now bent at shoulder height on the right. Screen LEFT knee raised and bent, screen RIGHT leg extending down. Remain full back view. Anatomically natural, hands outside hair silhouette. Same complete body height and centered alignment as input. Genuine transparent background. No wall, ladder, props, lines, text, shadow or glow. One entire sprite."
+    }
+  ]
+}

@@ -3,6 +3,13 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-15 · Codex · Qizchaga ikki kadrli tirmashish
+- Fayllar: src/renderer/chibi/chibi.js, frames/{climb-a,climb-b}.png, manifest.json, climb-prompts.json. Eski SVG personajlar o'zgarmadi.
+- Orqadan haqiqiy tirmashish: navbatma-navbat yuqoridagi qo'l va bukilgan tizza almashadi; 250 ms. To'xtaganda yoki yashirilganda taymer o'chadi. Chap devorda butun kadr bir xil akslantiriladi. Stand/back yurish kadriga almashtirilmaydi.
+- Rasmlar built-in image_gen orqali; ikkala natija ko'z bilan tekshirildi, shaffof PNG, uzun tomoni 400 px. Aniq promptlar climb-prompts.json'da.
+- Tekshirildi: node --check; 5 kadr/taymer tekshiruvi (ikki faza, to'xtash, chap, setActive(false)). Yakuniy Electron ko'rinish tekshiruvi ifodalar bilan birga bajariladi.
+- Holat: Claude review uchun. Commit: shu yozuv bilan `Animate chibi climbing with alternating poses`.
+
 ## 2026-10-15 · Codex · X3: saqlanadigan bir martalik eslatmalar
 - Fayllar: main.js, src/main/{reminders,settings,menu}.js, src/reminders-preload.js, src/renderer/{reminders.html,reminders.css,reminders.js,renderer.js}. Eski SVG personajlar o'zgarmadi; umumiy renderer'da faqat eslatma pufakchasi ulandi.
 - Menyu → Eslatmalar: 200 belgigacha matn, vaqt, 10/30/60 daqiqa yorliqlari, ro'yxat va o'chirish. 50 tagacha faol eslatma; tarix saqlanadi. settings.json'ga darhol yoziladi; yozish muvaffaqiyatsiz bo'lsa ro'yxat orqaga tiklanadi va xato ko'rsatiladi.
