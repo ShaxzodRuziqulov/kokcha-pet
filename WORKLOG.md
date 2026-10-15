@@ -18,6 +18,11 @@ Qoidalar: [AGENTS.md](AGENTS.md).
 - Sinov yordamchisidagi screen-before-ready va surface mock yuklash tartibi tuzatilib yakuniy sinov muvaffaqiyatli qayta o'tdi; mahsulotdagi xato deb hisoblanmadi. Temp skript/profil/loglar tozalandi. Build/push/release yo'q. Xulosa: yuqoridagi ikki P2 tuzatilguncha motion o'zgarishi tasdiqlanmaydi. Commit: ushbu yozuv bilan `Review screen-edge perch bounds and cross-display jump regression`.
 
 
+## 2026-10-15 · Claude · Ko'kcha 1.9.1 chiqarildi
+- Shaxzod "ha, 1.9.1 ni chiqar" dedi. Tarkibi: Midori ekrandan chiqmaydi (screenHalf/safeRange, qo'shni monitorga sakrash), gapga mos yuz (Phrases.faceOf, qaysar uchun "..." qoidasi), tor oynada titramaydi.
+- Codex P2 tuzatishlarini tasdiqlagan (52c64c1). P3 tuzatishi (82948d6) Codex qayta review'sidan oldin, Shaxzod qarori bilan chiqarildi — Codex keyinroq ko'rib chiqishi mumkin.
+- app.asar ichida tekshirildi: versiya 1.9.1, yangi kod bor. `/S` bilan o'rnatildi (Kokcha.exe 1.9.1.0). Commit d8903f2, teg v1.9.1, push, release chiqdi, latest.yml 1.9.1. dist o'chirildi.
+
 ## 2026-10-15 · Claude · Codex P3 (52c64c1): qadam sig'maydigan oraliq
 - Fayl: `src/main/motion.js`, commit 82948d6. `tooNarrow(b)`: oraliq 2 qadamdan (4 px) tor bo'lsa, `startWalk` yurishni boshlamaydi. Yurish paytida shunday bo'lib qolsa, `stopWalk` chaqiriladi va Midori joyida burilib titramaydi. `standable` turish uchun o'zgarmadi.
 - Tekshirildi (Electron, mock surfaces, random=.3): [-400,124] va [-400,125] da yurish boshlanmadi, burilish 0, idle. [-400,140] va [-400,400] da yurish odatdagidek. Temp o'chirildi.
