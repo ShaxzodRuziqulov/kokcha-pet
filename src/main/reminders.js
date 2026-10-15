@@ -53,14 +53,14 @@ function tick() {
 function add(input) {
   const text = typeof input?.text === 'string' ? input.text.trim() : '';
   const dueAt = input?.dueAt;
-  if (!text || text.length > 200) return { error: 'Matn 1–200 belgidan iborat bo‘lsin.' };
+  if (!text || text.length > 200) return { error: 'Matn 1–200 belgidan iborat boʻlsin.' };
   if (!Number.isSafeInteger(dueAt) || dueAt <= Date.now() || dueAt > 8640000000000000) return { error: 'Kelajakdagi vaqtni tanlang.' };
-  if (pendingCount() >= MAX_PENDING) return { error: 'Avval mavjud eslatmalardan birini o‘chiring (eng ko‘pi 50 ta).' };
+  if (pendingCount() >= MAX_PENDING) return { error: 'Avval mavjud eslatmalardan birini oʻchiring (eng koʻpi 50 ta).' };
   // Yetkazilgan eski yozuvlar oxirgi 50 ta bilan cheklanadi; faol yozuvlar yo'qolmaydi.
   const before = list();
   C.ctx.settings.reminders = [...list().filter(item => item.deliveredAt).slice(-49),
     ...list().filter(item => !item.deliveredAt), { id: randomUUID(), text, dueAt }];
-  if (!changed()) { C.ctx.settings.reminders = before; return { error: 'Saqlab bo‘lmadi. Diskdagi bo‘sh joyni tekshiring.' }; }
+  if (!changed()) { C.ctx.settings.reminders = before; return { error: 'Saqlab boʻlmadi. Diskdagi boʻsh joyni tekshiring.' }; }
   tick(); return { ok: true };
 }
 
@@ -69,7 +69,7 @@ function remove(id) {
   const before = list();
   C.ctx.settings.reminders = before.filter(item => item.id !== id);
   if (list().length === before.length) return { error: 'Eslatma topilmadi.' };
-  if (!changed()) { C.ctx.settings.reminders = before; return { error: 'O‘chirib bo‘lmadi. Diskdagi bo‘sh joyni tekshiring.' }; }
+  if (!changed()) { C.ctx.settings.reminders = before; return { error: 'Oʻchirib boʻlmadi. Diskdagi boʻsh joyni tekshiring.' }; }
   tick(); return { ok: true };
 }
 

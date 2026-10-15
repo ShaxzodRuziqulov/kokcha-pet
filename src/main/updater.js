@@ -131,7 +131,7 @@ function menuItems() {
   if (state.status !== 'ready') return [];
   const label = isPortable()
     ? `✨ Yangi versiya ${state.version} — yuklab olish`
-    : `✨ Yangilash (${state.version}) — hoziroq o'rnatish`;
+    : `✨ Yangilash (${state.version}) — hoziroq oʻrnatish`;
   return [{ label, click: install }, { type: 'separator' }];
 }
 

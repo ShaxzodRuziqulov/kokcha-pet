@@ -27,16 +27,16 @@ async function refresh() {
       const text = document.createElement('p'); text.textContent = item.text;
       const time = document.createElement('small');
       time.textContent = `${item.deliveredAt ? 'Eslatildi · ' : item.dueAt <= Date.now() ? 'Kutilmoqda · ' : ''}${new Date(item.dueAt).toLocaleString('uz-Latn', { dateStyle: 'medium', timeStyle: 'short' })}`;
-      const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = 'O‘chirish';
-      remove.setAttribute('aria-label', `${item.text} eslatmasini o‘chirish`);
+      const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = 'Oʻchirish';
+      remove.setAttribute('aria-label', `${item.text} eslatmasini oʻchirish`);
       remove.addEventListener('click', async () => {
         remove.disabled = true;
         try { const result = await window.reminders.remove(item.id); status.textContent = result.error || ''; await refresh(); }
-        catch { status.textContent = 'O‘chirib bo‘lmadi. Yana urinib ko‘ring.'; remove.disabled = false; }
+        catch { status.textContent = 'Oʻchirib boʻlmadi. Yana urinib koʻring.'; remove.disabled = false; }
       });
       details.append(text, time); row.append(details, remove); list.append(row);
     }
-  } catch { status.textContent = 'Ro‘yxatni yuklab bo‘lmadi. Oynani qayta oching.'; }
+  } catch { status.textContent = 'Roʻyxatni yuklab boʻlmadi. Oynani qayta oching.'; }
 }
 form.addEventListener('submit', async event => {
   event.preventDefault(); saveButton.disabled = true;
@@ -44,7 +44,7 @@ form.addEventListener('submit', async event => {
     const result = await window.reminders.add({ text: textInput.value, dueAt: new Date(dueInput.value).getTime() });
     status.textContent = result.error || 'Saqlandi. Vaqti kelganda eslataman.';
     if (result.ok) { textInput.value = ''; textInput.focus(); await refresh(); }
-  } catch { status.textContent = 'Saqlab bo‘lmadi. Yana urinib ko‘ring.'; }
+  } catch { status.textContent = 'Saqlab boʻlmadi. Yana urinib koʻring.'; }
   finally { saveButton.disabled = false; }
 });
 window.reminders.onChanged(refresh);

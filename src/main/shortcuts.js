@@ -28,7 +28,7 @@ function unregister() {
 function menuItems() {
   return [
     {
-      label: C.alive() && C.ctx.win.isVisible() ? 'Yashirish' : "Ko'rsatish",
+      label: C.alive() && C.ctx.win.isVisible() ? 'Yashirish' : "Koʻrsatish",
       ...(registered ? { accelerator: 'Ctrl+Alt+M', registerAccelerator: false } : {}),
       click: toggleVisibility,
     },

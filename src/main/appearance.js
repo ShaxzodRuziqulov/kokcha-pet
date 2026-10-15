@@ -11,16 +11,16 @@ const win = require('./window');
 const activity = require('./activity');
 
 // Tayyor personajlar (ko'rinishi — renderer/characters.js) va ranglar (renderer/style.css)
-const CHARACTERS = { 'chibi-girl': 'Midori', kokcha: "Ko'kcha" };
+const CHARACTERS = { 'chibi-girl': 'Midori', kokcha: "Koʻkcha" };
 const REMOVED = ['cat', 'dog', 'penguin']; // 1.8.0 da olib tashlangan — tanlaganlar Ko'kchaga o'tadi
-const CUSTOM_NAME = "Do'stcha";
+const CUSTOM_NAME = "Doʻstcha";
 const COLORS = {
   original: 'Asl rang',
   green: 'Yashil',
   pink: 'Pushti',
   yellow: 'Sariq',
   purple: 'Binafsha',
-  blue: "Ko'k",
+  blue: "Koʻk",
 };
 const IMAGE_EXTS = ['png', 'gif', 'webp', 'jpg', 'jpeg'];
 const SPRITE_EXTS = ['png', 'gif', 'webp'];
@@ -145,7 +145,7 @@ function prepareImage(src, destBase) {
       }
     }
   }
-  if (maxX < 0) throw new Error("Rasm butunlay shaffof — unda hech narsa ko'rinmaydi.");
+  if (maxX < 0) throw new Error("Rasm butunlay shaffof — unda hech narsa koʻrinmaydi.");
 
   const corners = [alpha(0, 0), alpha(w - 1, 0), alpha(0, h - 1), alpha(w - 1, h - 1)];
   const hasBackground = corners.filter((a) => a > 24).length >= 3;
@@ -222,7 +222,7 @@ async function chooseImage() {
     apply('custom', report);
   } catch (err) {
     send('say', 'image-error');
-    dialog.showErrorBox("Rasmni o'rnatib bo'lmadi", String(err.message || err));
+    dialog.showErrorBox("Rasmni oʻrnatib boʻlmadi", String(err.message || err));
     menu.refreshTray();
   }
 }

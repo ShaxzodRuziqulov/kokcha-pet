@@ -169,7 +169,7 @@
   }
 
   const ready = fetch('chibi/frames/manifest.json').then(r => {
-    if (!r.ok) throw new Error('Kadrlar ro‘yxati yuklanmadi');
+    if (!r.ok) throw new Error('Kadrlar roʻyxati yuklanmadi');
     return r.json();
   }).then(async manifest => {
     const normalized = window.ChibiSequences.normalizeManifest(manifest);
@@ -177,7 +177,7 @@
     clock = new window.ChibiSequences.SequenceClock(slots);
     await Promise.all(Object.entries(frames).filter(([, frame]) => !frame.sequenceOnly).map(async ([name, frame]) => {
       const image = new Image(); image.src = `chibi/frames/${name}.png`; await image.decode();
-      if (image.naturalWidth !== frame.width || image.naturalHeight !== frame.height) throw new Error(`Kadr o‘lchami noto‘g‘ri: ${name}`);
+      if (image.naturalWidth !== frame.width || image.naturalHeight !== frame.height) throw new Error(`Kadr oʻlchami notoʻgʻri: ${name}`);
       frames[name] = { ...frame, image };
     }));
     // Kadrli (sequenceOnly) slotlar uchun: bir martalik decode; slot almashganda kutish va qayta decode yo'q.
@@ -186,7 +186,7 @@
       const response = await fetch(`chibi/${frame.src}`);
       if (!response.ok) throw new Error(`Kadr yuklanmadi: ${name}`);
       const image = await createImageBitmap(await response.blob());
-      if (image.width !== frame.width || image.height !== frame.height) { image.close(); throw new Error(`Kadr o‘lchami noto‘g‘ri: ${name}`); }
+      if (image.width !== frame.width || image.height !== frame.height) { image.close(); throw new Error(`Kadr oʻlchami notoʻgʻri: ${name}`); }
       return image;
     } });
     const optional = Object.keys(frames).filter(name => frames[name].sequenceOnly);

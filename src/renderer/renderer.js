@@ -14,38 +14,38 @@ const line = (key) => window.Phrases.pick(voice(), key, { name: petName });
 // Birinchi ochilganda — qisqa tanishtirish
 const onboarding = () => [
   `Salom! Men ${petName}man 🌱 Endi shu yerda yashayman.`,
-  "Meni sudrab ko'chirsangiz bo'ladi. Ctrl bosib tursangiz — orqamdagini bosasiz.",
-  "Sozlamalar va boshqa personajlar — ustimda o'ng tugma ⚙️",
+  "Meni sudrab koʻchirsangiz boʻladi. Ctrl bosib tursangiz — orqamdagini bosasiz.",
+  "Sozlamalar va boshqa personajlar — ustimda oʻng tugma ⚙️",
 ];
 
 // "O'z rasmim..." — rasm tanlanayotganda maslahatlar
 const IMAGE_TIPS = [
   "Rasm tanlaymizmi? 🖼️ Eng yaxshisi — foni shaffof PNG.",
-  "Personaj rasmning o'rtasida, pastga tegib tursa — yerda turgandek ko'rinaman.",
-  "Kamida 256×256 piksel bo'lsa tiniq chiqaman. GIF bo'lsa — jonli!",
+  "Personaj rasmning oʻrtasida, pastga tegib tursa — yerda turgandek koʻrinaman.",
+  "Kamida 256×256 piksel boʻlsa tiniq chiqaman. GIF boʻlsa — jonli!",
 ];
 const IMAGE_CANCEL = "Mayli, keyinroq tanlarmiz 😊";
-const IMAGE_ERROR = "Voy, bu rasm bilan ishlay olmadim 😕 Boshqasini sinab ko'ramizmi?";
+const IMAGE_ERROR = "Voy, bu rasm bilan ishlay olmadim 😕 Boshqasini sinab koʻramizmi?";
 
 // Rasm tekshirilgandan keyin — natijaga qarab maslahat
 function imageFeedback({ issues, cropped, w, h }) {
   const lines = ["Yangi qiyofa! Qalay, yarashdimi? ✨"];
-  if (cropped) lines.push("Atrofidagi bo'sh joyni o'zim qirqib oldim ✂️");
-  if (issues.includes('gif')) lines.push("GIF ekan — jonli bo'ldim! 🎉");
+  if (cropped) lines.push("Atrofidagi boʻsh joyni oʻzim qirqib oldim ✂️");
+  if (issues.includes('gif')) lines.push("GIF ekan — jonli boʻldim! 🎉");
   if (issues.includes('background')) {
-    lines.push("Rasmda fon bor ekan — atrofimda to'rtburchak ko'rinadi 🙈");
-    lines.push("remove.bg saytida fonni bir bosishda olib tashlasa bo'ladi.");
+    lines.push("Rasmda fon bor ekan — atrofimda toʻrtburchak koʻrinadi 🙈");
+    lines.push("remove.bg saytida fonni bir bosishda olib tashlasa boʻladi.");
   }
   if (issues.includes('jpg')) {
-    lines.push("JPG rasmda shaffof fon bo'lmaydi — atrofimda to'rtburchak ko'rinadi 🙈");
+    lines.push("JPG rasmda shaffof fon boʻlmaydi — atrofimda toʻrtburchak koʻrinadi 🙈");
     lines.push("Foni shaffof PNG tanlasangiz, ancha chiroyli chiqaman.");
   }
-  if (issues.includes('small')) lines.push(`Rasm biroz kichik (${w}×${h}) — xira ko'rinishim mumkin. 256 pikseldan kattasi yaxshi.`);
-  if (issues.includes('shape')) lines.push("Rasm juda cho'zinchoq, shuning uchun kichik ko'rinaman. Kvadratga yaqini yaxshi.");
+  if (issues.includes('small')) lines.push(`Rasm biroz kichik (${w}×${h}) — xira koʻrinishim mumkin. 256 pikseldan kattasi yaxshi.`);
+  if (issues.includes('shape')) lines.push("Rasm juda choʻzinchoq, shuning uchun kichik koʻrinaman. Kvadratga yaqini yaxshi.");
 
   const problems = issues.filter((i) => i !== 'gif');
-  if (problems.length) lines.push("Boshqasini tanlash: o'ng tugma → Personaj → Boshqa rasm tanlash.");
-  else lines.push("Zo'r rasm tanladingiz! 👍");
+  if (problems.length) lines.push("Boshqasini tanlash: oʻng tugma → Personaj → Boshqa rasm tanlash.");
+  else lines.push("Zoʻr rasm tanladingiz! 👍");
   return lines;
 }
 
@@ -80,7 +80,7 @@ const mascot = document.getElementById('mascot');
 const bubbleName = document.getElementById('bubble-name');
 
 let sprites = {};
-let petName = "Ko'kcha";
+let petName = "Koʻkcha";
 let character = null;
 let quiet = false;
 let state = 'idle';
@@ -500,7 +500,7 @@ window.pet.on('update', ({ status, version, portable }) => {
   if (status === 'checking') return say('Yangi versiya bormi, qarab chiqyapman… 🔍', force);
   if (status === 'downloading') return say(`Yangi versiya bor (${version})! Yuklab olyapman… ⏬`, force);
   if (status === 'latest') return say(`Sizda eng yangi versiya turibdi (${version}) ✨`, force);
-  if (status === 'error') return say("Yangilanishni tekshira olmadim 😕 Internet bormi? Keyinroq yana urinib ko'raman.", force);
+  if (status === 'error') return say("Yangilanishni tekshira olmadim 😕 Internet bormi? Keyinroq yana urinib koʻraman.", force);
   if (status === 'dev') return say("Bu sinov nusxasi — yangilanish tekshirilmaydi.", force);
   if (status !== 'ready') return;
   mood('wave', 1600);
@@ -510,7 +510,7 @@ window.pet.on('update', ({ status, version, portable }) => {
   } else {
     say(`Yangi versiya tayyor (${version})! ✨`, { force: true, actions: [
       { label: 'Yangilash', id: 'update-install', primary: true },
-      { label: 'Keyinroq', run: () => setTimeout(() => say("Mayli, dastur yopilganda o'zi yangilanadi 😊"), 300) }] });
+      { label: 'Keyinroq', run: () => setTimeout(() => say("Mayli, dastur yopilganda oʻzi yangilanadi 😊"), 300) }] });
   }
 });
 

@@ -14,7 +14,7 @@ const persona = require('./persona');
 
 const { ctx } = C;
 
-const SIZE_LABELS = { small: 'Kichik', medium: "O'rta", large: 'Katta' };
+const SIZE_LABELS = { small: 'Kichik', medium: "Oʻrta", large: 'Katta' };
 const BREAK_OPTIONS = [30, 45, 60, 0]; // daqiqa; 0 — o'chiq
 
 // ---- Windows bilan birga ishga tushish ----
@@ -47,7 +47,7 @@ function characterMenu() {
     ...radios(Object.entries(appearance.CHARACTERS), (k) => s.character === k, appearance.setCharacter),
     { type: 'separator' },
     {
-      label: s.customImage ? "O'z rasmim" : "O'z rasmim...",
+      label: s.customImage ? "Oʻz rasmim" : "Oʻz rasmim...",
       type: 'radio',
       checked: s.character === 'custom',
       click: () => (s.customImage ? appearance.setCharacter('custom') : appearance.chooseImage()),
@@ -63,7 +63,7 @@ function template() {
     ...updater.menuItems(),
     { label: 'Gapir', enabled: !sleeping && !ctx.userHidden, click: () => C.send('say', 'random') },
     sleeping
-      ? { label: "Uyg'ot", click: () => activity.wakeUp('click') }
+      ? { label: "Uygʻot", click: () => activity.wakeUp('click') }
       : { label: 'Uxlat', click: () => activity.goToSleep(true) },
     ...shortcuts.menuItems(),
     { type: 'separator' },
@@ -78,7 +78,7 @@ function template() {
       submenu: radios(Object.entries(appearance.COLORS), (k) => s.color === k, appearance.setColor),
     },
     { type: 'separator' },
-    check("O'zi harakat qilsin", s.autoWalk, (on) => {
+    check("Oʻzi harakat qilsin", s.autoWalk, (on) => {
       s.autoWalk = on;
       if (!on) motion.stopWalk();
       settings.save();
@@ -95,13 +95,13 @@ function template() {
       settings.save();
     }),
     {
-      label: "O'lcham",
+      label: "Oʻlcham",
       submenu: radios(Object.entries(SIZE_LABELS), (k) => s.size === k, win.setSize),
     },
     {
       label: 'Dam olish eslatmasi',
       submenu: radios(
-        BREAK_OPTIONS.map((m) => [m, m ? `Har ${m} daqiqada` : "O'chiq"]),
+        BREAK_OPTIONS.map((m) => [m, m ? `Har ${m} daqiqada` : "Oʻchiq"]),
         (m) => s.breakMinutes === m,
         (m) => {
           s.breakMinutes = m;

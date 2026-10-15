@@ -4,7 +4,7 @@ const C = require('./context');
 const settings = require('./settings');
 
 const ORDER = Object.freeze(['cheerful', 'shy', 'tsundere', 'playful']);
-const LABELS = Object.freeze({ cheerful: 'Quvnoq', shy: 'Uyatchan', tsundere: 'Qaysar', playful: "Sho'x" });
+const LABELS = Object.freeze({ cheerful: 'Quvnoq', shy: 'Uyatchan', tsundere: 'Qaysar', playful: "Shoʻx" });
 const MIN_MS = 3 * 60 * 60 * 1000, MAX_MS = 4 * 60 * 60 * 1000;
 const EVENT_MS = 2 * 60 * 1000, PET_WINDOW_MS = 20000, PET_COUNT = 4;
 let timer = null, running = false, temporary = null, petTimes = [];
