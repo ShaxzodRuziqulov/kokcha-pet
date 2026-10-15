@@ -1,15 +1,21 @@
 # O'zgarishlar
 
-## Keyingi versiya
-- Midori uchun "Kayfiyat" menyusi: fe'llar har 3–4 soatda navbat bilan almashadi, muddat qayta ochilganda saqlanadi. Otishdan keyin 2 daqiqa qaysar, 20 soniyada 4 marta silansa 2 daqiqa uyatchan bo'ladi; keyin asosiy fe'liga qaytadi.
-- Personajlar o'z fe'li bilan gapiradi: Midori'ning 4 kayfiyati (quvnoq, uyatchan, injiq, hazilkash) navbat bilan almashadi; Ko'kcha — bolalarcha qiziquvchan. Salomlashish, harakat, jahl, uyg'onish, silash va tanaffus gaplari fe'lga mos.
+## 1.9.0
+### 👧 Midori (oldingi "Yashil qizcha")
+- **Kayfiyatlar:** quvnoq, uyatchan, qaysar va sho'x — har 3–4 soatda navbat bilan almashadi (o'ng tugma → Kayfiyat). Otib yuborilsa 2 daqiqa qaysar, ko'p silansa 2 daqiqa uyatchan bo'ladi.
+- **Fe'liga mos gaplar:** salomlashish, harakat, jahl, uyg'onish, silash va tanaffus gaplari kayfiyatga qarab.
+- **Jonli:** tinch turganda nafas oladi, boshi va sochi tebranadi; ko'z qisish harakatni to'xtatmaydi.
+- **Yangi yurish:** asl rasm qismlaridan — tana qadamga mos ko'tariladi, qo'llar siltanadi, bosh va tana doim mos, etiklar yerda.
 
-## 1.8.0
-- Mushukcha, Kuchukcha va Pingvin olib tashlandi — ularni tanlaganlar avtomatik Ko'kchaga o'tadi. Menyuda: Yashil qizcha, Ko'kcha va "O'z rasmim".
-- Ko'kcha: otib yuborilganda jahl (qosh, og'iz, g'azab belgisi, kuchiga qarab silkinish); chapga burilishda "varaq ag'darilishi" yo'q.
-- Ko'kcha va "O'z rasmim" ancha yengil: tinch turganda CPU ~57% → ~20% bir yadro (abadiy SVG animatsiyalari qadamli, ko'z qisish taymer bilan).
-- Yashil qizcha: neytral holatda nafas, bosh va soch harakati; yangi yurish — asl rasm qismlaridan: tana qadamga mos ko'tariladi, qo'llar siltanadi, bosh va tana doim mos. Boshqa yuz ifodalari va pozalar saqlanadi.
-- Ko'z qisish turganda ham, yurganda ham harakatni to'xtatmaydi. Animatsiya yashirin oynada va boshqa personaj tanlanganda to'xtaydi; qizcha tinch turganda CPU ~25% → ~7%.
+### 🌱 Ko'kcha
+- Bolalarcha qiziquvchan gaplar ("Commit nima? Shirinlikmi?").
+- Otib yuborilsa jahli chiqadi; chapga burilishda "varaq ag'darilishi" yo'q.
+- Ancha yengil: tinch turganda CPU ~57% → ~20% bir yadro ("O'z rasmim" ham).
+
+### Boshqa
+- Mushukcha, Kuchukcha va Pingvin olib tashlandi — ularni tanlaganlar avtomatik Ko'kchaga o'tadi.
+- Midori tinch turganda CPU ~25% → ~7%. Animatsiya yashirin oynada to'xtaydi.
+- 1.8.0 alohida chiqarilmadi — uning o'zgarishlari shu versiyada.
 
 ## 1.7.0
 - Qizcha ifodalari ¾/yon ko'rinish, o'tirish, yurish va qirrada o'tirishda ham almashadi; ko'z pirpirashi shu holatlarda ham ishlaydi.
