@@ -127,12 +127,19 @@ function usableSurfaces() {
   });
 }
 
-// cx nuqtadan pastdagi eng yaqin sirt; hech narsa bo'lmasa — yer
+// Oyna ustida turish mumkin bo'lgan oraliq: oyog'i sirtda, tanasi ekranda. Bo'sh bo'lsa (lo > hi) — turib bo'lmaydi.
+function safeRange(sf, cx) {
+  const wa = C.workAreaAt(cx, sf.y - 1), f = FOOT_HALF * C.scale();
+  return [Math.max(sf.x1 + f, wa.x + screenHalf()), Math.min(sf.x2 - f, wa.x + wa.width - screenHalf())];
+}
+const standable = (sf, cx) => { const [lo, hi] = safeRange(sf, cx); return lo <= hi; };
+
+// cx nuqtadan pastdagi eng yaqin sirt (turib bo'ladigani); hech narsa bo'lmasa — yer
 function landingBelow(cx, fy) {
   const wa = C.workAreaAt(cx, fy - 1);
   let best = { ground: true, y: wa.y + wa.height, x1: wa.x, x2: wa.x + wa.width };
   for (const sf of usableSurfaces()) {
-    if (cx >= sf.x1 && cx <= sf.x2 && sf.y >= fy - 3 && sf.y < best.y) best = sf;
+    if (cx >= sf.x1 && cx <= sf.x2 && sf.y >= fy - 3 && sf.y < best.y && standable(sf, cx)) best = sf;
   }
   return best;
 }
@@ -253,8 +260,10 @@ function findJumpTarget() {
   for (const sf of usableSurfaces()) {
     const up = fy - sf.y;
     if (up < 60 * s || up > JUMP_REACH * s) continue;
-    const lx = onScreenX(Math.min(Math.max(cx, sf.x1 + f), sf.x2 - f), C.workAreaAt(cx, sf.y));
-    if (lx < sf.x1 + f || lx > sf.x2 - f) continue; // ekran chetidagi tor bo'lak — qo'nib bo'lmaydi
+    // Monitor — qo'nish nuqtasi bo'yicha (qo'shni monitordagi oynaga ham sakray oladi)
+    const [lo, hi] = safeRange(sf, Math.min(Math.max(cx, sf.x1 + f), sf.x2 - f));
+    if (lo > hi) continue; // ekran chetidagi tor bo'lak — qo'nib bo'lmaydi
+    const lx = Math.min(Math.max(cx, lo), hi);
     if (Math.abs(lx - cx) > 380 * s) continue;
     options.push({ surface: sf, x: lx });
   }
@@ -364,6 +373,8 @@ function trackPerch() {
 
     const seg = mine.find((sf) => cx >= sf.x1 && cx <= sf.x2);
     if (!seg) return dropFromPerch();
+    // Oynaning ekrandagi qismi tanaga tor bo'lsa — turib bo'lmaydi (aks holda chetda titrab buriladi)
+    if (!standable(seg, cx)) return dropFromPerch();
     ctx.perch = { ...seg };
   }, PERCH_TICK_MS);
 }
