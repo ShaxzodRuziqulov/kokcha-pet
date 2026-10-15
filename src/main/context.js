@@ -7,7 +7,7 @@
 const { screen } = require('electron');
 
 const BASE_W = 240;     // oyna o'lchami (o'rta o'lchamda)
-const BASE_H = 280;
+const BASE_H = 340;   // personaj pastda; tepada — gap bulutchasi uchun joy (shaffof, bosishni o'tkazadi)
 const PET_SIZE = 150;   // personaj qutisi — oynaning pastki o'rtasida
 const petSize = () => ctx.settings.character === 'chibi-girl' ? 180 : PET_SIZE;
 const SIZES = { small: 0.75, medium: 1, large: 1.3 };

@@ -180,8 +180,33 @@ function burst(chars, count) {
 }
 
 // ---- Gap pufakchasi ----
+// Matn harfma-harf chiqadi (gapirayotgandek). Qolgan qismi ko'rinmas holda joy egallab turadi —
+// bulutcha o'lchami boshidan to'g'ri, satrlar "sakramaydi". Tinish belgilarida biroz to'xtaydi.
+const TYPE_MS = 28;
+let typeTimer = null;
+function typeText(text) {
+  clearInterval(typeTimer);
+  const chars = Array.from(text);
+  const shown = document.createElement('span');
+  const rest = document.createElement('span');
+  rest.className = 'rest';
+  rest.textContent = text;
+  bubbleText.replaceChildren(shown, rest);
+  let i = 0, pause = 0;
+  typeTimer = setInterval(() => {
+    if (pause > 0) { pause--; return; }
+    i++;
+    shown.textContent = chars.slice(0, i).join('');
+    rest.textContent = chars.slice(i).join('');
+    if ('.!?…'.includes(chars[i - 1]) && chars[i] === ' ') pause = 6;
+    else if (chars[i - 1] === ',' ) pause = 3;
+    if (i >= chars.length) { clearInterval(typeTimer); typeTimer = null; bubbleText.textContent = text; }
+  }, TYPE_MS);
+}
+
 function hideBubble(immediate = false) {
   if (reminderActive) { talking = state !== 'sleep'; return; }
+  clearInterval(typeTimer);
   clearTimeout(bubbleTimer);
   talking = false;
   clearSpeechMood();
@@ -251,12 +276,13 @@ function say(text, opts = {}) {
   if (reminderActive) return;
   if (state === 'sleep' && !opts.force) return;
   speechFace = window.Phrases.faceOf(voice(), text);
+  bubble.dataset.face = speechFace;
   clearSpeechMood();
   if (character !== 'chibi-girl' && (speechFace === 'happy' || speechFace === 'angry') && !body.classList.contains(speechFace)) {
     speechMood = speechFace;
     mood(speechFace, bubbleTime(text));
   }
-  bubbleText.textContent = text;
+  typeText(text);
   bubble.classList.remove('hidden', 'closing');
   bubble.style.animation = 'none';     // "pop" animatsiyasini qaytadan boshlash
   void bubble.offsetWidth;
@@ -272,7 +298,7 @@ function say(text, opts = {}) {
 
 // Uzun gap ko'proq turadi
 function bubbleTime(text) {
-  return Math.max(3000, 1800 + text.length * 55);
+  return text.length * TYPE_MS + Math.max(2600, 1400 + text.length * 50);   // yozilish + o'qish
 }
 
 // Bir nechta gapni ketma-ket aytadi (yangisi boshlansa — eskisi to'xtaydi)
@@ -295,7 +321,10 @@ function showReminder() {
   clearTimeout(bubbleTimer);
   const text = reminderQueue.shift();
   bubbleName.textContent = '⏰ Eslatma';
+  clearInterval(typeTimer);
   bubbleText.textContent = text;
+  bubble.classList.add('reminder');
+  delete bubble.dataset.face;
   bubble.classList.remove('hidden', 'closing');
   talking = state !== 'sleep';
   speechFace = 'talking';
@@ -303,6 +332,7 @@ function showReminder() {
   render();
   bubbleTimer = setTimeout(() => {
     reminderActive = false;
+    bubble.classList.remove('reminder');
     bubbleName.textContent = petName;
     hideBubble();
     showReminder();
@@ -516,8 +546,10 @@ window.pet.on('update', ({ status, version, portable }) => {
 
 // Oyna ekran chetidan chiqib tursa — pufakcha ichkariga suriladi
 window.pet.on('bubble-shift', (px) => {
-  bubble.style.left = `${10 + px}px`;
-  bubble.style.right = `${10 - px}px`;
+  // Faqat ekrandan chiqqan tomoni torayadi — bulutcha oynadan ham, ekrandan ham chiqmaydi
+  bubble.style.left = `${10 + Math.max(px, 0)}px`;
+  bubble.style.right = `${10 + Math.max(-px, 0)}px`;
+  bubble.style.setProperty('--tail', `${-px / 2}px`);   // dum personajga qaraydi
   reportBubbleArea();
 });
 window.pet.on('settings', (s) => { quiet = s.quiet; });

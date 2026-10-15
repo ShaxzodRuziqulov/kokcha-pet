@@ -10,25 +10,68 @@ html, body {
 
 .hidden { display: none !important; }
 
-/* ---- Gap pufakchasi ---- */
+/* ---- Gap bulutchasi ----
+   Boshning ustida turadi va yuqoriga o'sadi (oyna personajdan 60 px baland — shaffof joy).
+   --accent — chet va ism rangi; yuz ifodasiga qarab o'zgaradi (data-face). */
 #bubble {
+  --accent: #4e8a66;
+  --tail: 0px;                   /* oyna ekran chetida bo'lsa — dum baribir personajga qaraydi */
   position: absolute;
   left: 10px;
   right: 10px;
-  top: 8px;
-  padding: 10px 14px;
-  background: #fbfdf9;
-  border: 2px solid #4e8a66;
-  border-radius: 14px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  bottom: 156px;                 /* 150 px personaj qutisi (Koʻkcha bargi) ustida */
+  max-height: calc(100% - 162px);
+  padding: 12px 14px 10px;
+  background: #fffefa;
+  border: 2px solid var(--accent);
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(20, 40, 30, 0.18), inset 0 -3px 0 rgba(0, 0, 0, 0.04);
   color: #23343a;
   font-size: 14px;
-  line-height: 1.35;
-  animation: pop 0.18s ease-out;
-  pointer-events: none;          /* pufakcha orqasidagi narsalarni bosish mumkin */
-  transform-origin: 50% 100%;
+  line-height: 1.38;
+  animation: pop 0.22s cubic-bezier(.2, 1.4, .4, 1);
+  pointer-events: none;          /* bulutcha orqasidagi narsalarni bosish mumkin */
+  transform-origin: calc(50% + var(--tail)) 100%;
+  transition: border-color 0.2s;
 }
+body.chibi-mode #bubble { bottom: 178px; max-height: calc(100% - 184px); }
+#bubble[data-face="angry"]       { --accent: #c75b4e; }
+#bubble[data-face="embarrassed"] { --accent: #d06a8e; }
+#bubble[data-face="sad"]         { --accent: #5d82b3; }
+#bubble[data-face="surprised"]   { --accent: #c48a2a; }
+#bubble.reminder                 { --accent: #7a5bc4; }
 #bubble.closing { animation: fade-out 0.2s ease-in forwards; }
+#bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -9px;
+  left: 50%;
+  margin-left: calc(-8px + var(--tail));
+  width: 14px;
+  height: 14px;
+  background: #fffefa;
+  border-right: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  border-bottom-right-radius: 4px;
+  transform: rotate(45deg);
+  transition: border-color 0.2s;
+}
+/* Ism — chetga yopishgan yorliq */
+#bubble .name {
+  position: absolute;
+  top: -11px;
+  left: 12px;
+  padding: 1px 9px 2px;
+  border-radius: 9px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 11.5px;
+  letter-spacing: 0.2px;
+  transition: background 0.2s;
+}
+/* Harfma-harf yozish: qolgan matn joyini oldindan egallab turadi — bulutcha "sakramaydi" */
+#bubble-text .rest { visibility: hidden; }
 /* Tugmali bulutcha bosiladi (main shu joyda sichqonchani ushlaydi) */
 #bubble.has-actions { pointer-events: auto; z-index: 10; }
 #bubble-actions {
@@ -39,38 +82,19 @@ html, body {
 #bubble-actions button {
   flex: 1;
   padding: 5px 8px;
-  border: 1.5px solid #4e8a66;
+  border: 1.5px solid var(--accent);
   border-radius: 9px;
   background: #fff;
-  color: #2f6b49;
+  color: var(--accent);
   font: 600 12px/1.2 "Segoe UI", sans-serif;
   cursor: pointer;
 }
-#bubble-actions button.primary { background: #4e8a66; color: #fff; }
+#bubble-actions button.primary { background: var(--accent); color: #fff; }
 #bubble-actions button:hover { filter: brightness(1.08); }
 #bubble-actions button:active { transform: translateY(1px); }
-#bubble::after {
-  content: "";
-  position: absolute;
-  bottom: -9px;
-  left: 50%;
-  margin-left: -8px;
-  width: 14px;
-  height: 14px;
-  background: #fbfdf9;
-  border-right: 2px solid #4e8a66;
-  border-bottom: 2px solid #4e8a66;
-  transform: rotate(45deg);
-}
-#bubble .name {
-  font-weight: 700;
-  font-size: 12px;
-  color: #4e8a66;
-  margin-bottom: 3px;
-}
 @keyframes pop {
-  from { transform: scale(0.85); opacity: 0; }
-  to   { transform: scale(1);    opacity: 1; }
+  from { transform: translateY(6px) scale(0.85); opacity: 0; }
+  to   { transform: none; opacity: 1; }
 }
 @keyframes fade-out {
   to { transform: scale(0.92) translateY(4px); opacity: 0; }
@@ -257,7 +281,7 @@ body.dancing .arm-r { animation-direction: alternate-reverse; }
 /* ---- Uchib chiqadigan yurakcha va notalar ---- */
 .particle {
   position: absolute;
-  top: 150px;
+  bottom: 130px;                 /* personaj boshi atrofida (oyna balandligiga bog'liq emas) */
   font-size: 18px;
   font-weight: 700;
   color: #f47a95;
