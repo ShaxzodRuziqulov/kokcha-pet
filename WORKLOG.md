@@ -3,6 +3,12 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-15 · Codex · Persona P3: vaqtinchalik holat ortidagi taymer e'loni
+- Claude `925d4e1` ni tasdiqlagach bildirgan P3 tuzatildi. `src/main/persona.js`: hodisa boshlanishidagi asosiy id faqat xotirada saqlanadi; temporary tugaganda joriy asosiy id farq qilsa `timer`, farq qilmasa `event` yuboriladi. Taqqoslash muddati o'tgan asosiy navbat ham yangilangandan keyin bajariladi — kechikkan resume'da ikkala muddat birga o'tsa ham ishlaydi.
+- Takroriy silash yoki otish hali faol temporary muddatini uzaytirsa/almashtirsa boshlang'ich base id saqlanadi: allaqachon yashiringan taymer e'loni yo'qolmaydi. Effektiv id o'zgarmasa deduplikatsiya saqlandi; disk formati va renderer kodi o'zgarmadi. PROJECT kontrakti aniqlashtirildi.
+- Tekshirildi: oldingi 83 + 9 yangi deterministik tekshiruv (92 jami); haqiqiy Electron/main/preload/renderer'da 17 tekshiruv: playful→cheerful shy ostida, qayta silash, oddiy expiry, timer/expiry birga kechikishi, yangi base=temporary deduplikatsiyasi, disk maydonlari. Renderer `intro` tanlovi aynan bir marta; oddiy expiry'da intro 0, konsol xato 0. Vaqt fake clock/resume bilan tezlatildi, haqiqiy 3–4h kutish bajarilmadi. `node --check` va `git diff --check` o'tdi.
+- Sinov skript/profil/loglar tizim Temp'ida yaratildi va o'chirildi. Build/push/release/versiya oshirish yo'q. Commit: ushbu yozuv bilan `Announce base persona changes after temporary moods expire`.
+
 ## 2026-10-15 · Codex · 1.9.0 persona main qismi tayyor
 - Shaxzod 'senam boshla' dedi. Fayllar: yangi `src/main/persona.js`; `main.js`, `src/preload.js`, `src/main/{settings,menu,appearance,ipc,motion,activity}.js`, tegishli WORKLOG/PROJECT/CHANGELOG. Renderer fayllariga tegilmadi; Claude'ning parallel `9c6267c` gaplar commitiga ulanish tekshirildi. Boshqa agent main kodi ichiga faqat kelishilgan persona chaqiruvlari qo'shildi — mavjud otish/silash/ko'rinish oqimini yangi fe'l bilan bog'lash uchun.
 - Midori ismi appearance/menyuga ulandi (`chibi-girl` id saqlandi). Asosiy navbat cheerful→shy→tsundere→playful, har safar tasodifiy 3–4h; `{id,since,nextAt}` diskda. Eski/malformed/future qiymat normallashtiriladi, restart muddatni qaytarmaydi, uzoq tanaffus/resume'da bitta yangi fe'l, gaplar backlog'i yo'q. Bitta timeout/resume listener, stop/start tozalash va soat orqaga ketishi tekshirildi.

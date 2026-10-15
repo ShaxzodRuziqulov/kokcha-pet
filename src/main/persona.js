@@ -52,7 +52,7 @@ function schedule() {
 function reconcile(notify = true) {
   if (!running) return;
   const now = Date.now();
-  const expired = temporary && (temporary.until <= now || temporary.until > now + EVENT_MS);
+  const expired = temporary && (temporary.until <= now || temporary.until > now + EVENT_MS) ? temporary : null;
   if (expired) temporary = null;
   let changed = false;
   if (base().since > now) {
@@ -64,7 +64,7 @@ function reconcile(notify = true) {
     C.ctx.settings.persona = record(next, now); changed = true;
   }
   if (changed) settings.save();
-  if (notify) publish(expired ? 'event' : 'timer');
+  if (notify) publish(expired && expired.baseId === base().id ? 'event' : 'timer');
   schedule();
 }
 
@@ -111,7 +111,8 @@ function set(id) {
 function event(id) {
   if (!running || !isMidori()) return;
   reconcile(false);
-  temporary = { id, until: Date.now() + EVENT_MS };
+  // Qayta silash/otish muddatni uzaytirsa ham, yashirin taymer almashuvi yo'qolmasin.
+  temporary = { id, until: Date.now() + EVENT_MS, baseId: temporary?.baseId ?? base().id };
   schedule(); publish('event');
 }
 
