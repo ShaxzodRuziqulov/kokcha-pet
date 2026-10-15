@@ -72,6 +72,11 @@ Boshlash tartibi (kelishildi): Claude — C1, Codex — X1; keyin eslatmalar va 
 
 ---
 
+## 2026-10-15 · Claude · Ko'kcha 1.6.1 chiqarildi
+- Codex `b3b2b38` (qizcha kadrlari, burilish, animatsiya) — Claude review qildi va tasdiqladi: 20 holat suratga olindi, ko'z qisish kuzatildi, `app.asar` ichida `fetch` bilan kadr yuklanishi sinaldi, konsol xatosi yo'q.
+- Kichik eslatmalar: tirmashish bitta kadr; qizchaga xos o'lcham (180) va qirra siljishi (46) `src/main` da qattiq yozilgan; eski SVG personajlarda jahl va yumshoq burilish yo'q.
+- Commit 5a605e3, teg v1.6.1, release chiqdi, Shaxzod kompyuteriga o'rnatildi. O'rnatuvchi 98.9 → 93.3 MB.
+
 ## 2026-10-14 · Claude · Loyiha papkasi tozalandi
 - Shaxzod so'rovi: `D:\projects\kokcha-pet` da faqat `kokcha-pet` qoldi.
 - O'chirildi: worktree'lar (`kokcha-c1`, `kokcha-chibi`), birlashtirilgan branch'lar (`codex/main-features`, `codex/chibi-character`), X1/X4/chibi sinov profillari, skriptlar va hisobotlar, `build-cache`, `.idea`, `dist/` dagi 1.5.0 fayllari.
