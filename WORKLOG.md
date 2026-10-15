@@ -3,6 +3,16 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-15 · Codex · Qizcha ifodalari barcha asosiy pozalarda
+- Fayllar: src/renderer/chibi/{chibi.js,frames/manifest.json,frames/face-quarter-*.png,frames/face-profile-*.png,expression-prompts.json,README.md}; docs/PROJECT.md; CHANGELOG.md. Eski characters.js/style.css va claude/c1-2.5d o'zgarmadi.
+- Stand, quarter, profile, sit, walk-a, walk-b, ledge uchun happy/angry/sad/surprised/talking/sleeping. ¾ va yon holatlarda ifoda oldga burilishni majburlamaydi. Chapga qaraganda yuz/tana birga akslanadi; yurish fazasi saqlanadi. Neytral yuz bilan o'sha pozalarda ko'z pirpiraydi.
+- Yo'nalishlarga mos 12 bosh PNG built-in image_gen orqali; 3x2 atlaslar oldindan kesildi, runtime alfa skani yo'q. Aniq promptlar expression-prompts.json'da. Har poza manifestda bosh/yoqa anchor'iga ega; eski soch uchlari tozalanadi va yoqa osti tananing o'z PNG bo'lagi bilan tutashtiriladi. Stand'dagi avvalgi yuz ko'rinishi saqlandi.
+- Jami 33 PNG, 855 969 bayt; dekodlangan piksel hajmi 14 737 920 bayt (14.06 MiB), haqiqiy process RAM/GPU overhead o'lchanmadi. Tanalar <=400 px, yangi boshlar <=320 px.
+- Tekshirildi: haqiqiy Electron'da 49 tekshiruv: 42 poza-ifoda kombinatsiyasi, ikkala yo'nalish, 2 climb faza, inactive taymer to'xtashi, 1000 bir xil expression paint keshdan, profile blink yopilib ochilishi, konsol toza. 42 screenshot va climb fazalari ko'z bilan ko'rildi; yoqa bo'shligi/oldingi soch qoldiqlari tuzatilib qayta sinaldi. 33 asset o'lcham/alfa/gutter tekshiruvi o'tdi.
+- Umumiy npm start: alohida profil; oldindan qolgan eslatma ochilishda yetkazildi va settings'da delivered qayd etildi; haqiqiy ipcMain drag-start/move/end yo'li bilan level 1/2/3 tekshirildi, takroriy drag-end qo'shimcha hodisa yubormadi. X3 alohida 13 live, 74 model; X2 26 model sinovlari o'tgan. JS sintaksis va git diff --check o'tdi.
+- Tekshirilmadi: haqiqiy sichqoncha bilan otish hissi, fizik kompyuter sleep/resume va haqiqiy fullscreen; Shaxzod baholaydi. OS native/sichqoncha sinovlari simulyatsiya bilan almashtirilgani aniq qayd etildi. Versiya ko'tarilmadi, exe/build/push/release yo'q. Temp'dagi sinov fayllari yakunda o'chirildi.
+- Holat: 4 topshiriq Claude review uchun. Commit: shu yozuv bilan `Support chibi expressions across poses and view angles`. X2 c4a48c9; X3 8205ff0 (+ jurnal 4d09954); climb f946699.
+
 ## 2026-10-15 · Codex · Qizchaga ikki kadrli tirmashish
 - Fayllar: src/renderer/chibi/chibi.js, frames/{climb-a,climb-b}.png, manifest.json, climb-prompts.json. Eski SVG personajlar o'zgarmadi.
 - Orqadan haqiqiy tirmashish: navbatma-navbat yuqoridagi qo'l va bukilgan tizza almashadi; 250 ms. To'xtaganda yoki yashirilganda taymer o'chadi. Chap devorda butun kadr bir xil akslantiriladi. Stand/back yurish kadriga almashtirilmaydi.
@@ -37,7 +47,7 @@ Qoidalar: [AGENTS.md](AGENTS.md).
 - Commit: ushbu yozuv bilan `git log` dagi `Improve chibi frames, turning and animation`.
 
 ## Hozir band
-Codex: qizcha ifodalari va climb (src/renderer/chibi/, renderer.js), X2/X3 tayyor, Claude review kutmoqda. Shaxzod: eski SVG personajlarga tegilmaydi.
+_Hech kim._ 1.7.0 uchun Codex topshiriqlari tayyor, Claude review kutilmoqda.
 - Umumiy fayllar (`package.json`, `CHANGELOG.md`): o'zgartirishdan oldin Shaxzod orqali kelishiladi.
 
 ## Kontrakt: main → renderer kanallari

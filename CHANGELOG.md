@@ -1,6 +1,7 @@
 # O'zgarishlar
 
 ## Keyingi versiya
+- Qizcha ifodalari ¾/yon ko'rinish, o'tirish, yurish va qirrada o'tirishda ham almashadi; ko'z pirpirashi shu holatlarda ham ishlaydi.
 - Qizcha tirmashayotganda qo'l va oyoqlari ikki alohida kadrda almashadi.
 - Shaxsiy eslatmalar: menyudan matn va vaqt kiriting; saqlanadi, vaqti kelganda eslatadi. Yashirin holatda qolgan eslatmalar qaytgach ko'rsatiladi.
 - Tez sudrab qo'yib yuborilganda otish kuchiga qarab jahlning uch darajasi. Oddiy sudrash va oxirida to'xtab qo'yish jahlni yoqmaydi.

@@ -91,3 +91,8 @@ scripts/release.mjs     GitHub Release yaratish (CHANGELOG'dan tavsif oladi)
 | 1.3.0 | O'z rasmini tekshirish va avtomatik qirqish, personaj maslahat beradi |
 | 1.4.0 | Oynalar ustida yashash, tirmashish, yangi pozalar |
 | 1.5.0 | O'rnatuvchi, avtomatik yangilanish, kod modullarga ajratildi |
+
+## 1.7.0 tayyorgarligi (2026-10-15)
+- `src/main/reminders.js`: bir martalik shaxsiy eslatmalar; `settings.reminders` da epoch ms. Menyu → Eslatmalar alohida sandbox oynani ochadi (`reminders-preload.js`, renderer/reminders.*). IPC faqat shu oynaning asosiy frame'idan qabul qilinadi. `remind {text}` pufakchasi uyqu/jim rejimda ko'rinadi; yashirin/to'liq ekran holatida main yetkazishni kutadi. Ilova yopiq bo'lsa keyingi ochilishda; OS alarm yo'q. settings.save(true) endi muvaffaqiyat bool qiymatini qaytaradi; eski chaqiruvlar o'zgarishsiz.
+- `motion.beginDrag/sampleDrag/finishDrag`: IPC host kursordan oxirgi 120 ms tezlikni o'lchaydi; 700/1400/2200 DIP/s (personaj o'lchamiga nisbatan), angry level 1/2/3. To'xtab qo'yish/shovqin/takroriy drag-end filtrlanadi.
+- Qizchaning bosh ifodalari `frames/manifest.json` dagi har poza `face` anchor'i orqali tanlanadi. Eski SVG personajlar va `claude/c1-2.5d` branch'i bu topshiriqda o'zgartirilmadi/qo'shilmadi. Claude review kutiladi; versiya ko'tarilmagan.

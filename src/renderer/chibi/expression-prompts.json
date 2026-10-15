@@ -1,0 +1,15 @@
+{
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "source": "frames/quarter.png at 5a605e3",
+      "output": "frames/face-quarter-*.png",
+      "prompt": "Use case: identity-preserve. Asset type: ONE expression-head sprite atlas, transparent PNG, exactly 3 columns x 2 rows. Input is the exact green-haired chibi girl's RIGHT three-quarter view identity and angle reference. Draw 6 HEAD-AND-TURTLENECK-COLLAR ONLY sprites all at exactly this same RIGHT THREE-QUARTER angle, same head scale, same green hair silhouette and tuft, pale green collar, linework, colors and green eyes. Do not turn any head front-facing. Expressions in reading order: top left HAPPY closed smiling eyes and cheerful mouth; top center ANGRY lowered eyebrows and frown; top right SAD tearful eyes and downturned mouth; bottom left SURPRISED wide eyes small O mouth; bottom center TALKING green eyes open and speaking open smile; bottom right SLEEPING eyes gently fully closed, relaxed mouth. Each includes all hair and complete collar but NO torso, arms, hands or body. Same head silhouette and collar baseline in every cell. Strict equal 3x2 grid on fully transparent canvas, generous transparent margins between every head, nothing touches a cell edge or another head. No labels, text, grid lines, background, glow, shadow or props. Preserve exact chibi identity and proportions from input."
+    },
+    {
+      "source": "frames/profile.png at 5a605e3",
+      "output": "frames/face-profile-*.png",
+      "prompt": "Use case: identity-preserve. Asset type: ONE expression-head sprite atlas, transparent PNG, exactly 3 columns x 2 rows. Input is the exact green-haired chibi girl's RIGHT FULL SIDE PROFILE identity and angle reference. Draw 6 HEAD-AND-TURTLENECK-COLLAR ONLY sprites all at exactly this same STRICT RIGHT SIDE PROFILE angle, same head scale and outline, same green hair silhouette and tuft, pale green collar, linework, colors and green visible eye. One visible eye only. Nose and mouth in silhouette facing right, do not rotate toward camera. Expressions reading order: top left HAPPY closed smiling eye and cheerful mouth; top center ANGRY lowered eyebrow and frown; top right SAD tearful eye and downturned mouth; bottom left SURPRISED wide eye O mouth; bottom center TALKING green eye open and speaking open smile; bottom right SLEEPING eye gently fully closed relaxed mouth. Each includes all hair and complete collar but NO torso, arms, hands or body. Same silhouette and collar baseline in every cell. Strict equal 3x2 grid on fully transparent canvas, generous clear margins between each head and edges; no overlap, labels, text, lines, background, glow, shadows, props."
+    }
+  ]
+}

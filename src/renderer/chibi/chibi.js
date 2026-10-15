@@ -29,7 +29,7 @@
   // Har safar bitta ko'rinishdan o'tiladi: chap yon → chap ¾ → old → o'ng ¾ → o'ng yon.
   function targetFacing() {
     if (latest.state === 'walk' || ['jump', 'ledge'].includes(latest.pose)) return latest.dir < 0 ? -1 : 1;
-    if (latest.expression !== 'neutral' || blinking || latest.pose !== 'stand') return 0;
+    if (latest.pose !== 'stand') return 0;
     return lookTarget;
   }
   function turn() {
@@ -49,7 +49,7 @@
     clearTimeout(blinkTimer);
     if (!active) return;
     blinkTimer = setTimeout(() => {
-      if (latest.state === 'idle' && latest.pose === 'stand' && latest.expression === 'neutral' && facing === 0) {
+      if (latest.state !== 'sleep' && latest.expression === 'neutral' && frames[canvas.dataset.frame]?.face) {
         blinking = true; paint();
         blinkEnd = setTimeout(() => { blinking = false; paint(); scheduleBlink(); }, 135);
       } else scheduleBlink();
@@ -70,18 +70,30 @@
     else if (pose === 'climb') { name = step ? 'climb-b' : 'climb-a'; mirrored = side === 'left'; }
     else if (state === 'walk') { name = facing === 0 ? 'stand' : step ? 'walk-b' : 'walk-a'; mirrored = facing < 0; }
     else if (facing !== 0) { name = Math.abs(facing) === 2 ? 'profile' : 'quarter'; mirrored = facing < 0; }
-    const emotion = name === 'stand' ? (blinking && expression === 'neutral' ? 'sleeping' : expression) : 'neutral';
+    const head = frames[name].face;
+    const requested = blinking && expression === 'neutral' ? 'sleeping' : expression;
+    const faceName = head ? `face-${head.group === 'front' ? '' : `${head.group}-`}${requested}` : '';
+    const emotion = head && frames[faceName] ? requested : 'neutral';
     const key = `${name}:${mirrored}:${emotion}`;
     if (key !== previous) {
       previous = key;
       context.clearRect(0, 0, SIZE, SIZE);
       const base = draw(name, mirrored);
-      if (emotion !== 'neutral' && frames[`face-${emotion}`]) {
-        const face = frames[`face-${emotion}`];
-        // Yuz + yoqa tanaga bir xil balandlikda ulanadi, bosh masshtabi o'zgarmaydi.
-        const height = base.height * 0.555, width = height * face.width / face.height;
-        context.clearRect(0, 0, SIZE, base.y + base.frame.neck * base.scale);
-        context.drawImage(face.image, (SIZE - width) / 2, base.y, width, height);
+      if (emotion !== 'neutral') {
+        const face = frames[faceName];
+        // Har pozaning o'z bosh/yoqa chegarasi bor. Chap kadrga yuz ham birga akslanadi.
+        context.save();
+        if (mirrored) { context.translate(SIZE, 0); context.scale(-1, 1); }
+        context.clearRect(0, 0, SIZE, base.y + head.cut * base.scale);
+        if (head.join) {
+          // Eski boshning soch uchlarini qoldirmasdan, yoqa ostini tananing o'z PNG'si bilan tutashtiradi.
+          context.clearRect(0, base.y + (head.cut - head.join) * base.scale, SIZE, head.join * 3 * base.scale);
+          context.drawImage(base.frame.image, 0, head.cut, base.frame.width, head.join * 2,
+            base.x, base.y + (head.cut - head.join) * base.scale, base.width, head.join * 3 * base.scale);
+        }
+        context.drawImage(face.image, base.x + head.x * base.scale, base.y + head.y * base.scale,
+          head.w * base.scale, head.h * base.scale);
+        context.restore();
       }
       canvas.dataset.frame = name;
       canvas.dataset.expression = emotion;
