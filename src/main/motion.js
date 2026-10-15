@@ -103,11 +103,16 @@ const feetY = () => ctx.win.getPosition()[1] + C.winH();
 // Tana qirrasi oyna markazidan qancha uzoqda (personaj qutisi ichida tana ~26 px ichkarida)
 const bodyHalf = () => (C.petSize() / 2 - 26) * C.scale();
 
+// Ekran chetigacha masofa. Midori yotganda (uxlash) eng keng — oyna markazidan ~83 px,
+// shuning uchun uni hisobga olamiz: biror pozada ham tanasi ekrandan chiqmasin.
+const screenHalf = () => ctx.settings.character === 'chibi-girl' ? 84 * C.scale() : bodyHalf();
+
 // Tana ekrandan chiqmasin (oynaning shaffof qismi chiqib tursa mayli)
+const onScreenX = (cx, wa) => Math.min(Math.max(cx, wa.x + screenHalf()), wa.x + wa.width - screenHalf());
+
 function clampBodyX(x, wa) {
   const half = C.winW() / 2;
-  const cx = Math.min(Math.max(x + half, wa.x + bodyHalf()), wa.x + wa.width - bodyHalf());
-  return cx - half;
+  return onScreenX(x + half, wa) - half;
 }
 
 // ---- Sirtlar: yer (taskbar ustida) va oynalarning yuqori qirralari ----
@@ -176,7 +181,11 @@ function fall() {
 function walkBounds() {
   if (ctx.perch) {
     const f = FOOT_HALF * C.scale();
-    return { min: ctx.perch.x1 + f, max: ctx.perch.x2 - f, ledge: true };
+    const wa = C.currentWorkArea();
+    const min = ctx.perch.x1 + f, max = ctx.perch.x2 - f;
+    const sMin = wa.x + screenHalf(), sMax = wa.x + wa.width - screenHalf();
+    // Oyna ekrandan chiqib tursa — ekran cheti "devor": u yerda faqat burilamiz
+    return { min: Math.max(min, sMin), max: Math.min(max, sMax), ledge: true, wallMin: sMin > min, wallMax: sMax < max };
   }
   const wa = C.currentWorkArea();
   // Devorga tirmashmoqchi bo'lsa — tanasi devorga tekkuncha boradi
@@ -211,8 +220,8 @@ function startWalk(dir) {
 // Chetga yetdi. Yerda — buriladi yoki devorga tirmashadi.
 // Oyna ustida — buriladi, chekkada oyog'ini osiltirib o'tiradi yoki sakrab tushadi.
 function onEdge(b) {
-  if (!b.ledge) {
-    if (wantClimb) return startClimb(ctx.walkDir > 0 ? 'right' : 'left');
+  if (!b.ledge || (ctx.walkDir < 0 ? b.wallMin : b.wallMax)) {
+    if (wantClimb && !b.ledge) return startClimb(ctx.walkDir > 0 ? 'right' : 'left');
     ctx.walkDir *= -1;
     return C.sendState();
   }
@@ -244,7 +253,8 @@ function findJumpTarget() {
   for (const sf of usableSurfaces()) {
     const up = fy - sf.y;
     if (up < 60 * s || up > JUMP_REACH * s) continue;
-    const lx = Math.min(Math.max(cx, sf.x1 + f), sf.x2 - f);
+    const lx = onScreenX(Math.min(Math.max(cx, sf.x1 + f), sf.x2 - f), C.workAreaAt(cx, sf.y));
+    if (lx < sf.x1 + f || lx > sf.x2 - f) continue; // ekran chetidagi tor bo'lak — qo'nib bo'lmaydi
     if (Math.abs(lx - cx) > 380 * s) continue;
     options.push({ surface: sf, x: lx });
   }
@@ -314,7 +324,7 @@ function startClimb(wallSide) {
 }
 
 function climbOnto(goal, right) {
-  const f = FOOT_HALF * C.scale() * 1.5;
+  const f = Math.max(FOOT_HALF * C.scale() * 1.5, screenHalf());
   const wa = C.currentWorkArea();
   const cx = right ? Math.min(goal.x2, wa.x + wa.width) - f : Math.max(goal.x1, wa.x) + f;
   C.placeAt(cx - C.winW() / 2, goal.y - C.winH());
@@ -349,9 +359,9 @@ function trackPerch() {
     const dx = mine[0].left - ctx.perch.left;
     const dy = mine[0].y - ctx.perch.y;
     const [x, y] = ctx.win.getPosition();
-    if (dx || dy) C.placeAt(x + dx, y + dy);
+    const cx = onScreenX(x + dx + C.winW() / 2, C.workAreaAt(x + dx + C.winW() / 2, y + dy + C.winH()));
+    if (cx !== x + C.winW() / 2 || dy) C.placeAt(cx - C.winW() / 2, y + dy);
 
-    const cx = x + dx + C.winW() / 2;
     const seg = mine.find((sf) => cx >= sf.x1 && cx <= sf.x2);
     if (!seg) return dropFromPerch();
     ctx.perch = { ...seg };

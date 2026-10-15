@@ -88,6 +88,8 @@ let currentSide = null;
 let currentDir = 1;
 let chibiReady = false;
 let talking = false;
+let speechFace = 'talking';   // gap aytilayotgandagi yuz — gapning ma'nosiga mos (Phrases.faceOf)
+let speechMood = null;        // Ko'kcha uchun: gap davomida qo'yilgan body klassi (happy | angry)
 let bubbleTimer = null;
 let lastPettedTalk = 0;
 let reminderActive = false;
@@ -111,7 +113,7 @@ function render() {
       dancing: body.classList.contains('dancing'),
       expression: body.classList.contains('angry') ? 'angry' :
         body.classList.contains('surprised') ? 'surprised' :
-        body.classList.contains('sad') ? 'sad' : talking ? 'talking' :
+        body.classList.contains('sad') ? 'sad' : talking ? speechFace :
         body.classList.contains('yawn') ? 'sleeping' :
         body.classList.contains('happy') ? 'happy' : body.classList.contains('hover') ? 'embarrassed' : 'neutral' });
     return;
@@ -181,6 +183,7 @@ function hideBubble(immediate = false) {
   if (reminderActive) { talking = state !== 'sleep'; return; }
   clearTimeout(bubbleTimer);
   talking = false;
+  clearSpeechMood();
   render();
   if (immediate || bubble.classList.contains('hidden')) {
     bubble.classList.add('hidden');
@@ -194,9 +197,23 @@ function hideBubble(immediate = false) {
   }, FADE_MS);
 }
 
+// Ko'kcha'da faqat quvnoq va jahldor yuz bor — gap davomida shularni ko'rsatamiz
+function clearSpeechMood() {
+  if (!speechMood) return;
+  clearTimeout(bodyTimers[speechMood]);
+  body.classList.remove(speechMood);
+  speechMood = null;
+}
+
 function say(text) {
   if (reminderActive) return;
   if (state === 'sleep') return;
+  speechFace = window.Phrases.faceOf(voice(), text);
+  clearSpeechMood();
+  if (character !== 'chibi-girl' && (speechFace === 'happy' || speechFace === 'angry') && !body.classList.contains(speechFace)) {
+    speechMood = speechFace;
+    mood(speechFace, bubbleTime(text));
+  }
   bubbleText.textContent = text;
   bubble.classList.remove('hidden', 'closing');
   bubble.style.animation = 'none';     // "pop" animatsiyasini qaytadan boshlash
@@ -237,6 +254,8 @@ function showReminder() {
   bubbleText.textContent = text;
   bubble.classList.remove('hidden', 'closing');
   talking = state !== 'sleep';
+  speechFace = 'talking';
+  clearSpeechMood();
   render();
   bubbleTimer = setTimeout(() => {
     reminderActive = false;

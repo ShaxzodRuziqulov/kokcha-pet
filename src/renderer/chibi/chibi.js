@@ -9,6 +9,7 @@
   context.scale(ratio, ratio);
   let frames = {}, loaded = false, active = false;
   let latest = { state: 'idle', pose: 'stand', expression: 'neutral', dir: 1 };
+  const FACE_FALLBACK = { embarrassed: 'happy' };
   let lookTarget = 0, facing = 0, previous = '', previousTime = 0;
   let turnTimer = null, blinkTimer = null, blinkEnd = null;
   let blinking = false;
@@ -128,7 +129,10 @@
        (phase && blinkPatches[frames[name].blink?.source]));
     if (blinking && expression === 'neutral' && !sequenceBlink) requested = 'sleeping';
     const head = frames[name].face;
-    const faceName = head ? `face-${head.group === 'front' ? '' : `${head.group}-`}${requested}` : '';
+    const faceFor = (expr) => head ? `face-${head.group === 'front' ? '' : `${head.group}-`}${expr}` : '';
+    // Yon (profile/quarter) boshlarda uyalgan yuz yo'q — eng yaqini quvnoq yuz
+    if (head && !frames[faceFor(requested)] && FACE_FALLBACK[requested]) requested = FACE_FALLBACK[requested];
+    const faceName = faceFor(requested);
     const emotion = head && frames[faceName] ? requested : 'neutral';
     const key = `${name}:${mirrored}:${emotion}:${Boolean(sequenceBlink)}:${phase ? `${phase.name}:${phase.tick}:${phase.running}` : ''}`;
     if (key !== previous) {

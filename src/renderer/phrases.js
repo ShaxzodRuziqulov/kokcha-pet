@@ -167,6 +167,27 @@
     return text.replace(/\{name\}/g, vars.name || '');
   }
 
+  // Gap aytilayotganda yuz ifodasi: gapdagi oxirgi his-tuyg'u emojisi bo'yicha
+  // (tsundere "Hmph 😤 ... 😳" — oxirgisi muhim), emoji bo'lmasa — fe'lning odatiy yuzi.
+  const EMOJI_FACES = {
+    angry: '😤😠😡💢',
+    embarrassed: '😳🥺👉👈😅😰🙈',
+    sad: '😢😭😔😞😕',   // 💧 — suv ichish eslatmasi, qayg'u emas
+    surprised: '😮😲😱😵🎢👀',
+    happy: '✨😜😊😄😁💚😎💪🎉😆😌😏🤸💃👑🥰',
+  };
+  const VOICE_FACES = { cheerful: 'happy', playful: 'happy', shy: 'embarrassed' };
+  function faceOf(voice, text) {
+    let best = -1, face = null;
+    for (const [name, chars] of Object.entries(EMOJI_FACES)) {
+      for (const ch of chars) {
+        const at = text.lastIndexOf(ch);
+        if (at > best) { best = at; face = name; }
+      }
+    }
+    return face || VOICE_FACES[voice] || 'talking';
+  }
+
   const has = (voice, key) => Boolean(lookup(VOICES[voice] ? voice : 'default', key) || lookup('default', key));
-  window.Phrases = { pick, has, voices: Object.keys(VOICES) };
+  window.Phrases = { pick, has, faceOf, voices: Object.keys(VOICES) };
 })();

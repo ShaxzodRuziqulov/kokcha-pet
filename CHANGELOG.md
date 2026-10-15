@@ -1,5 +1,9 @@
 # O'zgarishlar
 
+## Keyingi versiya
+- Midori endi ekran chetidan chiqib ketmaydi: oyna ustiga sakraganda, chiqqanda, oyna bilan birga ko'chganda, oyna ustida yurganda va uxlab yotganda ham to'liq ko'rinadi.
+- Gapirayotganda yuzi gapga mos: quvnoq gapda kuladi, jahldorida jahli chiqadi, uyatchanida qizaradi, hayratlanganda ko'zini katta ochadi. Ko'kcha ham quvnoq va jahldor gaplarda shunga mos yuz qiladi.
+
 ## 1.9.0
 ### 👧 Midori (oldingi "Yashil qizcha")
 - **Kayfiyatlar:** quvnoq, uyatchan, qaysar va sho'x — har 3–4 soatda navbat bilan almashadi (o'ng tugma → Kayfiyat). Otib yuborilsa 2 daqiqa qaysar, ko'p silansa 2 daqiqa uyatchan bo'ladi.
