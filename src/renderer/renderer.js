@@ -127,6 +127,7 @@ function render() {
     sprite.classList.add('hidden');
     mascot.classList.add('hidden');
     window.Chibi.paint({ state, pose: currentPose, side: currentSide, dir: currentDir,
+      dancing: body.classList.contains('dancing'),
       expression: body.classList.contains('angry') ? 'angry' :
         body.classList.contains('surprised') ? 'surprised' :
         body.classList.contains('sad') ? 'sad' : talking ? 'talking' :

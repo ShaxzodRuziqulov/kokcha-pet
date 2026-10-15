@@ -1,4 +1,4 @@
-// Sifat sinovi moduli. Runtime chibi.js'ga hali ulanmagan.
+// Qatlamli idle: chibi.js sequence soatidan vaqt oladi, o'z taymeri yo'q.
 // Barcha qatlamlar original stand.png'dan olinadi; yangi chizilgan idle kadri yo'q.
 (() => {
   const W = 239, H = 400;

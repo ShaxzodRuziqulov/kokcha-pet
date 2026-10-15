@@ -1,13 +1,13 @@
-# 1.8.0 — sifat sinovi, integratsiya qilinmagan
+# 1.8.0 — tasdiqlangan pilot va runtime integratsiyasi
 
-A–D kelishuvi: qatlamli idle; 8 walk kadr / 10 fps; erta GIF ko'rigi; neutral-only animatsiya, boshqa ifodalarda eski poza + overlay. d513816 review'dan keyin Shaxzod 'davom' dedi. Ushbu revision integratsiyadan OLDINGI 4 tuzatishni bajaradi; runtime chibi.js/manifest/CSS/renderer o'zgarmagan.
+A–D kelishuvi: qatlamli idle; 8 walk kadr / 10 fps; erta GIF ko'rigi; neutral-only animatsiya, boshqa ifodalarda eski poza + overlay. d513816 review'dan keyingi 4 sifat tuzatishi 8eb8033'da. Shaxzod 'ha, integratsiya qil' degach ushbu assetlar runtime'ga ulandi. Quyidagi manba va sifat auditi 8eb8033 holatiga tegishli; runtime kontrakti va o'lchovi [../README.md](../README.md)'da.
 
 ## Manba va idle
 - Original stand.png (239×400), walk-a.png va walk-b.png; boshlang'ich repo 1ecb5b9, birinchi pilot d513816.
 - idle-rig.js: original rasm pastki qism/oyoq, tana, bosh va ikki soch uchiga ajratiladi. Yangi rasm generatsiyasi yo'q; draw(ctx,seconds,x,y,width,height) taymer yaratmaydi.
 - Soch tip maskalari yuqorida y=146 dan yumshoq boshlanadi; boshdagi ichki kesim y=177 dan. Ichki ildiz bo'yicha ham overlap bor. Maskalarning 2.5 px blur'i faqat alfaga qo'llanadi; original rang piksellari xiralashtirilmaydi. Eski y=158 qattiq kesim va to'g'ri to'rtburchak 'patch' olib tashlandi.
 - Harakat 2.5× oshirildi: nafas 0–3.5 source px, bosh ±0.015 rad, soch uchlari ±0.035 rad. 3.2 s sikl. 180 px canvasda nafasning peak siljishi taxminan 1.5 px. Yoqa overlap'i saqlandi; oyoqlar statik qatlamda.
-- 5 saqlanadigan layer canvas nazariy 1 912 000 bayt (1.82 MiB); maskalar faqat konstruktor vaqtida tayyorlanadi. GPU/process overhead va CPU keyingi integratsiyada o'lchanadi.
+- 5 saqlanadigan layer canvas nazariy 1 912 000 bayt (1.82 MiB); maskalar faqat konstruktor vaqtida tayyorlanadi. Runtime idle20fps, o'z taymeri yo'q. CPU/process working set integratsiyada qisqa namuna bilan o'lchandi; tafsilot yuqoridagi README'da.
 
 ## Walk manbasi va qayta ishlov
 - Birinchi pilotdagi AYNI 4×2 atlas: built-in image_gen exec-66826a8c-d2f0-43c3-bc2b-2933a5e05709.png. Prompt va references walk-prompt.json'da. Yangi generatsiya, Higgsfield, video, MaoMao resurslari yo'q.
@@ -22,5 +22,5 @@ A–D kelishuvi: qatlamli idle; 8 walk kadr / 10 fps; erta GIF ko'rigi; neutral-
 - Yangi review artifactlar: Codex visualizations/2026/10/15/01a13ddf-7f4b-7ba0-b41c-5c9bd0801c9f/chibi-180-revision2/{comparison,idle,walk}.gif. Umumiy 256 rangli palitra ishlatilgan, har GIF 3200 ms. Oldingi GIF'lar chibi-180-quality papkasida saqlangan.
 - Sinov script/profil/capture/metrics faqat tizim Temp'ida yaratildi va yakunda o'chirildi. Review GIF'lar foydalanuvchiga topshiriladigan saqlanadigan artifactlar.
 
-## Keyingi qadam
-Sequence integratsiyasi, neutral-only fallback, CSS takroriy harakatini o'chirish, yashirilganda taymer to'xtashi, decode strategiyasi va CPU/RAM o'lchovi. Bu revision sifat tuzatishidir, hali 1.8.0 runtime/release emas.
+## Holat
+Sequence, neutral-only fallback, CSS takroriy harakatini o'chirish, yashirilganda pauza va bir martalik decode integratsiya qilindi. Claude review va Shaxzodning jonli ilovadagi bahosi kutiladi. Versiya/build/push/release alohida ruxsat bilan.

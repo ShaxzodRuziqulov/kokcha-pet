@@ -1,230 +1,325 @@
 {
-  "stand": {
-    "width": 239,
-    "height": 400,
-    "head": 237.45049504950495,
-    "neck": 192.2970297029703,
-    "face": {
-      "group": "front",
-      "x": 7.5,
-      "y": 0,
-      "w": 224,
-      "h": 222,
-      "cut": 192.297
+  "version": 2,
+  "frames": {
+    "stand": {
+      "width": 239,
+      "height": 400,
+      "head": 237.45049504950495,
+      "neck": 192.2970297029703,
+      "face": {
+        "group": "front",
+        "x": 7.5,
+        "y": 0,
+        "w": 224,
+        "h": 222,
+        "cut": 192.297
+      }
+    },
+    "quarter": {
+      "width": 221,
+      "height": 400,
+      "head": 208.0910891089109,
+      "face": {
+        "group": "quarter",
+        "x": 0,
+        "y": 0,
+        "w": 221,
+        "h": 214,
+        "cut": 214,
+        "join": 12
+      }
+    },
+    "profile": {
+      "width": 194,
+      "height": 400,
+      "head": 208.34851485148513,
+      "face": {
+        "group": "profile",
+        "x": 0,
+        "y": 0,
+        "w": 194,
+        "h": 214,
+        "cut": 214,
+        "join": 12
+      }
+    },
+    "back": {
+      "width": 223,
+      "height": 400,
+      "head": 208.34851485148513
+    },
+    "walk-a": {
+      "width": 271,
+      "height": 400,
+      "head": 265.53465346534654,
+      "face": {
+        "group": "quarter",
+        "x": 0,
+        "y": 0,
+        "w": 271,
+        "h": 228,
+        "cut": 228,
+        "join": 12
+      }
+    },
+    "sit": {
+      "width": 297,
+      "height": 400,
+      "head": 306.24653465346535,
+      "face": {
+        "group": "front",
+        "x": 0,
+        "y": 0,
+        "w": 297,
+        "h": 253,
+        "cut": 260,
+        "join": 12
+      }
+    },
+    "lie": {
+      "width": 400,
+      "height": 249,
+      "head": 267.12475247524753
+    },
+    "jump": {
+      "width": 307,
+      "height": 400,
+      "head": 286.5732673267327
+    },
+    "fall": {
+      "width": 338,
+      "height": 400,
+      "head": 283.5376237623762
+    },
+    "face-happy": {
+      "width": 400,
+      "height": 397,
+      "head": 395.7029702970297
+    },
+    "face-sad": {
+      "width": 400,
+      "height": 395,
+      "head": 392.9920792079208
+    },
+    "face-angry": {
+      "width": 400,
+      "height": 398,
+      "head": 396.6148514851485
+    },
+    "face-sleeping": {
+      "width": 400,
+      "height": 398,
+      "head": 395.7029702970297
+    },
+    "face-surprised": {
+      "width": 400,
+      "height": 396,
+      "head": 394.7950495049505
+    },
+    "face-talking": {
+      "width": 400,
+      "height": 395,
+      "head": 392.9920792079208
+    },
+    "face-embarrassed": {
+      "width": 400,
+      "height": 397,
+      "head": 394.7950495049505
+    },
+    "hang": {
+      "width": 229,
+      "height": 400,
+      "head": 223.988
+    },
+    "ledge": {
+      "width": 245,
+      "height": 400,
+      "head": 240.876,
+      "face": {
+        "group": "quarter",
+        "x": 0,
+        "y": 0,
+        "w": 245,
+        "h": 220,
+        "cut": 220,
+        "join": 12
+      }
+    },
+    "walk-b": {
+      "width": 253,
+      "height": 400,
+      "head": 249.409,
+      "face": {
+        "group": "quarter",
+        "x": 0,
+        "y": 0,
+        "w": 253,
+        "h": 220,
+        "cut": 220,
+        "join": 12
+      }
+    },
+    "climb-a": {
+      "width": 222,
+      "height": 400,
+      "head": 181.959
+    },
+    "climb-b": {
+      "width": 220,
+      "height": 400,
+      "head": 181.959
+    },
+    "face-quarter-happy": {
+      "width": 320,
+      "height": 310,
+      "head": 320
+    },
+    "face-quarter-angry": {
+      "width": 320,
+      "height": 309,
+      "head": 320
+    },
+    "face-quarter-sad": {
+      "width": 320,
+      "height": 316,
+      "head": 320
+    },
+    "face-quarter-surprised": {
+      "width": 320,
+      "height": 310,
+      "head": 320
+    },
+    "face-quarter-talking": {
+      "width": 320,
+      "height": 308,
+      "head": 320
+    },
+    "face-quarter-sleeping": {
+      "width": 320,
+      "height": 314,
+      "head": 320
+    },
+    "face-profile-happy": {
+      "width": 298,
+      "height": 320,
+      "head": 298
+    },
+    "face-profile-angry": {
+      "width": 297,
+      "height": 320,
+      "head": 297
+    },
+    "face-profile-sad": {
+      "width": 298,
+      "height": 320,
+      "head": 298
+    },
+    "face-profile-surprised": {
+      "width": 299,
+      "height": 320,
+      "head": 299
+    },
+    "face-profile-talking": {
+      "width": 301,
+      "height": 320,
+      "head": 301
+    },
+    "face-profile-sleeping": {
+      "width": 299,
+      "height": 320,
+      "head": 299
+    },
+    "walk-seq-00": {
+      "src": "pilot/walk/00.webp",
+      "width": 300,
+      "height": 400,
+      "head": 265.535,
+      "sequenceOnly": true
+    },
+    "walk-seq-01": {
+      "src": "pilot/walk/01.webp",
+      "width": 300,
+      "height": 400,
+      "head": 265.535,
+      "sequenceOnly": true
+    },
+    "walk-seq-02": {
+      "src": "pilot/walk/02.webp",
+      "width": 300,
+      "height": 400,
+      "head": 265.535,
+      "sequenceOnly": true
+    },
+    "walk-seq-03": {
+      "src": "pilot/walk/03.webp",
+      "width": 300,
+      "height": 400,
+      "head": 265.535,
+      "sequenceOnly": true
+    },
+    "walk-seq-04": {
+      "src": "pilot/walk/04.webp",
+      "width": 300,
+      "height": 400,
+      "head": 265.535,
+      "sequenceOnly": true
+    },
+    "walk-seq-05": {
+      "src": "pilot/walk/05.webp",
+      "width": 300,
+      "height": 400,
+      "head": 265.535,
+      "sequenceOnly": true
+    },
+    "walk-seq-06": {
+      "src": "pilot/walk/06.webp",
+      "width": 300,
+      "height": 400,
+      "head": 265.535,
+      "sequenceOnly": true
+    },
+    "walk-seq-07": {
+      "src": "pilot/walk/07.webp",
+      "width": 300,
+      "height": 400,
+      "head": 265.535,
+      "sequenceOnly": true
     }
   },
-  "quarter": {
-    "width": 221,
-    "height": 400,
-    "head": 208.0910891089109,
-    "face": {
-      "group": "quarter",
-      "x": 0,
-      "y": 0,
-      "w": 221,
-      "h": 214,
-      "cut": 214,
-      "join": 12
+  "slots": {
+    "idle": {
+      "frames": [
+        "stand"
+      ],
+      "fps": 20,
+      "loop": true,
+      "next": null,
+      "procedural": "idle",
+      "duration": 3.2
+    },
+    "walk": {
+      "frames": [
+        "walk-seq-00",
+        "walk-seq-01",
+        "walk-seq-02",
+        "walk-seq-03",
+        "walk-seq-04",
+        "walk-seq-05",
+        "walk-seq-06",
+        "walk-seq-07"
+      ],
+      "fps": 10,
+      "loop": true,
+      "next": null
+    },
+    "climb": {
+      "frames": [
+        "climb-a",
+        "climb-b"
+      ],
+      "fps": 4,
+      "loop": true,
+      "next": null
     }
-  },
-  "profile": {
-    "width": 194,
-    "height": 400,
-    "head": 208.34851485148513,
-    "face": {
-      "group": "profile",
-      "x": 0,
-      "y": 0,
-      "w": 194,
-      "h": 214,
-      "cut": 214,
-      "join": 12
-    }
-  },
-  "back": {
-    "width": 223,
-    "height": 400,
-    "head": 208.34851485148513
-  },
-  "walk-a": {
-    "width": 271,
-    "height": 400,
-    "head": 265.53465346534654,
-    "face": {
-      "group": "quarter",
-      "x": 0,
-      "y": 0,
-      "w": 271,
-      "h": 228,
-      "cut": 228,
-      "join": 12
-    }
-  },
-  "sit": {
-    "width": 297,
-    "height": 400,
-    "head": 306.24653465346535,
-    "face": {
-      "group": "front",
-      "x": 0,
-      "y": 0,
-      "w": 297,
-      "h": 253,
-      "cut": 260,
-      "join": 12
-    }
-  },
-  "lie": {
-    "width": 400,
-    "height": 249,
-    "head": 267.12475247524753
-  },
-  "jump": {
-    "width": 307,
-    "height": 400,
-    "head": 286.5732673267327
-  },
-  "fall": {
-    "width": 338,
-    "height": 400,
-    "head": 283.5376237623762
-  },
-  "face-happy": {
-    "width": 400,
-    "height": 397,
-    "head": 395.7029702970297
-  },
-  "face-sad": {
-    "width": 400,
-    "height": 395,
-    "head": 392.9920792079208
-  },
-  "face-angry": {
-    "width": 400,
-    "height": 398,
-    "head": 396.6148514851485
-  },
-  "face-sleeping": {
-    "width": 400,
-    "height": 398,
-    "head": 395.7029702970297
-  },
-  "face-surprised": {
-    "width": 400,
-    "height": 396,
-    "head": 394.7950495049505
-  },
-  "face-talking": {
-    "width": 400,
-    "height": 395,
-    "head": 392.9920792079208
-  },
-  "face-embarrassed": {
-    "width": 400,
-    "height": 397,
-    "head": 394.7950495049505
-  },
-  "hang": {
-    "width": 229,
-    "height": 400,
-    "head": 223.988
-  },
-  "ledge": {
-    "width": 245,
-    "height": 400,
-    "head": 240.876,
-    "face": {
-      "group": "quarter",
-      "x": 0,
-      "y": 0,
-      "w": 245,
-      "h": 220,
-      "cut": 220,
-      "join": 12
-    }
-  },
-  "walk-b": {
-    "width": 253,
-    "height": 400,
-    "head": 249.409,
-    "face": {
-      "group": "quarter",
-      "x": 0,
-      "y": 0,
-      "w": 253,
-      "h": 220,
-      "cut": 220,
-      "join": 12
-    }
-  },
-  "climb-a": {
-    "width": 222,
-    "height": 400,
-    "head": 181.959
-  },
-  "climb-b": {
-    "width": 220,
-    "height": 400,
-    "head": 181.959
-  },
-  "face-quarter-happy": {
-    "width": 320,
-    "height": 310,
-    "head": 320
-  },
-  "face-quarter-angry": {
-    "width": 320,
-    "height": 309,
-    "head": 320
-  },
-  "face-quarter-sad": {
-    "width": 320,
-    "height": 316,
-    "head": 320
-  },
-  "face-quarter-surprised": {
-    "width": 320,
-    "height": 310,
-    "head": 320
-  },
-  "face-quarter-talking": {
-    "width": 320,
-    "height": 308,
-    "head": 320
-  },
-  "face-quarter-sleeping": {
-    "width": 320,
-    "height": 314,
-    "head": 320
-  },
-  "face-profile-happy": {
-    "width": 298,
-    "height": 320,
-    "head": 298
-  },
-  "face-profile-angry": {
-    "width": 297,
-    "height": 320,
-    "head": 297
-  },
-  "face-profile-sad": {
-    "width": 298,
-    "height": 320,
-    "head": 298
-  },
-  "face-profile-surprised": {
-    "width": 299,
-    "height": 320,
-    "head": 299
-  },
-  "face-profile-talking": {
-    "width": 301,
-    "height": 320,
-    "head": 301
-  },
-  "face-profile-sleeping": {
-    "width": 299,
-    "height": 320,
-    "head": 299
   }
 }

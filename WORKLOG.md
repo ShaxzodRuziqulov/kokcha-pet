@@ -3,6 +3,18 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-15 · Codex · Tasdiqlangan idle/walk pilot runtime'ga ulandi
+- Ruxsat: Shaxzod 'ha, integratsiya qil'. A–D va 8eb8033 sifat tuzatishlari asosida; yangi generatsiya yo'q.
+- Fayllar: chibi/sequence.js, chibi.js/chibi.css, frames/manifest.json, pilot/idle-rig.js izohi; index.html, renderer.js va README/PROJECT/CHANGELOG. Claude yozgan umumiy renderer'ga faqat dancing flag qo'shildi — raqs pilot idle bilan to'qnashmasligi uchun. Eski 4 SVG, characters.js/style.css va main o'zgarmadi.
+- Manifest v2 frames+slots, fps/loop/next va eski tekis format parseri. Monotonic soat paint/look bilan qayta boshlanmaydi, non-loop oxirgi kadr yoki next. Bitta deadline timeout; yangi slot boshlanishi va terminal CSS flag chekka holatlari tuzatildi.
+- Old neytral idle: original stand qatlamlari20fps; neytral walk:8WebP10fps. Ifoda/blink eski bitta poza+overlay, keyin faza davom etadi; climb2PNG4fps. Yashirin/boshqa personajda animatsiya/burilish/blink timeoutlari tozalanadi, yashirin vaqt fazaga qo'shilmaydi. CSS breath/step takrorlanishi haqiqiy computedStyle bilan tekshirilib specificity tuzatildi; raqs saqlandi.
+- Decode tanlovi: barcha8WebP bir marta ImageBitmap cache. Lokal iliq fayl-kesh namunasi all first11.2ms/return0.1ms/8decode; active first11.8ms/return11.9ms/16decode. Qo'shimcha3.66MiB evaziga qayta decode yo'q; idle5layer1.82MiB. 41rasm1396541bayt (<3MB), barcha alfa/<=400px; eski metadata saqlangan. Kattaroq pack strategiyasi qayta o'lchanadi.
+- Tekshirildi:58 unit/live tekshiruv (soat pauza/resume/next/terminal/1000takror, cache dedupe/eviction/inflight/failure, 8walk, ifoda fallback, burilish, 2climb, sleep, dance, haqiqiy hide/show, personaj almashtirish, konsol). Qo'shimcha: bitta WebP bloklanganda ready+walk-a fallback, tabiiy walk blink va sequence'ga qaytish. 41asset audit; Electron idle/walk screenshotlari ko'z bilan; npm start alohida Temp profilida main→renderer state orqali walk-seq-03/slot walk/CSS none; sintaksis va diff --check o'tdi.
+- Qisqa resurs namuna:350ms+2s/holat, renderer CPU static0.364%/idle0.276%/walk0.117%/hidden0.002%, renderer working set107.5–108.4MiB; app process working set yig'indisi367.7–370.3MiB (shared ikki marta sanalishi mumkin). Bu X4/60s×3 benchmark yoki tezlashish isboti emas. Aniq kontrakt/manba/o'lchov chibi/README.md'da.
+- Sinov script/profil/report/capture faqat tizim Temp'ida yaratildi va yakunda o'chirildi. Yakuniy idle/walk screenshotlar visualizations/.../chibi-integrated'da saqlandi. Versiya1.7.0; exe/build/push/release yo'q. Haqiqiy sichqoncha/fullscreen/OS sleep-resume tekshirilmadi; Shaxzod baholaydi.
+- Keyingi agentga: Claude review. Qo'shimcha talk/angry/excited/sleep/sitdown/wave/mashg'ulot sequence'lari alohida keyingi ish; bu commit faqat tasdiqlangan pilot.
+- Commit: shu yozuv bilan `Integrate approved chibi idle and walk sequences`.
+
 ## 2026-10-15 · Codex · d513816 review: to'rtta sifat tuzatishi
 - Shaxzod 'davom' dedi, Claude integratsiyadan oldin 4 tuzatish so'radi. Fayllar: chibi/pilot/idle-rig.js, 8 walk WebP, walk.json/walk-prompt.json, README'lar. Runtime va eski personajlar o'zgarmadi.
 - Walk to'g'ri y228 kesimi o'rniga soch/yoqa konturi; 2–3 px yumshoq alfa va 5 px tana overlap. To'liq generated torso saqlandi, butun kenglikdagi body complement mask chetdagi eski soch parchalarini ham olib tashlaydi. Yangi rasm yaratilmadi, ayni raw atlas va original walk-a.png.
@@ -75,7 +87,7 @@ Qoidalar: [AGENTS.md](AGENTS.md).
 - Commit: ushbu yozuv bilan `git log` dagi `Improve chibi frames, turning and animation`.
 
 ## Hozir band
-_Hech kim._ Pilot review bo'yicha 4 tuzatish va yangi GIF tayyor; runtime integratsiyasi keyingi bosqich.
+Hech kim band emas.
 
 ## Kontrakt: main → renderer kanallari
 Ikki tomon faqat shu orqali bog'lanadi. Kanal yoki ma'lumot shakli o'zgarsa, avval ikkinchi agent bilan Shaxzod orqali kelishiladi.

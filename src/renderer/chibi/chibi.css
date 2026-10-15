@@ -9,6 +9,8 @@ body.chibi-mode.idle:not(.pose-lie):not(.dancing) #chibi { animation: chibi-brea
 body.chibi-mode.walk #chibi { animation: chibi-step 0.5s ease-in-out infinite; }
 body.chibi-mode.sleep #chibi { animation: chibi-breathe 4s ease-in-out infinite; }
 body.chibi-mode.dancing #chibi { animation: chibi-dance 0.5s ease-in-out infinite; }
+body.chibi-mode.idle:not(.pose-lie):not(.dancing) #chibi[data-animated="true"],
+body.chibi-mode.walk #chibi[data-animated="true"] { animation: none; }
 body.chibi-mode.sleep #sprite-zzz { display: block; top: 45px; right: 24px; }
 @keyframes chibi-dance {
   0%, 100% { transform: rotate(-4deg); }

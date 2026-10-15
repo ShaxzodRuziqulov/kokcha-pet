@@ -1,5 +1,9 @@
 # O'zgarishlar
 
+## Keyingi versiya
+- Yashil qizcha: neytral holatda nafas, bosh va soch harakati; yurishda 8 kadrli ravon sikl. Boshqa yuz ifodalari va pozalar saqlanadi.
+- Animatsiya soati yashirin oynada va boshqa personaj tanlanganda to'xtaydi; takroriy CSS nafas/sakrash olib tashlandi. Walk kadrlari bir marta decode qilinadi.
+
 ## 1.7.0
 - Qizcha ifodalari ¾/yon ko'rinish, o'tirish, yurish va qirrada o'tirishda ham almashadi; ko'z pirpirashi shu holatlarda ham ishlaydi.
 - Qizcha tirmashayotganda qo'l va oyoqlari ikki alohida kadrda almashadi.
