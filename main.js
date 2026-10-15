@@ -9,7 +9,8 @@
 //   surfaces    — ochiq oynalarning qirralarini topish (Windows)
 //   activity    — uyqu, eslatmalar, kursor, silash
 //   native      — to'liq ekran va Ctrl'ni aniqlash (Windows)
-//   menu        — tray va o'ng tugma menyusi
+//   menu        — tray menyusi va bandlar ro'yxati (bitta)
+//   panel       — personaj ustida o'ng tugma paneli (menu ro'yxatidan)
 //   updater     — avtomatik yangilanish
 //   ipc         — renderer bilan aloqa
 
@@ -49,6 +50,7 @@ if (!app.requestSingleInstanceLock()) {
     settings.save();
 
     ipc.register();
+    require('./src/main/panel').register();
     const w = win.create();
     w.webContents.once('did-finish-load', () => reminders.start());
     native.init();

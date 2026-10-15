@@ -33,8 +33,15 @@ function setAutoStart(on) {
 }
 
 // ---- Menyu ----
+// Paneldagi ikonkalar (almashtirgichlar uchun)
+const CHECK_PANEL = {
+  'Oʻzi harakat qilsin': ['🚶', 'Oʻzi yursin'], 'Oynalar ustiga chiqsin': ['🪟', 'Oynalarga chiqsin'],
+  'Jim rejim (faqat eslatmalar)': ['🔕', 'Jim rejim'], 'Windows bilan birga ishga tushsin': ['🚀', 'Windows bilan ochilsin'],
+};
+
 function check(label, checked, onChange, enabled = true) {
-  return { label, type: 'checkbox', checked, enabled, click: (item) => onChange(item.checked) };
+  const [panelIcon, panelLabel] = CHECK_PANEL[label] || [];
+  return { label, type: 'checkbox', checked, enabled, panelIcon, panelLabel, click: (item) => onChange(item.checked) };
 }
 
 function radios(entries, isChecked, onPick) {
@@ -56,24 +63,30 @@ function characterMenu() {
   ];
 }
 
+// Bitta ro'yxat: tray menyusi ham, o'ng tugma paneli ham (panel.js) shundan quriladi.
+// panelIcon / panelKind — faqat panel uchun (Windows menyusi ularni e'tiborsiz qoldiradi).
 function template() {
   const s = ctx.settings;
   const sleeping = ctx.state === 'sleep';
   return [
-    ...updater.menuItems(),
-    { label: 'Gapir', enabled: !sleeping && !ctx.userHidden, click: () => C.send('say', 'random') },
+    ...updater.menuItems().map((i) => (i.type === 'separator' ? i : { ...i, panelKind: 'banner' })),
+    { label: 'Gapir', panelIcon: '💬', panelKind: 'tile', enabled: !sleeping && !ctx.userHidden, click: () => C.send('say', 'random') },
     sleeping
-      ? { label: "Uygʻot", click: () => activity.wakeUp('click') }
-      : { label: 'Uxlat', click: () => activity.goToSleep(true) },
-    ...shortcuts.menuItems(),
+      ? { label: "Uygʻot", panelIcon: '☀️', panelKind: 'tile', click: () => activity.wakeUp('click') }
+      : { label: 'Uxlat', panelIcon: '😴', panelKind: 'tile', click: () => activity.goToSleep(true) },
+    ...shortcuts.menuItems().map((i) => (i.enabled === false ? { ...i, panelKind: 'note' }
+      : { ...i, panelIcon: '🙈', panelKind: 'tile' })),
     { type: 'separator' },
-    { label: 'Personaj', submenu: characterMenu() },
+    { label: 'Personaj', panelIcon: '🧸', submenu: characterMenu() },
     ...(s.character === 'chibi-girl' ? [{
       label: 'Kayfiyat',
+      panelIcon: '💭',
       submenu: radios(Object.entries(persona.LABELS), (id) => persona.current().id === id, persona.set),
     }] : []),
     {
       label: 'Rang',
+      panelIcon: '🎨',
+      panelHide: s.character === 'custom' || s.character === 'chibi-girl',   // panelda — kerak bo'lmasa ko'rinmaydi
       enabled: s.character !== 'custom' && s.character !== 'chibi-girl',
       submenu: radios(Object.entries(appearance.COLORS), (k) => s.color === k, appearance.setColor),
     },
@@ -96,10 +109,13 @@ function template() {
     }),
     {
       label: "Oʻlcham",
+      panelIcon: '📏',
       submenu: radios(Object.entries(SIZE_LABELS), (k) => s.size === k, win.setSize),
     },
     {
       label: 'Dam olish eslatmasi',
+      panelLabel: 'Tanaffus',
+      panelIcon: '☕',
       submenu: radios(
         BREAK_OPTIONS.map((m) => [m, m ? `Har ${m} daqiqada` : "Oʻchiq"]),
         (m) => s.breakMinutes === m,
@@ -110,13 +126,14 @@ function template() {
         },
       ),
     },
-    { label: `Eslatmalar (${require('./reminders').pendingCount()})...`, click: () => require('./reminders').open() },
+    { label: `Eslatmalar (${require('./reminders').pendingCount()})...`, panelLabel: `Eslatmalar (${require('./reminders').pendingCount()})`,
+      panelIcon: '⏰', click: () => require('./reminders').open() },
     // dasturlash rejimida ma'nosi yo'q
     check('Windows bilan birga ishga tushsin', getAutoStart(), setAutoStart, app.isPackaged),
     { type: 'separator' },
-    { label: `Versiya ${app.getVersion()}`, enabled: false },
-    updater.checkItem(),
-    { label: 'Chiqish', click: () => app.quit() },
+    { label: `Versiya ${app.getVersion()}`, enabled: false, panelKind: 'version' },
+    { ...updater.checkItem(), panelIcon: '🔄' },
+    { label: 'Chiqish', panelIcon: '⏻', panelKind: 'danger', click: () => app.quit() },
   ];
 }
 
@@ -125,8 +142,9 @@ function refreshTray() {
   ctx.tray.setContextMenu(Menu.buildFromTemplate(template()));
 }
 
+// Personaj ustida o'ng tugma — o'z paneli (tray'da esa Windows menyusi)
 function popup() {
-  if (C.alive()) Menu.buildFromTemplate(template()).popup({ window: ctx.win });
+  if (C.alive()) require('./panel').show();
 }
 
 function createTray() {
@@ -142,4 +160,4 @@ function createTray() {
   refreshTray();
 }
 
-Object.assign(module.exports, { createTray, refreshTray, popup });
+Object.assign(module.exports, { createTray, refreshTray, popup, template });
