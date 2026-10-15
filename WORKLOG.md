@@ -3,6 +3,11 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-15 · Claude · Ko'kcha 1.7.0 chiqarildi
+- Claude review: X2 (c4a48c9), X3 (8205ff0, 4d09954), climb (f946699), ifodalar barcha pozalarda (71d24ad) — tasdiqlandi. 28 poza×ifoda holati va eslatma pufakchasi Electron'da suratga olinib ko'rildi, konsol xatosi yo'q.
+- Takliflar (keyingi versiya): personaj yashirin bo'lsa eslatma uchun Windows bildirishnomasi; eski 4 ta SVG personajga jahl va yumshoq burilish (Claude, `claude/c1-2.5d` asosida).
+- Commit 710383a, teg v1.7.0, release chiqdi, Shaxzod kompyuteriga o'rnatildi.
+
 ## 2026-10-15 · Codex · Qizcha ifodalari barcha asosiy pozalarda
 - Fayllar: src/renderer/chibi/{chibi.js,frames/manifest.json,frames/face-quarter-*.png,frames/face-profile-*.png,expression-prompts.json,README.md}; docs/PROJECT.md; CHANGELOG.md. Eski characters.js/style.css va claude/c1-2.5d o'zgarmadi.
 - Stand, quarter, profile, sit, walk-a, walk-b, ledge uchun happy/angry/sad/surprised/talking/sleeping. ¾ va yon holatlarda ifoda oldga burilishni majburlamaydi. Chapga qaraganda yuz/tana birga akslanadi; yurish fazasi saqlanadi. Neytral yuz bilan o'sha pozalarda ko'z pirpiraydi.
