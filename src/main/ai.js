@@ -26,7 +26,8 @@ const hasKey = () => Boolean(readKey());
 
 function setKey(input) {
   const key = typeof input === 'string' ? input.trim() : '';
-  if (!/^[\w-]{20,200}$/.test(key)) return { error: 'Kalit notoʻgʻri koʻrinyapti. AI Studio’dan nusxa olib qayta qoʻying.' };
+  // Eski "AIza…" va yangi "AQ.…" formatlari (nuqta bor)
+  if (!/^[\w.-]{20,300}$/.test(key)) return { error: 'Kalit notoʻgʻri koʻrinyapti. AI Studio’dan nusxa olib qayta qoʻying.' };
   if (!safeStorage.isEncryptionAvailable()) return { error: 'Bu kompyuterda kalitni xavfsiz saqlab boʻlmaydi.' };
   const before = C.ctx.settings.aiKey;
   C.ctx.settings.aiKey = safeStorage.encryptString(key).toString('base64');
