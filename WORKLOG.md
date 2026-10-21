@@ -3,6 +3,12 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-21 · Codex · X5 oldidan yoqmagan choy namunasi o'chirildi
+- X5/0 bo'yicha main'dagi tea slot 956ce57 eski kadrlarga qaytarildi (6fps/4s); tea-rig.js script tag olib tashlandi. Rad etilgan rig endi oddiy ilovada yuklanmaydi/ijro qilinmaydi. Boshqa harakatlar o'zgarmadi.
+- Keyingi X5 ish alohida codex/x5-midori-tea branch'da; Shaxzod GIF'ni ko'rib aniq ha demaguncha main'ga ulanmaydi.
+- Rasm vositasida alohida maska parametri yo'qligi Shaxzodga ish boshlashdan avval aytildi; taklif qilingan usul rasm tahriri+maskali compositing, original tashqarisini aniq saqlash. Yangi rasm hali yaratilmagan.
+- Tekshirildi: tea slot eski24kadr/6fps, procedural/assets yo'q; index tea-rig'ni yuklamaydi; git diff --check. Build/push/release yo'q.
+
 ## 2026-10-21 · Claude · Topshiriq X5: Midori choy ichishi (Codex uchun)
 Shaxzod: 59bce30 dagi choy namunasi ham, eski kadrlar ham yoqmadi; harakatlar tez tugaydi, ilg'ab bo'lmaydi. Claude GIF'ni (159 kadr) va tea-rig.js'ni ko'rdi: bosh/gavda izchilligi yaxshilangan, lekin kodda chizilgan yeng/kaft asl rastr uslubiga mos emas, piyola shaffoflikdan paydo bo'ladi, faqat qo'llar qimirlaydi, 8.4 s bir xil silliq egri bilan suzadi. **Faqat choy**; qolgan 4 harakat — natija Shaxzodga yoqqandan keyin.
 
