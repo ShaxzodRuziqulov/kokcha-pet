@@ -3,6 +3,13 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-21 · Codex · 1.11.0 AI suhbat review
+- Ko'rib chiqildi: 0b5a7ff..2f8fb25 (AI suhbat va ulanishlari). Mahsulot kodi o'zgartirilmadi.
+- P2: ai.js reset()/clearKey() davom etayotgan ask() ni bekor qilmaydi. So'rov vaqtida suhbat yoki kalit o'chirilsa, kechikkan javob history'ni qayta to'ldiradi va chat-say yuboradi. Eski so'rov natijasini bekor qilish uchun generation token va/yoki abort kerak.
+- P2: request() timeout'ni net.fetch qaytishi bilan tozalaydi; res.json()/res.text() hali tugamagan bo'lishi mumkin. Tana kelishi to'xtasa busy uzoq vaqt true qoladi. Timeout response body o'qish yakunigacha ishlashi kerak.
+- Tekshirildi: barcha src JS va main.js node --check, git diff --check; Node VM ichida soxta Electron/net bilan reset va clearKey race hamda body o'qish paytida timeout allaqachon tozalangani mustaqil takrorlandi. Haqiqiy Gemini kaliti ishlatilmadi; UI/npm start bu review'da sinalmadi.
+- Qolgan ish: yuqoridagi ikki P2. Build/push/release bajarilmadi. Commit: ushbu review qaydi.
+
 ## 2026-10-21 · Claude · Ko'kcha 1.11.0 chiqarildi
 - Shaxzod "ha, 1.11.0 ni chiqar". Tarkibi: AI suhbat (Gemini, 0f9a1f1) va yangi "AQ.…" kalit formati (d2439e2).
 - asar tekshirildi: versiya 1.11.0, ai.js (kalit regex, model), chat.*, chat-preload, `chat-say`, menyu bandi. Setup 90.7 MB.
