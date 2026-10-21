@@ -84,3 +84,13 @@ CPU: haqiqiy `npm start`, har variantga yangi Temp profil; qizcha old/neytral id
 | B, idle12fps + uzluksiz blink | 7.272% / 7.305% | 2.276% / 2.320% | 3.525% / 3.615% |
 
 Formula: har process uchun `100 * delta(cumulativeCPUUsage seconds) / elapsed seconds`, jami Browser/Tab/GPU/Utility yig'indisi. 100% bitta mantiqiy yadro; bu mashinada16ta, Task Manager butun CPU foizi uchun16ga bo'linadi. GPU ustuni GPU process'ining CPU vaqti, GPU apparat utilization'i emas. Jami o'rtacha10.565 → 7.289% (~31% pasayish); bu ikki lokal namuna, universal kafolat yoki X4/60s×3 emas. App working set yig'indisi oldin450.6/452.4MiB, keyin455.2/440.1MiB; shared xotira takror sanalishi mumkin, RAM kamayishi isbotlanmadi. Renderer/GPU alohida qayd etildi; sinovda jismoniy sudrash/fullscreen/OS sleep-resume bajarilmadi.
+
+## Choy ichish: 2026-10-21 sinov namunasi
+
+Shaxzod eski beshta mashg'ulotning boshlanish/tugash va kadrlar nomuvofiqligini qayta ishlashni so'radi. Avval choy ichish uchun baholanadigan namuna tayyorlandi; qolgan to'rttasi qayta chizilmagan.
+
+- tea-rig.js: original stand.png bosh, gavda va oyoqlar; piyola tea-04.webp konturidan. Yeng/kaftlar Canvas'da qayta chiziladi, qo'llar ikki bo'g'im orqali uzluksiz harakatlanadi. Bu sleeve stili original bitmapga aynan teng emas; Shaxzod bahosi kerak. Yangi AI rasm yoki boshqa personaj uslubi kiritilmagan.
+- tea slot: procedural tea, 20fps, 8.4s; bitta stand referensi va lazy assets:['tea-04']. Avvalgi 22 choy WebP Git'da saqlanadi, hozir ijro qilinmaydi. Runtime pixel skaneri yoki kadrlar bo'yicha decode yo'q; bitta rig obyektida ikki canvas.
+- Bosqichlar: piyola 0–0.4s paydo bo'ladi, 0.4–1.8s tutish, 2–3.3s ko'tarish, 3.3–5s ichish (3.75–4.55s mavjud ko'z patch'i), 5–6.5s tushirish, 6.8–8s qo'llarni qaytarish, 7.9–8.4s piyola yo'qolishi. Prop paydo/yo'qolishi fade; bosh/tana orasida crossfade yo'q.
+- Barcha mashg'ulotlar oldidan yon→¾→old burilish kutiladi; mashg'ulot davomida facing=0. Oxirida kursor tomonga odatiy 95ms bosqichlarda qaytadi. Sudrash/uyqu/boshqa poza/yashirish tayyorgarlikni yoki faol harakatni to'xtatadi.
+- Band heartbeat oldingi ishda kiritilgan; 8.4s harakatni ham qoplaydi. To'liq ish stoli/sichqoncha hissi va badiiy qabul Shaxzod bahosida; bu namuna barcha beshta harakat tayyor degani emas.

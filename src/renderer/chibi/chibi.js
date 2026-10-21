@@ -12,7 +12,7 @@
   // Biror boshda ifoda bo'lmasa — eng yaqini
   const FACE_FALLBACK = { embarrassed: 'happy', smug: 'happy', love: 'happy', excited: 'happy' };
   // Bir martalik kadrli harakat (wave, read, tea, water, stretch): { name, resolve }
-  let activity = null;
+  let activity = null, preparingActivity = false;
   let lookTarget = 0, facing = 0, previous = '', previousTime = 0;
   let turnTimer = null, blinkTimer = null, blinkEnd = null;
   let blinking = false;
@@ -72,6 +72,7 @@
 
   // Har safar bitta ko'rinishdan o'tiladi: chap yon → chap ¾ → old → o'ng ¾ → o'ng yon.
   function targetFacing() {
+    if (activity || preparingActivity) return 0;
     if (latest.state === 'walk' || ['jump', 'ledge'].includes(latest.pose)) return latest.dir < 0 ? -1 : 1;
     if (latest.pose !== 'stand') return 0;
     return lookTarget;
@@ -234,9 +235,16 @@
   async function playActivity(name) {
     await ready;
     const slot = slots[name];
-    if (!slot || disabledSlots.has(name) || activity || !active) return false;
+    if (!slot || disabledSlots.has(name) || activity || preparingActivity || !active) return false;
     if (!(latest.state === 'idle' && latest.pose === 'stand' && !latest.dragging)) return false;
-    try { await cache.prepare([...new Set(slot.frames.filter(id => frames[id].sequenceOnly))]); }
+    try {
+      const ids = [...slot.frames, ...(slot.assets || [])].filter(id => frames[id]?.sequenceOnly);
+      await cache.prepare([...new Set(ids)]);
+      if (slot.procedural === 'tea' && !rigs.tea) {
+        if (!window.ChibiTeaRig) throw new Error('Choy rig yuklanmadi');
+        rigs.tea = new window.ChibiTeaRig(frames.stand.image, cache.get('tea-04'), blinkPatches.stand);
+      }
+    }
     catch (error) {
       disabledSlots.add(name);
       console.warn(`"${name}" harakati yuklanmadi, oʻtkazib yuborildi:`, error);

@@ -3,6 +3,16 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-21 · Codex · Choy ichish: bitta namuna va burilish tuzatishi
+- Shaxzod: beshta mashg'ulot bosh/oxir/kadrlar nomuvofiqligi; kelishilgan reja — avval choy ichish namunasi, Shaxzod bahosidan keyin qolgan to'rtta. Hozir faqat birinchi namuna tayyor; barcha beshtasi badiiy qayta ishlangan emas.
+- Fayllar: yangi tea-rig.js; chibi.js, manifest.json, index.html, chibi/README.md, CHANGELOG. Original bosh/gavda/oyoq stand.png'dan, piyola tea-04'dan; qo'l/yenglar Canvas'da chizilgan uzluksiz IK, ko'z patch'i mavjud blink'dan. Eski butun tanali shaffof aralash kadrlar choy uchun ishlatilmaydi. 20fps,8.4s. Yeng stili original rasterga aynan teng emas; boshlanish/oxir canonical stand va yangi yenglar mosligi badiiy bahoda ochiq. Bu yakuniy sifat tasdig'i emas.
+- Cutout mesh prototipi yeng kesiklari sabab rad etildi, tashlandi. Yangi AI asset yaratilmagan. Piyolaning paydo/yo'qolishi fade, bosh/gavda crossfade yo'q. Faqat tea-04 lazy decode (22 choy WebP yuklanmaydi), 2 canvas bir marta tayyorlanadi.
+- Claude chibi.js o'zgartirildi: yon ko'rinishdan mashg'ulotga sakrash topilgani sabab barcha harakat oldidan 95ms bosqichli burilish tugashi kutiladi; harakatda facing0, oxirida kursor tomonga tabiiy burilish. Boshqa 4 slot asset/timing o'zgarmadi. Band heartbeat oldingi tuzatishdan 8.4s ni qoplaydi.
+- Tekshirildi: haqiqiy Electron37 production sequence/chibi/asset bilan tea8417.7ms,true; qayta boshlash+drag false va yashirish false; 168 jonli canvas kadr. 16 faza tasviri ko'z bilan ko'rildi. Keyingi 5slot regressiya: wave2687/read4020/tea8405/water4029/stretch4022ms, barchasi true va o'rtada facing0; yashirish cancel true.
+- To'liq main/preload/renderer alohida Temp profil orqali: haqiqiy activity IPC→runActivity→tea slot, o'rtada animated=true/facing0, tugaganda profile/facing2 va animated=false; band muddati yakunda o'tgan. Harness app.getAppPath tuzatilgach Midori bilan qayta o'tdi; avvalgi Ko'kcha fallback test dalili sifatida olinmadi. node --check/git diff --check o'tdi. Jismoniy sichqoncha/fullscreen/OS sleep hamda CPU benchmark qilinmadi.
+- Preview: Codex visualizations/2026/10/21/01a15ced-b7c7-75b3-b878-1fbc4995d032/tea-comparison.gif (eski4s vs yangi8.4s), tea-rig-preview.png va tea-original-frames.png. Sinov skript/profil/kadr JSONlar Temp'dan tozalandi. User ishlatayotgan EXE almashtirilmadi; build/push/release/versiya yo'q.
+- Qolgan ish: Shaxzod namuna ko'rinishini baholaydi; keyin qolgan4ta animatsiya shu sifat mezoni bilan qayta ishlanadi. Commit: ushbu namuna.
+
 ## 2026-10-21 · Codex · Midori mashg'ulotlari tezligi tuzatildi
 - Shaxzod beshta harakat juda tezligini aytdi va sinab tuzatishni so'radi. Fayllar: chibi/frames/manifest.json, renderer.js, CHANGELOG.md. Oldingi o'z asset timingim 12fps→6fps: wave 1.333→2.667s, read/tea/water/stretch 2→4s. Kadrlar va tartibi o'zgarmadi.
 - Claude renderer kodidagi 2800ms band muddati sekinroq animatsiyaga yetmasligi sabab o'rniga 750ms oralig'ida 1500ms band xabari yuboriladi; birinchi decode paytida ham himoya, tugash/bekor qilishda interval finally bilan tozalanadi. Main IPC 5s cheklovi o'zgarmadi.

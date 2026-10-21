@@ -1025,7 +1025,7 @@
       "loop": true,
       "next": null,
       "procedural": "walk",
-      "duration": 1.0
+      "duration": 1
     },
     "climb": {
       "frames": [
@@ -1092,34 +1092,16 @@
     },
     "tea": {
       "frames": [
-        "activity-stand",
-        "tea-02",
-        "tea-03",
-        "tea-04",
-        "tea-05",
-        "tea-06",
-        "tea-07",
-        "tea-08",
-        "tea-09",
-        "tea-10",
-        "tea-11",
-        "tea-12",
-        "tea-13",
-        "tea-14",
-        "tea-15",
-        "tea-16",
-        "tea-17",
-        "tea-18",
-        "tea-19",
-        "tea-20",
-        "tea-21",
-        "tea-22",
-        "tea-23",
-        "activity-stand"
+        "stand"
       ],
-      "fps": 6,
+      "fps": 20,
       "loop": false,
-      "next": null
+      "next": null,
+      "procedural": "tea",
+      "duration": 8.4,
+      "assets": [
+        "tea-04"
+      ]
     },
     "water": {
       "frames": [

@@ -1,6 +1,8 @@
 # O'zgarishlar
 
 ## Keyingi versiya
+- Choy ichish uchun 8.4 soniyalik yangi harakat namunasi: barqaror bosh/gavda va uzluksiz qo'l/piyola harakati.
+- Mashg'ulot oldidan old ko'rinishga buriladi, oxirida kursor tomonga bosqichma-bosqich qaytadi.
 - Midori'ning beshta maxsus harakati ikki baravar sekinlashtirildi: qo'l silkitish 2.67 s, kitob/choy/gul/cho'zilish 4 s; mashg'ulot tugaguncha o'zi yurib ketmaydi.
 - AI suhbat yoki kalit o'chirilganda davom etayotgan so'rov bekor qilinadi; eski javob tarixga va bulutchaga qaytmaydi.
 - AI javobini kutish chegarasi javob to'liq o'qilguncha ishlaydi.
