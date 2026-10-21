@@ -8,7 +8,7 @@ Qoidalar: [AGENTS.md](AGENTS.md).
 - Fayllar: yangi `src/main/ai.js`, `src/chat-preload.js`, `src/renderer/chat.{html,js,css}`; `main.js`, `settings.js` (aiKey), `menu.js` (Suhbat (AI)...), `preload.js` + `renderer.js` (`chat-say` kanali), docs/PROJECT.md, CHANGELOG.
 - Commit: 0f9a1f1
 - Tekshirildi (Electron, Temp profil, harness): menyu bandi, oyna ochiladi, window.chat faqat 6 funksiya, require yo'q; noto'g'ri formatdagi kalit rad etiladi; kalit settings.json'da shifrlangan (ochiq matn yo'q); soxta kalit bilan haqiqiy Google so'rovi → 400 → o'zbekcha xato; `chat-say` personaj bulutchasida chiqdi; "Kalitni o'chirish" kalit sahifasiga qaytaradi. Skrinshotlar ko'rildi. Temp o'chirildi.
-- Tekshirilmadi: haqiqiy kalit bilan javob sifati va model nomi (`gemini-3.5-flash-lite`, 404 bo'lsa `gemini-flash-latest`) — Shaxzod kalit kiritib sinaydi. 429 (limit) matni faqat kodda.
+- Shaxzod haqiqiy kalit bilan sinadi (npm start): javoblar o'zbekcha, uyatchan fe'lga mos ("E-e…"), bulutchada ham chiqdi. Yangi "AQ.…" formatdagi kalit avval rad etilgan — tuzatildi (d2439e2). Kichik: bir javobda "sen" o'rniga "siz" ishlatildi. 429 (limit) matni faqat kodda.
 - Keyingi agentga: `chat-say` — main'dan matn keladigan yagona kanal (PROJECT.md'da yozilgan). Codex review qilmagan.
 
 ## 2026-10-15 · Claude · Ko'kcha 1.10.1 chiqarildi
