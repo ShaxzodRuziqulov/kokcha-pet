@@ -3,6 +3,11 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-21 · Claude · Ko'kcha 1.11.0 chiqarildi
+- Shaxzod "ha, 1.11.0 ni chiqar". Tarkibi: AI suhbat (Gemini, 0f9a1f1) va yangi "AQ.…" kalit formati (d2439e2).
+- asar tekshirildi: versiya 1.11.0, ai.js (kalit regex, model), chat.*, chat-preload, `chat-say`, menyu bandi. Setup 90.7 MB.
+- `/S` bilan o'rnatildi (kokcha-desktop-pet\Kokcha.exe 1.11.0) va ishga tushirildi. Commit aa4523b, teg v1.11.0, push, release, latest.yml 1.11.0. dist o'chirildi. Codex review yo'q (Shaxzod qarori).
+
 ## 2026-10-21 · Claude · AI suhbat (Gemini)
 - Shaxzod: personajni AI'ga ulash; Pro obunalar API'ni qoplamaydi, shuning uchun bepul Gemini kaliti. "Codex shart emas, o'zing qil".
 - Fayllar: yangi `src/main/ai.js`, `src/chat-preload.js`, `src/renderer/chat.{html,js,css}`; `main.js`, `settings.js` (aiKey), `menu.js` (Suhbat (AI)...), `preload.js` + `renderer.js` (`chat-say` kanali), docs/PROJECT.md, CHANGELOG.
