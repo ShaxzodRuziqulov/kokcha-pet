@@ -23,7 +23,7 @@ OLD_LEFT = [(87,210),(89,237),(82,264),(80,294),(49,301),(11,301),(9,265),(29,23
 HEAD = [(0,0),(239,0),(239,212),(157,212),(150,190),(143,184),(96,184),(89,190),(81,212),(0,212)]
 LEFT = {
     'K2': [(84,199),(110,206),(112,232),(96,256),(81,271),(58,274),(46,263),(48,237),(65,216)],
-    'K3': [(78,195),(84,173),(105,171),(112,182),(111,208),(98,234),(79,250),(58,249),(46,235),(49,210),(64,199)],
+    'K3': [(77,193),(82,170),(106,169),(115,182),(114,210),(102,235),(97,248),(82,257),(58,256),(44,246),(41,232),(46,207),(62,195)],
     'K5': [(86,214),(110,228),(113,252),(99,274),(73,278),(54,268),(55,246),(68,229)],
 }
 CUPS = {
@@ -63,7 +63,50 @@ def steam(raw, double=False):
     opacity = np.clip((rgb.min(axis=2)-167)/70, 0, 1) * region * neutral * (arr[:,:,3]/255)
     result = np.full_like(arr, 255)
     result[:,:,3] = np.round(opacity*205).astype(np.uint8)
-    return Image.fromarray(result)
+    # Re-anchor the existing AI-painted curl at the cup's right rim. Stretch
+    # its outward drift so it clears the eye rather than starting on the hair.
+    ys, xs = np.where(result[:,:,3] > 32)
+    if not len(ys):
+        raise RuntimeError('Steam extraction is empty')
+    bottom = ys.max()
+    anchor_x = float(xs[ys >= bottom-2].mean())
+    sx, sy = 1.7, .55
+    return Image.fromarray(result).transform(
+        SIZE, Image.Transform.AFFINE,
+        (1/sx, 0, anchor_x-136/sx, 0, 1/sy, bottom-168/sy),
+        resample=Image.Resampling.BICUBIC, fillcolor=(0,0,0,0))
+
+
+def retain_original_skirt(edited, original):
+    """Keep the complete original skirt contour, not a polygon cut through it.
+
+    The folded sipping sleeves end above this band. Below them, remove the
+    old hanging sleeves but copy original skirt runs with their antialiasing.
+    This mask contains only existing pixels; it paints no new contour.
+    """
+    source = np.asarray(original)
+    restored = np.zeros_like(source)
+    for y in range(245, 305):
+        dark = (source[y, :, :3].max(axis=1) < 115) & (source[y, :, 3] > 0)
+        if not dark[120]:
+            continue
+        left = right = 120
+        while left > 0 and dark[left-1]:
+            left -= 1
+        while right < SIZE[0]-1 and dark[right+1]:
+            right += 1
+        # In the standing reference, hanging cuff outlines touch the skirt
+        # in these rows. Keep only the skirt between its adjacent contours.
+        if 282 <= y <= 288:
+            left = max(left, round(70 - (y-281)*.5))
+            right = min(right, round(164 + (y-281)*5/8))
+        restored[y, left:right+1] = source[y, left:right+1]
+    restored[305:] = source[305:]
+    yy = np.indices(source.shape[:2])[0]
+    weight = np.clip((yy-252)/8, 0, 1)
+    weight = weight*weight*(3-2*weight)
+    return Image.composite(Image.fromarray(restored), edited,
+                           Image.fromarray(np.round(weight*255).astype('uint8')))
 
 
 def main():
@@ -73,25 +116,30 @@ def main():
     original = Image.open(FRAMES/'stand.png').convert('RGBA')
     source = {k: Image.open(args.sources/v).convert('RGBA').resize(SIZE, Image.Resampling.LANCZOS)
               for k,v in RAW.items()}
+    source['K3'] = retain_original_skirt(source['K3'], original)
     head_mask = mask([HEAD], 0)
+    head_support = Image.fromarray(np.where(
+        (np.asarray(head_mask) > 0) & (np.asarray(original)[:,:,3] > 0), 255, 0).astype('uint8'))
     keys = {'K1': original}
     report = {}
     for name in ['side', 'K2', 'K3', 'K5']:
         regions = [OLD_LEFT, mirror(OLD_LEFT)]
         regions += SIDE if name == 'side' else [LEFT[name], mirror(LEFT[name]), CUPS[name]]
-        allowed = mask(regions)
-        # Original skirt is retained except where a new cup/hand actually covers it.
-        skirt = mask([[(92,249),(145,249),(157,270),(171,294),(150,305),(85,305),(66,294),(79,268)]], 0)
-        occlusion = mask(SIDE if name == 'side' else [CUPS[name]], 0)
-        keep_skirt = (np.asarray(skirt)/255)*(1-np.asarray(occlusion)/255)
-        allowed = Image.fromarray(np.round(np.asarray(allowed)*(1-keep_skirt)).astype('uint8'))
+        allowed = mask(regions, 1.5 if name == 'K3' else .7)
+        # Sip uses the original raster contour above, with a soft interior band.
+        # Do not clip its sleeve outlines with a hard skirt polygon.
+        if name != 'K3':
+            skirt = mask([[(92,249),(145,249),(157,270),(171,294),(150,305),(85,305),(66,294),(79,268)]], 0)
+            occlusion = mask(SIDE if name == 'side' else [CUPS[name]], 0)
+            keep_skirt = (np.asarray(skirt)/255)*(1-np.asarray(occlusion)/255)
+            allowed = Image.fromarray(np.round(np.asarray(allowed)*(1-keep_skirt)).astype('uint8'))
         # Restore every head/hair pixel except actual cup/hand occlusion of chin.
         if name == 'K3':
             front = mask([CUPS[name], [(80,173),(108,173),(112,204),(80,205)],
                           [(134,173),(160,173),(160,205),(133,205)]])
         else:
             front = Image.new('L', SIZE)
-        protected = np.asarray(head_mask).astype(float)/255
+        protected = np.asarray(head_support if name == 'K3' else head_mask).astype(float)/255
         exposed = np.asarray(front).astype(float)/255
         allowed = Image.fromarray(np.round(np.asarray(allowed)*(1-protected*(1-exposed))).astype('uint8'))
         # Feather occurs only at the shoulder seam within each single pose.
@@ -136,6 +184,10 @@ def main():
                   [(134,173),(160,173),(160,206),(133,206)]], .5)
     front.save(HERE/'masks'/'sip-front.png')
     mask([HEAD], 0).save(HERE/'masks'/'head.png')
+    head_support.save(HERE/'masks'/'head-support.png')
+    support_rgba = Image.new('RGBA', SIZE, (255,255,255,0))
+    support_rgba.putalpha(head_support)
+    support_rgba.save(HERE/'masks'/'head-support-alpha.png')
     for name in ['head','sip-front']:
         alpha=Image.open(HERE/'masks'/f'{name}.png').convert('L')
         rgba=Image.new('RGBA',SIZE,(255,255,255,0));rgba.putalpha(alpha)

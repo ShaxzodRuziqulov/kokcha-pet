@@ -3,6 +3,17 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-21 · Codex · X5 ikkala P1 tuzatildi — 4x haqiqiy render bilan
+- Shaxzod f034b81 Claude review bo'yicha faqat codex/x5-midori-tea'da tuzatishni so'radi. Main integratsiya, versiya, build va push yo'q. Faol production index/manifest/main fayllari o'zgarmadi.
+- P1 etak: player.js'da y300 yuqori/pastki body crop'lari olib tashlandi. Bitta uzluksiz body y398 tagcharm tayanchiga nisbatan masshtablanadi; neckrise0–1.5px, oyoqtagi barqaror. Shu sabab tana kesimi/shoulder siljishidan ochiladigan gorizontal tirqish yo'q.
+- P1 maska: K3 maskasi tabiiy yeng konturidan tashqariga kengaytirildi,1.5px feather; K3/K4da qattiq skirt ko'pburchagi olib tashlandi. Original rastr yubka qatorlari saqlanadi, eski osilgan yeng konturi yubkaga tegib qolgan282..288qatorlar ajratiladi;252–260kofta ichida yumshoq tutashuv. Boshni o'chirish haqiqiy bosh/sochpixel support'i bilan; keng polygon bo'shlig'idagi yangi yeng kesilmaydi. Noddastochok ochilmasin deb originalyeng214..221tasmasi soch ostiga overlap bilan cho'ziladi, yangi chiziq/anatomiya kodda chizilmaydi. K3/K4body bug'sizbazadan, bug'double-render yo'q.
+- P2 ham: K4ga bog'liq1pxyelka sakrashi yo'q, faqat uzluksiz nafas; steamkey0.32→0.6s. Mavjud AI bug'ining pastki uchi piyolaningo'ngcheti136,168ga ko'chirildi, egri tashqariga yo'naltirildi; yangi AI generatsiya qilinmadi.
+- Tekshiruv rasmlarga emas PLAYER.JS chiqishiga: Electron37 ratio4 canvas720,6.5s bo'ylab131faza; K1/side/K2/K3raise/sipA(K3)/sipB(K4)/K5/end alohida4xPNG va tirsak/etakROI ko'z bilan tekshirildi. Barcha131frame'da etakichkiROI x326..393/y539..548 pastalpha<245 soni0,min250; oldin engyomon136piksel,min0. Baselinealpha>24 barchasida716..716. Har ikkala sip varianti toza.
+- Alohida native ratio1 medium180 va ratio2canvas360 player renderlari olindi,4xPNG'ni shunchaki kichraytirish emas. Yakuniy playback6538ms,true; cancel/hiddenCancel/heartbeatStoppedtrue; konsolerror0. QA getImageData performance warning va Electronlistener deprecation mahsulot xatosi emas. Fizik sichqoncha/OS sleep/CPUbenchmark qilinmadi.
+- Assetmask auditi barcha6keyda tashqarifarq0; K1/side/K2/K5 PNG'lar o'zgarmadi. K3/K4feather241/248turlioraliqalpha; source stand yoki mavjud yuzqatlamlari tahrirlanmadi.
+- Yangi dalillar: Codex visualizations/2026/10/21/01a15ced-b7c7-75b3-b878-1fbc4995d032/x5-tea-p1/{comparison-medium.gif,comparison-2x.gif,elbow-skirt-before-after-4x.png,all-key-crops-4x.png,elbow-skirt-4x.gif,render-validation.json}; qolganlari alohida {K1,side,K2,K3,sipA,sipB,K5,end}-render-4x.png. Comparison yonida1.11.0eski2s. Eski dalillar saqlandi.
+- Temp sinov skript/profil/captureJSONlar tozalandi; node --check/git diff --check o'tdi. Qolgan ish: Shaxzod yangi GIF'ga aniq HA demaguncha main'ga ulash YO'Q. ReviewP3(toolssrc'dan chiqarish) integratsiya oldidan alohida qoladi. Commit: ushbu P1 tuzatishlari.
+
 ## 2026-10-21 · Claude · X5 choy review (c952c46)
 - Ko'rildi: key-poses-2x, K2/K3 2x, comparison-2x.gif (77 kadr, 6.55 s), maskalar, player.js; player Electron'da 4× chizildi (kirish/ho'plash A-B/mamnun).
 - Yo'nalish to'g'ri: qo'l, yeng, piyola asl rastr uslubida; crossfade yo'q; piyola havodan chiqmaydi; vaqt jadvalga mos (ho'plash 2.4 s, jami 6.5 s); asset'larda maska tashqarisi 0 farq. Codex rasm vositasida maska yo'qligini oldindan aytgan.

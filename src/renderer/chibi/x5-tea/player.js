@@ -49,18 +49,22 @@
     async prepare() {
       this.images = {};
       await Promise.all(KEYS.map(async key => { this.images[key] = await load(`keys/${key}.png`); }));
-      const [headMask, frontMask, sleep, happy, steam3, steam4] = await Promise.all([
+      const [headMask, frontMask, sleep, happy, steam3, steam4, headSupport, sipBase] = await Promise.all([
         load('masks/head-alpha.png'), load('masks/sip-front-alpha.png'),
         load('keys/face-sleeping.png'), load('keys/face-happy.png'),
         load('keys/K3-steam.png'), load('keys/K4-steam.png'),
+        load('masks/head-support-alpha.png'), load('keys/sip-without-steam.png'),
       ]);
       const head = masked(this.images.K1, headMask, 'destination-in');
       this.heads = { neutral: head, sleeping: expression(head, sleep), happy: expression(head, happy) };
       this.steam = { K3: steam3, K4: steam4 }; this.layers = {};
       for (const key of KEYS) {
+        const bodyImage = ['K3', 'K4'].includes(key) ? sipBase : this.images[key];
         this.layers[key] = {
-          body: masked(this.images[key], headMask, 'destination-out'),
-          front: ['K3', 'K4'].includes(key) ? masked(this.images[key], frontMask, 'destination-in') : null,
+          // Erase only original head pixels, never empty space around the hair:
+          // a broad head polygon would horizontally chop the new sleeves.
+          body: masked(bodyImage, headSupport, 'destination-out'),
+          front: ['K3', 'K4'].includes(key) ? masked(sipBase, frontMask, 'destination-in') : null,
         };
       }
     }
@@ -68,7 +72,7 @@
       let time = Math.max(0, seconds);
       for (const part of this.parts) {
         if (time < part.seconds) {
-          const key = part.phase === 'sip' && Math.floor(time / .32) % 2 ? 'K4' : part.key;
+          const key = part.phase === 'sip' && Math.floor(time / .6) % 2 ? 'K4' : part.key;
           return { ...part, key, elapsed: time };
         }
         time -= part.seconds;
@@ -81,7 +85,8 @@
       const ctx = this.ctx, layer = this.layers[key];
       const sipping = part.phase === 'sip';
       const rise = sipping ? .75 * (1 - Math.cos(part.elapsed * Math.PI * 2 / 1.6)) : 0;
-      const shoulder = key === 'K4' ? 1 : 0;
+      // Steam keys never change body position; breathing stays continuous.
+      const shoulder = 0;
       const tilt = part.tilt === 'in' ? ease(part.elapsed / part.seconds)
         : part.tilt === 'out' ? 1 - ease(part.elapsed / part.seconds) : part.tilt === 'hold' ? 1 : 0;
       ctx.setTransform(this.ratio, 0, 0, this.ratio, 0, 0);
@@ -93,10 +98,16 @@
         return;
       }
       ctx.save(); ctx.translate((SIZE - W * SCALE) / 2, SIZE - H * SCALE); ctx.scale(SCALE, SCALE);
-      // Original feet stay on the original baseline; breathing transforms only existing layers.
-      ctx.drawImage(layer.body, 0, 300, W, 100, 0, 300, W, 100);
-      ctx.save(); ctx.translate(0, 300 - shoulder); ctx.scale(1, 1 + rise / 116); ctx.translate(0, -300);
-      ctx.drawImage(layer.body, 0, 0, W, 300, 0, 0, W, 300); ctx.restore();
+      // One continuous body draw: no cropped seam at the skirt hem.
+      // The original sole edge is the fixed anchor; the neck rises by exactly rise.
+      const sole = 398, neck = 184;
+      ctx.save(); ctx.translate(0, sole); ctx.scale(1, 1 + rise / (sole - neck)); ctx.translate(0, -sole);
+      if (layer.front) {
+        // Original sleeve pixels overlap under the moving hair. Without this
+        // underlap, a nod exposes the old head-erasure edge over each elbow.
+        for (const x of [47, 152]) ctx.drawImage(layer.body, x, 214, 40, 8, x, 204, 40, 18);
+      }
+      ctx.drawImage(layer.body, 0, 0); ctx.restore();
       // Small original collar overlap prevents a transparent seam under a nodding head.
       ctx.drawImage(this.images.K1, 96, 185, 49, 10, 96, 182 - rise, 49, 13);
       ctx.save(); ctx.translate(119.5, 184 - rise); ctx.rotate(tilt * 2.2 * Math.PI / 180);

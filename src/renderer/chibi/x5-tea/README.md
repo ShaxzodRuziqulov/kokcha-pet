@@ -9,9 +9,9 @@ Rad etilgan 59bce30 rig'i main'da `64e86e7` bilan o'chirilgan: tea slot eski kad
 
 Imagegen built-in rasm tahriri ishlatildi. Alohida maska fayli parametri unda **yo'q**; bu cheklov ish boshlanishidan oldin Shaxzodga aytildi. Shuning uchun bu API orqali haqiqiy maskali inpainting emas: rasm vositasida lokal tahrir so'raldi, so'ng `build-assets.py` faqat oldindan belgilangan qo'l/yeng/piyola/bug' maskalarini original ustiga ko'chirdi. Yangi yeng, kaft, piyola yoki bug' kodda chizilmadi. Maska tashqarisidagi RGBA original `stand.png` dan aynan saqlangan. Yuz uchun faqat mavjud face-sleeping/face-happy qatlamlaridan ko'z/og'iz hududi olindi.
 
-`keys/K1.png`, `side.png`, `K2.png`, `K3.png`, `K4.png`, `K5.png`: 239×400, neytral original yuzli asosiy pozalar. `masks/<key>.png` — har pozaning aniq ruxsat etilgan o'zgarish hududi. Oldingi yon qo'llarni olib tashlash uchun ham maska bor; yubka, oyoqlar va boshning ochiq hududi originaldan tiklanadi. Feather faqat bitta pozaning yelka tutashuviga ishlatiladi. Pozalar orasida crossfade, opacity tween yoki IK yo'q.
+`keys/K1.png`, `side.png`, `K2.png`, `K3.png`, `K4.png`, `K5.png`: 239×400, neytral original yuzli asosiy pozalar. `masks/<key>.png` — har pozaning aniq ruxsat etilgan o'zgarish hududi. Oldingi yon qo'llarni olib tashlash uchun ham maska bor; yubka, oyoqlar va boshning ochiq hududi originaldan tiklanadi. K3/K4 qo'l/yeng maskasi 1.5 source px feather bilan kengaytirilgan: tabiiy qora kontur maska ichida qoladi. Yubka qattiq ko'pburchak bilan kesilmaydi; original rastr konturi va 252–260 oralig'idagi yumshoq ichki tutashuv saqlanadi. Pozalar orasida crossfade, opacity tween yoki IK yo'q.
 
-`K4` qo'l/piyolasi aynan K3'dan; faqat rasm vositasi yaratgan boshqa bug' fazasi qo'shilgan. K4 yelkalari ijroda 1 source px ko'tariladi. Bug'ni ajratishda yuz/ko'zning oq piksellari chiqarib tashlangan. Shaffoflik bug'ning o'z alpha kanaliga tegishli; piyola va qo'l fade bilan paydo bo'lmaydi.
+`K4` qo'l/piyolasi aynan K3'dan; faqat rasm vositasi yaratgan boshqa bug' fazasi qo'shilgan. K3/K4 almashishi tanani siljitmaydi; bug' fazasi 0.6 s da almashadi, yelka sakrashi yo'q. Asl bug' qatlamining pastki uchi piyolaning o'ng cheti (136,168) ga bog'langan. Bug'ni ajratishda yuz/ko'zning oq piksellari chiqarib tashlangan. Shaffoflik bug'ning o'z alpha kanaliga tegishli; piyola va qo'l fade bilan paydo bo'lmaydi.
 
 `build-assets.py --sources <image_gen output directory>` asset tayyorlash vositasi; Pillow va numpy runtime dependency emas. Asl AI chiqishlari `prompts.json` da qayd etilgan Codex generated_images papkasida saqlanadi. Yakuniy ishlatiladigan PNG/maskalar shu branch ichida.
 
@@ -30,7 +30,7 @@ Imagegen built-in rasm tahriri ishlatildi. Alohida maska fayli parametri unda **
 | K2 → yon → K1 | 0.6 s |
 | Yakuniy K1 | 0.9 s |
 
-Limited-animation usuli: pozalar darhol almashadi. Kod faqat PNG qatlamlarini chizadi: nafas 0–1.5 source px, original bosh maksimal 2.2°, K4 yelka 1 px. Oyoq/baseline siljimaydi. Bosh hech qachon AI qayta chizgan boshga almashtirilmaydi. Cup/hands alohida foreground bo'lib boshning oldida qoladi. K1 bosh/oxir butun original rasmning o'zi.
+Limited-animation usuli: pozalar darhol almashadi. Kod faqat PNG qatlamlarini chizadi: nafas 0–1.5 source px, original bosh maksimal 2.2°. Tana y=300 da bo'linmaydi: butun qatlam y=398 tayanchiga nisbatan juda oz masshtablanadi; tagcharm baseline'i o'zgarmaydi. Bosh hech qachon AI qayta chizgan boshga almashtirilmaydi. Boshni o'chirish maskasi keng bo'sh ko'pburchak emas, original bosh/sochning haqiqiy pixel support'i; shu sabab soch atrofidagi yangi yeng saqlanadi. Soch ostiga asl yengning 8 px tasmasi ustma-ust cho'zilib, bosh egilganda bo'shliq ochilishini yopadi. Cup/hands alohida foreground bo'lib boshning oldida qoladi; bug'siz sip bazasi ishlatiladi, bug' ikki marta chizilmaydi. K1 bosh/oxir butun original rasmning o'zi.
 
 ## Tekshiruv
 
@@ -42,3 +42,11 @@ Limited-animation usuli: pozalar darhol almashadi. Kod faqat PNG qatlamlarini ch
 - 131 olingan kadrdan tayyorlangan medium/2× GIF (77 takrorsiz GIF kadr, 6.55s) va barcha kalitning alohida 2× PNG'si Codex visualizations/2026/10/21/01a15ced-b7c7-75b3-b878-1fbc4995d032/x5-tea/ da. Sinov skript/profillar faqat Temp'da va ish oxirida tozalanadi.
 
 GIF'ni ko'rish sifatni qabul qilish o'rnini bosmaydi. Shaxzod aniq **ha** degandan keyingina integratsiya alohida ish sifatida bajariladi. Qolgan 4 harakat bu topshiriqda o'zgarmadi.
+
+## P1 qayta tekshiruv — c952c46 review'dan keyin
+
+- Faqat asset emas, player.js natijasi Electron37'da 4×, butun6.5s bo'ylab131fazada tekshirildi. Y=300 etak ichki ROI(4× x326..393,y539..548): oldin eng yomon136past-alphapiksel/min0; keyin0ta/min250. Bu ROI originalidagi odatiy alpha250–253; oq/shafof gorizontal chiziq yo'q.
+- Barcha131frame'da alpha>24 eng pastki qator716..716. K1/side/K2/K3/K4/K5, raise va sipA/sipB4× ko'z bilan ham ko'rildi. Runtime tirqish testi asset zero-diff testidan mustaqil.
+- SourcePNG'lar maska tashqarisi0farq bo'lib qoldi. P1maskusuli asl contourpiksellarini saqlaydi; yangi rasm generatsiyasi yoki kodda chizilgan sleeve/outline yo'q.
+- Yangi comparison-medium.gif/comparison-2x.gif va elbow-skirt-before-after-4x.png/all-key-crops-4x.png Codex visualizations/.../x5-tea-p1/ da. Bu yangi fayllar avvalgi X5 dalillarini ustiga yozmaydi.
+- Main integratsiyasi, versiya, build, push yo'q. Review'dagi P3 (asset tayyorlash vositalarini src'dan tashqariga chiqarish) integratsiya bosqichida alohida qoladi.
