@@ -3,6 +3,40 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-21 · Claude · Topshiriq X5: Midori choy ichishi (Codex uchun)
+Shaxzod: 59bce30 dagi choy namunasi ham, eski kadrlar ham yoqmadi; harakatlar tez tugaydi, ilg'ab bo'lmaydi. Claude GIF'ni (159 kadr) va tea-rig.js'ni ko'rdi: bosh/gavda izchilligi yaxshilangan, lekin kodda chizilgan yeng/kaft asl rastr uslubiga mos emas, piyola shaffoflikdan paydo bo'ladi, faqat qo'llar qimirlaydi, 8.4 s bir xil silliq egri bilan suzadi. **Faqat choy**; qolgan 4 harakat — natija Shaxzodga yoqqandan keyin.
+
+**0. Avval:** `tea` slotini eski kadrlarga qaytar yoki rig'ni flag ortiga ol — yoqmagan namuna main'da turmasin. Yangi ish alohida branch'da; Shaxzod GIF'ni ko'rib "ha" demaguncha main'ga ulanmaydi.
+
+**1. Rasm — masklangan inpainting (kodda chizilgan qism yo'q):**
+- Asos `frames/stand.png` (239×400). Har kalit poza shu fayl ustida, faqat maska ichida qayta chiziladi: ikkala qo'l (yelkadan barmoqqacha), yenglar, piyola, bug'. Bosh, soch, yuz, gavda, yubka, oyoq — maska tashqarisida, **piksel farqi 0** (tekshiruv bilan). Yuz ifodasi faqat mavjud face-overlay orqali.
+- Maska chegarasi kofta ichida, yumshoq (feather); yelka tikuvi tutashuvi ko'rinmasin.
+- Uslub asl rasmdagidek: kontur qalinligi, soya, kofta burmalari, keng yeng uchlari, barmoqlari bor kaft.
+- Piyola shaffoflik bilan paydo bo'lmaydi va yo'qolmaydi. Masalan: K2 da qo'llar yondan oldinga keladi va piyola allaqachon qo'lda; oxirida piyolali qo'llar yonga ketadi.
+- Kalit pozalar: K1 stand → K2 piyola ko'krak oldida → K3 piyola og'iz oldida, ko'z yumuq (ho'plash) → K4 = K3 varianti (bug' shakli boshqa, yelka 1–2 px ko'tarilgan; hold ichida K3/K4 almashadi) → K5 piyola pastda, mamnun "ohh~" yuzi → K2 orqali K1 ga qaytish.
+- **Crossfade/alfa aralashtirish taqiqlanadi.** Pozalar keskin almashadi (anime limited animation). Kerak bo'lsa oraliq kadr ham shu inpainting bilan.
+- Rasm vositasi maskali tahrir qila olmasa, boshlashdan oldin Shaxzodga ayt.
+
+**2. Vaqt — o'tishlar tez, asosiy poza uzun (jami 6–7 s):**
+| Qism | Vaqt |
+|---|---|
+| Kirish K1→K2 (tez boshlanib, sekin to'xtaydi) | 0.5 s |
+| Ko'tarish K2→K3 | 0.4 s |
+| Ho'plash K3/K4, bug', nafas | 2.0–2.5 s |
+| Tushirish → K5 | 0.4 s |
+| Mamnun "ohh~" | 0.7 s |
+| Qaytish → K1 | 0.6 s |
+- Ho'plash uzunligi bitta sozlamada (masalan `TEA_SIP_SECONDS`) — rasm qayta chizilmasdan o'zgaradi.
+- Kod faqat asl qatlamlarni jonlantiradi: nafas 1–2 px, ho'plashda bosh 2–3° egilishi (asl boshdan kesilgan qatlam). Yangi narsa chizmaydi.
+
+**3. Topshirish va tekshiruv:**
+- GIF: haqiqiy o'lchamda (medium, ~150 px) va 2× da; 1.11.0 dagi eski choy bilan yonma-yon. Har kalit poza alohida 2× PNG.
+- Piksel tekshiruvi: maska tashqarisi stand.png bilan farq 0.
+- Electron: ijro/tugash, takror, sudrash va yashirishda bekor bo'lish, pet-busy heartbeat, konsol 0 xato.
+- Versiya, build, push, release yo'q.
+
+**4. Keyin (hozir emas) — qolgan harakatlar uchun mo'ljal:** qo'l silkitish 3 s (3–4 silkinish), kitob 12–15 s (1–2 varaq aylantirish, ko'z satr bo'ylab), gul sug'orish 6–7 s (suv oqimi, gul tebranishi), cho'zilish 4–5 s (yuqorida 1 s turish). Hammasi bir xil usulda: tez kirish, uzun asosiy poza, tez chiqish.
+
 ## 2026-10-21 · Codex · Choy ichish: bitta namuna va burilish tuzatishi
 - Shaxzod: beshta mashg'ulot bosh/oxir/kadrlar nomuvofiqligi; kelishilgan reja — avval choy ichish namunasi, Shaxzod bahosidan keyin qolgan to'rtta. Hozir faqat birinchi namuna tayyor; barcha beshtasi badiiy qayta ishlangan emas.
 - Fayllar: yangi tea-rig.js; chibi.js, manifest.json, index.html, chibi/README.md, CHANGELOG. Original bosh/gavda/oyoq stand.png'dan, piyola tea-04'dan; qo'l/yenglar Canvas'da chizilgan uzluksiz IK, ko'z patch'i mavjud blink'dan. Eski butun tanali shaffof aralash kadrlar choy uchun ishlatilmaydi. 20fps,8.4s. Yeng stili original rasterga aynan teng emas; boshlanish/oxir canonical stand va yangi yenglar mosligi badiiy bahoda ochiq. Bu yakuniy sifat tasdig'i emas.
@@ -375,7 +409,8 @@ Boshlash tartibi (kelishildi): Claude — C1, Codex — X1; keyin eslatmalar va 
 | C2 | Kayfiyat animatsiyalari: jahl (`mood`), eslatma pufakchasi (`remind`), cho'zilib-siqilish | Claude | ochiq | X0 dan keyin |
 | C3 | 3D tajriba (Three.js) | — | keyin | Shaxzod 2.5D natijasini ko'rib baholagandan keyin alohida topshiriq (Codex taklifi, kelishildi) |
 | 3 | `dist/` ni tozalash | Claude | tayyor | faqat 1.6.0 qoldi |
-| — | AI bilan suhbat | — | kerak emas | Shaxzod qarori (2026-10-14) |
+| — | AI bilan suhbat | Claude | tayyor | 1.11.0 da chiqdi (Shaxzod qarori 2026-10-21; avvalgi "kerak emas" bekor) |
+| X5 | Midori choy ichishi: masklangan inpainting + uzun asosiy poza | Codex | ochiq | topshiriq: 2026-10-21 Claude yozuvi; avval faqat choy |
 
 **Yo'nalish (Shaxzod, 2026-10-14):** Ko'kchani yaxshi darajaga olib chiqish, 2D dan 3D gacha. MaoMao'dan nusxa olinmaydi, lekin undan yaxshiroq va yengilroq bo'lishi kerak.
 
