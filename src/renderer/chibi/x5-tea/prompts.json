@@ -1,0 +1,41 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "mode": "edit with referenced_image_paths and transparent_background=true",
+  "mask_api_available": false,
+  "method": "Generated localized sprite edits, followed by deterministic masked compositing onto stand.png. Limitation disclosed before generation. No generated head/body used outside masks.",
+  "source_directory": "C:/Users/janob/.codex/generated_images/01a15ced-b7c7-75b3-b878-1fbc4995d032",
+  "immutable_reference": "src/renderer/chibi/frames/stand.png",
+  "common_constraints": "The exact original Midori sprite is the edit target. Edit ONLY both arms from shoulders through fingers, the loose ribbed sweater sleeves, one ivory teacup and any requested steam. Preserve original head, green hair strands and silhouette, neutral open eyes, tiny smile, collar, sweater torso, skirt, bare legs, green socks and black boots. Match original thin dark outline, watercolor/anime pencil texture and soft shading. Full-body original 239x400 proportions and framing, transparent background. No vector-simplified sleeves, extra limbs, ghost silhouettes, motion blur, crossfade, text or sprite sheet. Closed eyes/happy expressions will come from existing game overlays, not from image generation.",
+  "edits": [
+    {
+      "key": "K2",
+      "output": "exec-65308343-7f59-48c9-9312-37044eedca20.png",
+      "references": ["stand.png"],
+      "pose_prompt": "One edited full body sprite. Both hands securely hold one small ivory ceramic teacup at chest height, cup rim just below the sweater collar, cup center approximately x120 y231 in original239x400 coordinates. Elbows down and outward, natural folded sleeves connected invisibly at shoulder seams, broad ribbed cuffs and clearly drawn individual fingers. Original neutral open eyes and original tiny smile unchanged. No steam in K2. Replace the original arms at the sides completely. Keep every other region immutable."
+    },
+    {
+      "key": "K3",
+      "output": "exec-388897aa-cefa-4efc-9ed1-876e044afc77.png",
+      "references": ["stand.png", "K2 raw output"],
+      "pose_prompt": "Image1 immutable original stand edit target, Image2 only sleeves/hands/cup/style reference. K3 SIP POSE: same exact Midori and same exact ivory cup. Lift both hands and cup until the rim touches just beneath the little mouth, cup center approximately x120 y195 in239x400. Elbows low/outward, wrists and individual fingers naturally grip cup. Small delicate white steam curl rises to her left/viewer-right side off the cheek, never over eyes. Keep original neutral eyes OPEN; existing game eyelid overlay will be applied separately. Change no face features. One held-sip key, not a sequence."
+    },
+    {
+      "key": "K4",
+      "output": "exec-5fb0532e-a830-418c-a92a-e84c19b7f8be.png",
+      "references": ["K3 raw output"],
+      "pose_prompt": "Edit ONLY white steam curl in exact full-body K3 sprite. Pose, ivory cup, arms, fingers, sleeves, hair, face, body, boots, alignment remain identical. Replace single viewer-right steam curl with two thinner drifting curls extending gently upward/right, visibly different steam phase. Raise shoulders at most one original pixel if possible, otherwise unchanged pose/body. Original neutral open eyes unchanged. Same full-body framing/aspect, transparent background. No new cup, vector parts, blur, text, crossfade or new scene."
+    },
+    {
+      "key": "K5",
+      "output": "exec-a0a9a2e7-d0f1-42f3-9ebc-372ac787c85b.png",
+      "references": ["stand.png", "K2 raw output"],
+      "pose_prompt": "Image1 immutable stand edit target, Image2 only same hands/cup/sleeve/style reference. K5 SATISFIED LOWERED CUP: same exact ivory cup, hands and sleeves lowered to upper waist/lower chest, cup center approximately x120 y255 in239x400. Elbows relaxed low/outward. Keep original tiny neutral smile and OPEN eyes; existing happy game overlay will be applied separately. No steam. One full body sprite."
+    },
+    {
+      "key": "side",
+      "output": "exec-74ca2016-90ee-4ed8-b2b9-926c9080ca08.png",
+      "references": ["stand.png", "K2 raw output"],
+      "pose_prompt": "Image1 immutable stand edit target, Image2 ivory cup/broad ribbed cuffs/fingers/watercolor reference. ENTRY/EXIT: both hands and cup low at her left hip/viewer-right, cup center approx x184 y276 in239x400. Viewer-right hand x205 y271 grips outer cup; other hand reaches gently across low waist to support underside. Elbows low, relaxed, naturally bent. Cup fully visible/opaque, held to side before bringing it to chest. Same exact head/hair/open eyes/collar/torso/skirt/legs/socks/boots, no shifting body. Hands have fingers, loose wide cuffs and folds. Replace original arms entirely. No steam, extra limbs, text, sheet, ghosting or alpha blending."
+    }
+  ]
+}

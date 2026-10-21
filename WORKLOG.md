@@ -3,6 +3,17 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-21 · Codex · X5 choy GIF ko'rikka tayyor; MAIN'GA ULANMAGAN
+- Shaxzod X5 bo'yicha faqat choy, GIF tasdig'igacha main'ga ulanmasin dedi. Rad etilgan rig main'da 64e86e7 bilan chiqarildi; barcha yangi fayllar faqat codex/x5-midori-tea branch'dagi src/renderer/chibi/x5-tea/ ichida. Production index/chibi/manifest/main kodlariga yangi ulanish yo'q, qolgan4harakat o'zgarmadi.
+- Rasm vositasida alohida maska input yo'qligi rasm yaratishdan AVVAL aytildi. Built-in image_gen tahriri + aniq lokal maskali compositing ishlatildi; API-maskali inpainting deb da'vo qilinmaydi. 5ta rasm tahriri: K2/K3/K5/K4 bug'varianti/yon kirish-chiqish. Promptlar va xom rasm fayllari prompts.json'da. Kodda yeng, kaft, piyola, bug' chizilmadi.
+- K1=originalstand; qolgan5key original239x400ga maska orqali yopishtirildi, bosh/soch va yubka/oyoq maskadan tashqarida tiklandi. 6keyning barchasida tashqaridagi farq0; y305..399 oyoq/etikRGBA aynan teng. K3/K4 qo'l/piyolasi bir xil, bug'i boshqa. Yuz faqat mavjud sleeping/happy overlay'dan ko'z/og'iz hududi. Bu zero-diff bazaviy assetga tegishli; yuzoverlay/rendernod va GIFpalitra alohida.
+- player.js faqat alohida preview: cut pozalar, globalAlpha/crossfade/IK yo'q. Piyola yon pozada ko'rinadi, fade yo'q. Nafas0–1.5sourcepx, originalbosh2.2°, K4yelka1px. TEA_SIP_SECONDS2.4; jami6.5s (kirish.5+kutish.6+ko'tarish.4+ho'plash2.4+tushirish.4+mamnun.7+qaytish.6+rest.9).
+- Electron37: final realijro6519.7ms,true; takrortrue, canceltrue, nativehidetrue, heartbeatstoptrue, konsol0. DOMpointerdown haqiqatan cancel qildi; nativeBrowserWindow.hide → document.hidden=true/stopped=true; qayta show visible=true. Fizik sichqoncha sinovi qilinmadi.
+- To'liq main/preload haqiqiy IPC faqat alohidaTemp preview oynasida: pet-busy9marta, ijro o'rtasida remaining752ms/motionnull/runningtrue; oxirida heartbeat to'xtagan/runningfalse/konsol0. Bu main activity slotiga ulash emas. Test harnessdagi Node module chaqiruvi tuzatilib qayta o'tdi; mahsulot xatosi emas.
+- Yakuniy GIFlar: Codex visualizations/2026/10/21/01a15ced-b7c7-75b3-b878-1fbc4995d032/x5-tea/comparison-medium.gif va comparison-2x.gif. 131sourcecapture → 77takrorsizGIFkadr,6.55s; mediumcanvas180sprite176px,2x360. Yonida aynan1.11.0 eski24kadr/12fps/2s. K1/side/K2/K3/K4/K5 alohida2xPNG, key-poses-2x.png va pixel-validation.json shu yerda. PNGlar ko'z bilan tekshirildi; bug' ajratishda ko'z oqi kirib qolishi tuzatildi.
+- node --check va git diff --check o'tdi. Ishchi branch'da faqat X5folder va WORKLOG farqi; previewproductionindex'da import qilinmaydi. Temp skript/profillar tozalandi. Versiya/build/push/release yo'q.
+- Qolgan ish: Shaxzod GIF'ga aniq HA demaguncha main'ga integratsiya YO'Q; shu tasdiqqacha qolgan4harakatga o'tilmaydi. Keyingi agent build/release yoki ulash uchun bu yozuvni ruxsat deb olmasin. Commit: ushbu X5 preview.
+
 ## 2026-10-21 · Codex · X5 oldidan yoqmagan choy namunasi o'chirildi
 - X5/0 bo'yicha main'dagi tea slot 956ce57 eski kadrlarga qaytarildi (6fps/4s); tea-rig.js script tag olib tashlandi. Rad etilgan rig endi oddiy ilovada yuklanmaydi/ijro qilinmaydi. Boshqa harakatlar o'zgarmadi.
 - Keyingi X5 ish alohida codex/x5-midori-tea branch'da; Shaxzod GIF'ni ko'rib aniq ha demaguncha main'ga ulanmaydi.
