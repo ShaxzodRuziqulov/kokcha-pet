@@ -136,6 +136,7 @@ function template() {
         },
       ),
     },
+    { label: 'Suhbat (AI)...', panelLabel: 'Suhbat', panelIcon: '✨', click: () => require('./ai').open() },
     { label: `Eslatmalar (${require('./reminders').pendingCount()})...`, panelLabel: `Eslatmalar (${require('./reminders').pendingCount()})`,
       panelIcon: '⏰', click: () => require('./reminders').open() },
     // dasturlash rejimida ma'nosi yo'q

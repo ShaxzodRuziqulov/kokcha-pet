@@ -12,6 +12,7 @@
 //   menu        — tray menyusi va bandlar ro'yxati (bitta)
 //   panel       — personaj ustida o'ng tugma paneli (menu ro'yxatidan)
 //   updater     — avtomatik yangilanish
+//   ai          — AI suhbat (Gemini), kalit va suhbat oynasi
 //   ipc         — renderer bilan aloqa
 
 const { app, Menu, screen } = require('electron');
@@ -28,6 +29,7 @@ const ipc = require('./src/main/ipc');
 const shortcuts = require('./src/main/shortcuts');
 const reminders = require('./src/main/reminders');
 const persona = require('./src/main/persona');
+const ai = require('./src/main/ai');
 
 const { ctx } = C;
 
@@ -50,6 +52,7 @@ if (!app.requestSingleInstanceLock()) {
     settings.save();
 
     ipc.register();
+    ai.start();
     require('./src/main/panel').register();
     const w = win.create();
     w.webContents.once('did-finish-load', () => reminders.start());

@@ -577,6 +577,13 @@ window.pet.on('say', (kind) => {
   else sayRandom();
 });
 
+// AI suhbat javobi (ai.js): foydalanuvchi o'zi so'ragan — jim rejimda va uyquda ham aytiladi
+window.pet.on('chat-say', (text) => {
+  if (typeof text !== 'string' || !text.trim()) return;
+  sayQueue.forEach(clearTimeout); sayQueue = [];
+  say(text.slice(0, 400), { force: true });
+});
+
 window.pet.on('clicked', () => {
   play('boing', 450);
   sayRandom();

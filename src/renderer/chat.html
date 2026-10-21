@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'">
+  <title>Suhbat</title>
+  <link rel="stylesheet" href="reminders.css">
+  <link rel="stylesheet" href="chat.css">
+</head>
+<body>
+  <main>
+    <header><span class="badge">KOʻKCHA · AI</span><h1 id="title">Suhbat</h1></header>
+
+    <form id="key-form" hidden>
+      <p class="hint">Suhbat uchun bepul <b>Google Gemini</b> kaliti kerak. Karta soʻralmaydi.</p>
+      <ol class="hint">
+        <li><button type="button" id="studio" class="link">aistudio.google.com/apikey</button> sahifasini oching</li>
+        <li>“Create API key” tugmasini bosing va kalitdan nusxa oling</li>
+        <li>Shu yerga qoʻyib, “Saqlash”ni bosing</li>
+      </ol>
+      <label for="key">Gemini kaliti</label>
+      <input id="key" type="password" autocomplete="off" spellcheck="false" placeholder="AIza…" required>
+      <button class="primary" type="submit">Saqlash</button>
+      <p class="hint small">Kalit faqat shu kompyuterda, shifrlangan holda saqlanadi. Bepul tarifda Google yozishmalardan modelni oʻrgatishda foydalanishi mumkin — shaxsiy maʼlumot yozmang.</p>
+      <p class="status" role="status" aria-live="polite"></p>
+    </form>
+
+    <section id="chat" hidden>
+      <ul id="log" aria-live="polite"></ul>
+      <form id="ask-form">
+        <input id="text" maxlength="500" autocomplete="off" placeholder="Biror narsa yozing…" required>
+        <button id="send" class="send" type="submit" aria-label="Yuborish">➤</button>
+      </form>
+      <p class="status" role="status" aria-live="polite"></p>
+      <div class="tools">
+        <button type="button" id="reset">Suhbatni tozalash</button>
+        <button type="button" id="forget">Kalitni oʻchirish</button>
+      </div>
+    </section>
+  </main>
+  <script src="chat.js"></script>
+</body>
+</html>

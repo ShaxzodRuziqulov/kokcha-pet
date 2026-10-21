@@ -27,6 +27,7 @@ src/main/               asosiy jarayon (Node)        — Codex egaligida (WORKLO
   panel.js              o'ng tugma paneli (frameless oyna); amal id+yorliq bo'yicha main'da topiladi
   ipc.js                renderer'dan kelgan xabarlar: bosish, sudrash, menyu, raqs, bulutcha tugmalari
   updater.js            electron-updater, GitHub Releases; holatlar checking/downloading/ready/latest/error
+  ai.js                 AI suhbat: Gemini REST (net.fetch), kalit safeStorage'da, suhbat oynasi (chat-preload.js, renderer/chat.*)
 src/preload.js          xavfsiz ko'prik: window.pet; renderer faqat EVENTS ro'yxatidagi kanallarni oladi
 src/panel-preload.js    panel ko'prigi: window.panel (onModel, act, close, height)
 src/renderer/           ko'rinish                       — Claude egaligida
@@ -51,6 +52,8 @@ scripts/release.mjs     GitHub Release yaratish (CHANGELOG'dan tavsif oladi)
 - `state` = `{ state: idle|walk|sleep, dir, pose: stand|sit|ledge|lie|climb|hang|jump|fall, side }` → renderer `body` klasslariga aylantiradi (`pose-sit`, `side-left`...).
 - `look` = `{ dx, dy }` — kursorning personajga nisbatan joyi; ko'zlar shunga qaraydi.
 - `say` = matn turi (`'random'`, `'break'`, `'here'`, harakat turlari, `'image-*'`). **Matnning o'zi renderer'da** — main faqat turini yuboradi.
+- `chat-say` = AI javobi matni (string, ≤400). Bu yagona istisno: matn main'dan keladi, chunki uni foydalanuvchi o'zi so'ragan. Renderer navbatni tozalab `say(text, { force: true })` qiladi (jim rejim/uyquda ham).
+- **AI suhbat (ai.js):** Google Gemini, foydalanuvchining bepul kaliti. Model: `gemini-3.5-flash-lite`, 404 bo'lsa `gemini-flash-latest`. Kalit `settings.aiKey` — safeStorage (DPAPI) bilan shifrlangan base64; renderer'lar kalitni ko'rmaydi. `chat:*` IPC faqat suhbat oynasining asosiy frame'idan. Tarix faqat xotirada (oxirgi 10 juftlik), diskka yozilmaydi. System prompt: personaj nomi + `persona.current()` + vaqt. Bir vaqtda bitta so'rov, 25 s timeout.
 - Yangi kanallar kontrakti: WORKLOG.md "Kontrakt" jadvali (`mood`, `remind`).
 - `persona` = `{id,reason}`; `getInit().persona` ham shu shaklda. Midori id'lari `cheerful→shy→tsundere→playful`, Ko'kcha uchun `curious`, sabab `start|timer|menu|event`. `persona` xabari `mood`/`petted` va personaj almashishdagi `appearance` xabaridan oldin keladi — birinchi gap ham yangi fe'lda tanlanadi. Renderer bir xil id'ni qayta e'lon qilmaydi; `start` salomga, `event` tegishli reaksiya gapiga birlashtiriladi.
 

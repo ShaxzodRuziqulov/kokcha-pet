@@ -20,6 +20,7 @@ const DEFAULTS = {
   lastSeenDay: null,  // "xayrli tong" kuniga bir marta
   reminders: [],     // bir martalik eslatmalar, vaqt epoch ms
   persona: null,     // Midori asosiy fe'li: { id, since, nextAt }; vaqtlar epoch ms
+  aiKey: null,       // Gemini kaliti — safeStorage bilan shifrlangan, base64 (ai.js)
 };
 
 let timer = null;

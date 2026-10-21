@@ -1,5 +1,11 @@
 # O'zgarishlar
 
+## Keyingi versiya
+### ✨ AI suhbat
+- Menyuda yangi **"Suhbat (AI)"** oynasi: Midori (yoki Ko'kcha) bilan yozishib gaplashasiz, javobi ish stolidagi bulutchada ham chiqadi.
+- Javob personaj xarakteri va hozirgi kayfiyatiga mos (quvnoq, uyatchan, qaysar, sho'x).
+- Bepul Google Gemini kaliti bilan ishlaydi (karta so'ralmaydi); kalit kompyuterda shifrlangan holda saqlanadi.
+
 ## 1.10.1
 - Midori'ning mashg'ulotlari (kitob, choy, gul sug'orish, cho'zilish) endi har 45–90 soniyada chiqadi; o'tirgan bo'lsa avval turadi, shu paytda yurib ketmaydi.
 - Panelda yangi "🎬 Harakat" bo'limi — xohlagan harakatni o'zingiz tanlaysiz.
