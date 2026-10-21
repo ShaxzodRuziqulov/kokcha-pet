@@ -12,7 +12,7 @@ const ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/';
 const TIMEOUT_MS = 25000;
 const MAX_INPUT = 500, MAX_REPLY = 400, HISTORY_TURNS = 10;
 
-let chatWin = null, running = false, busy = false;
+let chatWin = null, running = false, activeRequest = null;
 let history = []; // faqat shu sessiya: [{ role: 'user'|'model', text }]
 
 // ---- Kalit ----
@@ -36,6 +36,7 @@ function setKey(input) {
 }
 
 function clearKey() {
+  cancelRequest();
   C.ctx.settings.aiKey = null;
   history = [];
   settings.save(true);
@@ -75,23 +76,23 @@ function errorText(status, body) {
   return `Javob olib boʻlmadi (xato ${status}).`;
 }
 
-async function request(model, key, contents) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-  try {
-    return await net.fetch(`${ENDPOINT}${model}:generateContent`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: systemPrompt() }] },
-        contents,
-        generationConfig: { temperature: 0.9, maxOutputTokens: 300 },
-      }),
-      signal: controller.signal,
-    });
-  } finally {
-    clearTimeout(timer);
-  }
+function cancelRequest() {
+  const pending = activeRequest;
+  activeRequest = null;
+  pending?.abort();
+}
+
+async function request(model, key, contents, signal) {
+  return await net.fetch(`${ENDPOINT}${model}:generateContent`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: systemPrompt() }] },
+      contents,
+      generationConfig: { temperature: 0.9, maxOutputTokens: 300 },
+    }),
+    signal,
+  });
 }
 
 async function ask(input) {
@@ -99,17 +100,28 @@ async function ask(input) {
   if (!text || text.length > MAX_INPUT) return { error: `Xabar 1–${MAX_INPUT} belgidan iborat boʻlsin.` };
   const key = readKey();
   if (!key) return { error: 'Avval Gemini kalitini kiriting.', needKey: true };
-  if (busy) return { error: 'Hali oldingi savolga javob yozyapman…' };
-  busy = true;
+  if (activeRequest) return { error: 'Hali oldingi savolga javob yozyapman…' };
+  const controller = new AbortController();
+  activeRequest = controller;
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
     const contents = [...history, { role: 'user', text }].map(m => ({ role: m.role, parts: [{ text: m.text }] }));
     let res = null;
     for (const model of MODELS) {
-      res = await request(model, key, contents);
+      res = await request(model, key, contents, controller.signal);
+      controller.signal.throwIfAborted();
+      if (activeRequest !== controller) return { cancelled: true };
       if (res.status !== 404) break;
     }
-    if (!res.ok) return { error: errorText(res.status, await res.text().catch(() => '')) };
+    if (!res.ok) {
+      const body = await res.text();
+      controller.signal.throwIfAborted();
+      if (activeRequest !== controller) return { cancelled: true };
+      return { error: errorText(res.status, body) };
+    }
     const data = await res.json();
+    controller.signal.throwIfAborted();
+    if (activeRequest !== controller) return { cancelled: true };
     const reply = (data?.candidates?.[0]?.content?.parts || []).map(p => p?.text || '').join('').trim();
     if (!reply) return { error: 'Bunga javob bera olmayman. Boshqacha soʻrab koʻr.' };
     const short = reply.length > MAX_REPLY ? reply.slice(0, MAX_REPLY - 1).trimEnd() + '…' : reply;
@@ -117,13 +129,15 @@ async function ask(input) {
     C.send('chat-say', short); // personaj bulutchasida ham aytadi
     return { ok: true, reply: short };
   } catch (err) {
+    if (activeRequest !== controller) return { cancelled: true };
     return { error: err?.name === 'AbortError' ? 'Javob juda kechikdi. Qayta urinib koʻring.' : 'Internetga ulanib boʻlmadi.' };
   } finally {
-    busy = false;
+    clearTimeout(timer);
+    if (activeRequest === controller) activeRequest = null;
   }
 }
 
-function reset() { history = []; return { ok: true }; }
+function reset() { cancelRequest(); history = []; return { ok: true }; }
 
 // ---- Oyna ----
 function open() {

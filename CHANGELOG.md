@@ -1,5 +1,9 @@
 # O'zgarishlar
 
+## Keyingi versiya
+- AI suhbat yoki kalit o'chirilganda davom etayotgan so'rov bekor qilinadi; eski javob tarixga va bulutchaga qaytmaydi.
+- AI javobini kutish chegarasi javob to'liq o'qilguncha ishlaydi.
+
 ## 1.11.0
 ### ✨ AI suhbat
 - Menyuda yangi **"Suhbat (AI)"** oynasi: Midori (yoki Ko'kcha) bilan yozishib gaplashasiz, javobi ish stolidagi bulutchada ham chiqadi.

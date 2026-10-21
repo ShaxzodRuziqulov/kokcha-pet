@@ -3,6 +3,13 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-21 · Codex · AI suhbatdagi ikki P2 tuzatildi
+- Fayllar: src/main/ai.js, src/renderer/chat.js, CHANGELOG.md. Claude kodidagi reset/clearKey so'rov poygasi va response body timeout muammosini yopish uchun o'zgartirildi.
+- Main: faol AbortController, reset/clearKey bekor qilishi, eskirgan natija tekshiruvi; eski finally yangi so'rovni bo'shatmaydi. Bitta 25 s deadline fallback, fetch va JSON/xato tanasi o'qilishini qoplaydi.
+- Renderer: reset/forget requestVersion ni yangilaydi, kutish belgisi tozalanadi; eski handler yangi suhbatga natija/xato qo'shmaydi, yangi savol yuborishga xalaqit bermaydi. Takroriy submit bloklandi.
+- Tekshirildi: Node VM + soxta Electron/net bilan reset→yangi so'rov, clearKey cancellation, busy izolyatsiyasi, JSON va xato tanasi timeout, keyingi so'rov tiklanishi, 404 fallback va timer cleanup; node --check va git diff --check o'tdi. Haqiqiy Gemini/UI/npm start sinalmadi.
+- Qolgan ish: haqiqiy interfeysda qo'lda sinash. Versiya/build/push/release yo'q. Commit: ushbu yozuv bilan AI cancellation va timeout tuzatishi.
+
 ## 2026-10-21 · Codex · 1.11.0 AI suhbat review
 - Ko'rib chiqildi: 0b5a7ff..2f8fb25 (AI suhbat va ulanishlari). Mahsulot kodi o'zgartirilmadi.
 - P2: ai.js reset()/clearKey() davom etayotgan ask() ni bekor qilmaydi. So'rov vaqtida suhbat yoki kalit o'chirilsa, kechikkan javob history'ni qayta to'ldiradi va chat-say yuboradi. Eski so'rov natijasini bekor qilish uchun generation token va/yoki abort kerak.
