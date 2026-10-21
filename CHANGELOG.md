@@ -1,6 +1,6 @@
 # O'zgarishlar
 
-## Keyingi versiya
+## 1.11.0
 ### ✨ AI suhbat
 - Menyuda yangi **"Suhbat (AI)"** oynasi: Midori (yoki Ko'kcha) bilan yozishib gaplashasiz, javobi ish stolidagi bulutchada ham chiqadi.
 - Javob personaj xarakteri va hozirgi kayfiyatiga mos (quvnoq, uyatchan, qaysar, sho'x).
