@@ -1055,7 +1055,7 @@
         "wave-15",
         "activity-stand"
       ],
-      "fps": 12,
+      "fps": 6,
       "loop": false,
       "next": null
     },
@@ -1086,7 +1086,7 @@
         "read-23",
         "activity-stand"
       ],
-      "fps": 12,
+      "fps": 6,
       "loop": false,
       "next": null
     },
@@ -1117,7 +1117,7 @@
         "tea-23",
         "activity-stand"
       ],
-      "fps": 12,
+      "fps": 6,
       "loop": false,
       "next": null
     },
@@ -1148,7 +1148,7 @@
         "water-23",
         "activity-stand"
       ],
-      "fps": 12,
+      "fps": 6,
       "loop": false,
       "next": null
     },
@@ -1179,7 +1179,7 @@
         "stretch-23",
         "activity-stand"
       ],
-      "fps": 12,
+      "fps": 6,
       "loop": false,
       "next": null
     }

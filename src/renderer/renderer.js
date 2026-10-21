@@ -180,12 +180,17 @@ let activityBusy = false;
 function runActivity(name, manual = false) {
   if (character !== 'chibi-girl' || activityBusy || state === 'sleep' || body.classList.contains('dragging')) return;
   activityBusy = true;
-  window.pet.busy(2800);
+  // Kadrlar birinchi yuklanayotganda ham, sekinroq harakat tugaguncha ham yurmaydi.
+  window.pet.busy(1500);
+  const busyTimer = setInterval(() => window.pet.busy(1500), 750);
   // main pozani "stand" ga qaytargach boshlanadi
   setTimeout(async () => {
     const shouldTalk = name !== 'wave' && (manual || (!quiet && Math.random() < 0.6));
     if (shouldTalk) setTimeout(() => { if (!talking) say(line('activity.' + name)); }, 400);
-    try { await window.Chibi.playActivity(name); } finally { activityBusy = false; }
+    try { await window.Chibi.playActivity(name); } finally {
+      clearInterval(busyTimer);
+      activityBusy = false;
+    }
   }, 250);
 }
 window.pet.on('activity', (name) => {

@@ -3,6 +3,13 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-21 · Codex · Midori mashg'ulotlari tezligi tuzatildi
+- Shaxzod beshta harakat juda tezligini aytdi va sinab tuzatishni so'radi. Fayllar: chibi/frames/manifest.json, renderer.js, CHANGELOG.md. Oldingi o'z asset timingim 12fps→6fps: wave 1.333→2.667s, read/tea/water/stretch 2→4s. Kadrlar va tartibi o'zgarmadi.
+- Claude renderer kodidagi 2800ms band muddati sekinroq animatsiyaga yetmasligi sabab o'rniga 750ms oralig'ida 1500ms band xabari yuboriladi; birinchi decode paytida ham himoya, tugash/bekor qilishda interval finally bilan tozalanadi. Main IPC 5s cheklovi o'zgarmadi.
+- Haqiqiy Electron37, alohida Temp HTML/profil bilan production sequence.js + chibi.js va haqiqiy assetlar: wave2691ms, read4026ms, tea4022ms, water4025ms, stretch4029ms; beshtasi true bilan tugadi. Sudrash read'ni false bilan bekor qildi. 5x5 vaqt belgili canvas tasviri ko'z bilan ko'rildi. Test harness birinchi ishga tushishda Electron import yo'li xatosi tuzatilib qayta o'tkazildi; mahsulotda shu xato yo'q.
+- Deterministik SequenceClock: barcha slotlarning har bir kadri/tugash chegarasi; renderer runActivity band heartbeat va finally cleanup o'tdi. node --check/git diff --check o'tdi. To'liq npm start/menyu/sichqoncha/installed EXE bu safar sinalmadi; test alohida animatsiya oynasida o'tdi.
+- Qolgan cheklov: original assetlarda o'tish kadrlarining aralash silueti bor, bu ish rasmlarni qayta chizmaydi. Temp sinov fayllari tozalandi. Versiya/build/push/release yo'q. Commit: ushbu timing tuzatishi.
+
 ## 2026-10-21 · Codex · AI suhbatdagi ikki P2 tuzatildi
 - Fayllar: src/main/ai.js, src/renderer/chat.js, CHANGELOG.md. Claude kodidagi reset/clearKey so'rov poygasi va response body timeout muammosini yopish uchun o'zgartirildi.
 - Main: faol AbortController, reset/clearKey bekor qilishi, eskirgan natija tekshiruvi; eski finally yangi so'rovni bo'shatmaydi. Bitta 25 s deadline fallback, fetch va JSON/xato tanasi o'qilishini qoplaydi.
