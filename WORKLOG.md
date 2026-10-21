@@ -3,6 +3,15 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-21 · Claude · X5 choy review (c952c46)
+- Ko'rildi: key-poses-2x, K2/K3 2x, comparison-2x.gif (77 kadr, 6.55 s), maskalar, player.js; player Electron'da 4× chizildi (kirish/ho'plash A-B/mamnun).
+- Yo'nalish to'g'ri: qo'l, yeng, piyola asl rastr uslubida; crossfade yo'q; piyola havodan chiqmaydi; vaqt jadvalga mos (ho'plash 2.4 s, jami 6.5 s); asset'larda maska tashqarisi 0 farq. Codex rasm vositasida maska yo'qligini oldindan aytgan.
+- **P1 — ho'plashda yubka etagidan oq chiziq** (`player.js renderAt`): body y=300 da ikkiga bo'linadi, yuqori qism `scale(1, 1+rise/116)` va K4 `shoulder` bilan siljiydi → y≈300 da 1 px tirqish. 4× render'da sipA aniq, sipB'da xira. Asset tekshiruvi buni ushlamagan — runtime natija ham tekshirilsin.
+- **P1 — K3/K4 maskasi qattiq ko'pburchak, feather yo'q** (masks/K3, K4): tirsak ustida gorizontal kesik, puflangan yenglar ostida kontur yo'q, yubka o'ng chetida pog'ona. Topshiriqdagi "yumshoq chegara, tikuv ko'rinmasin" bajarilmagan.
+- P2 — bug' piyoladan emas, o'ng yuz/soch ustidan chiqadi; K3/K4 har 0.32 s almashib, yelka 1 px sakraydi — titrashdek ko'rinishi mumkin (Shaxzod ko'zi bilan baholasin).
+- P3 — integratsiyada `x5-tea/build-assets.py`, masks, prompts.json `src/` ichida qolsa exe'ga tushadi (`files: src/**/*`); asboblar src'dan tashqariga.
+- Xulosa: P1 ikkalasi tuzatilib, yangi GIF Shaxzodga ko'rsatilsin. Kod/asset o'zgartirilmadi.
+
 ## 2026-10-21 · Codex · X5 choy GIF ko'rikka tayyor; MAIN'GA ULANMAGAN
 - Shaxzod X5 bo'yicha faqat choy, GIF tasdig'igacha main'ga ulanmasin dedi. Rad etilgan rig main'da 64e86e7 bilan chiqarildi; barcha yangi fayllar faqat codex/x5-midori-tea branch'dagi src/renderer/chibi/x5-tea/ ichida. Production index/chibi/manifest/main kodlariga yangi ulanish yo'q, qolgan4harakat o'zgarmadi.
 - Rasm vositasida alohida maska input yo'qligi rasm yaratishdan AVVAL aytildi. Built-in image_gen tahriri + aniq lokal maskali compositing ishlatildi; API-maskali inpainting deb da'vo qilinmaydi. 5ta rasm tahriri: K2/K3/K5/K4 bug'varianti/yon kirish-chiqish. Promptlar va xom rasm fayllari prompts.json'da. Kodda yeng, kaft, piyola, bug' chizilmadi.
