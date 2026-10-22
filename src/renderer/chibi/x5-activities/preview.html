@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:">
+  <title>Midori · X5 harakatlar</title>
+  <link rel="stylesheet" href="preview.css">
+</head>
+<body>
+  <main>
+    <h1>Midori · X5 harakatlar</h1>
+    <p>Ko‘rish uchun namuna. Asosiy ilovaga hali ulanmagan.</p>
+    <nav aria-label="Harakatlar">
+      <button data-activity="wave">Qo‘l silkitish · 3 s</button>
+      <button data-activity="read">Kitob · 13 s</button>
+      <button data-activity="water">Gul · 6,5 s</button>
+      <button data-activity="stretch">Cho‘zilish · 4,5 s</button>
+    </nav>
+    <div class="pair">
+      <section><h2>1.11.0 dagi eski</h2><canvas id="old"></canvas></section>
+      <section><h2 id="title">Yangi</h2><canvas id="new"></canvas></section>
+    </div>
+    <button id="play" disabled>Qayta ko‘rish</button>
+    <button id="stop">To‘xtatish</button>
+    <p id="status" role="status">Rasmlar yuklanmoqda…</p>
+  </main>
+  <script src="player.js"></script>
+  <script src="preview.js"></script>
+</body>
+</html>
