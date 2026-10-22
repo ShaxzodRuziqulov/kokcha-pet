@@ -3,6 +3,16 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-22 · Claude · X5 review: choy P1 tuzatishi (24206f9) va qolgan 4 harakat (ef67525)
+- Ko'rildi: x5-tea-p1 before/after 4x, x5-activities key-poses-4x va {wave,read,water,stretch}-details-4x, player.js'lar. Production fayllar (src/main, preload, index, renderer, chibi.js, manifest, package.json) main bilan bir xil — izolyatsiya to'g'ri. node --check o'tdi.
+- **Choy: ikkala P1 yopildi.** Etakdagi tirqish yo'q, tirsak ostida kontur bor, bug' piyoladan chiqadi, yelka sakrashi olib tashlangan. Yubka o'ng chetida biroz xira dog' qolgan (P3).
+- **Suv sug'orish — eng yaxshisi:** qo'l, idish, oqim, gul uslubga mos. P3: o'ng yelka va soch orasida ingichka och chiziq (0.4/1.2/5.85 s).
+- **Qo'l silkitish — yaxshi.** P2: ko'tarilgan qo'l ostida gavdaning chap cheti konturisiz, xira (0.7 s).
+- **P1 — kitob o'qish: qo'llar qatlami to'g'ri burchakli quti bo'lib ko'rinadi** (0.35/3.95/4.2 s, key 2 s): yenglar ustidan gorizontal kesik, quti burchaklarida yashil to'ldirilgan joy, yoqa/soch bilan qo'llar orasida uzilish. Yubka chap chetida pog'ona. 13 s davomida ko'rinib turgani uchun eng ko'zga tashlanadigan nuqson.
+- **P1 — cho'zilish: qo'llar olib tashlangan joyda gavda yon chetlari konturisiz, xira yashil halo** (barcha fazalar: 0.5/1.35/3.4 s). Qo'llar tepada sochdan chiqishi qabul qilinadi.
+- P3 (integratsiyada): choydagi `x5-tea/build-assets.py`, masks, prompts.json hali `src/` ichida. Yangi harakatlarning asboblari to'g'ri joyda (`scripts/x5-activities`).
+- Xulosa: kitob va cho'zilishdagi P1 tuzatilib, Shaxzodga GIF ko'rsatilsin; choy, suv va qo'l silkitishni hozir ham ko'rsatsa bo'ladi. Kod/asset o'zgartirilmadi.
+
 ## 2026-10-22 · Codex · X5 qolgan to'rtta harakat ko'rikka tayyor
 - Shaxzod qolgan harakatlarni ham boshlash va tugatishni so'radi. `codex/x5-midori-tea`da wave/read/water/stretch alohida preview qilib tugatildi. Main integratsiyasi, production index/chibi/manifest/IPC, versiya/build/push/EXE o'zgarishi yo'q. Choyning 24206f9 P1 tuzatishi o'zgarmadi; boshqa agentning product kodi tahrirlanmadi.
 - Fayllar: `src/renderer/chibi/x5-activities/` player/preview/keys/README; `scripts/x5-activities/` prepare.py, prompts.json, reference.png, masks. Yangi tayyorlash asboblari va maskalar `src`dan tashqarida (Claude P3 hisobga olindi). Choydagi eski P3 integratsiyagacha alohida qoladi.
