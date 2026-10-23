@@ -178,33 +178,60 @@ function wave() {
 // o'tirgan bo'lsa turadi; keyin kadrli harakat o'ynaydi. Menyudan ham chaqiriladi (`activity` kanali).
 const ACTIVITIES = ['read', 'tea', 'water', 'stretch'];
 let activityBusy = false;
+// Natija: harakat o'ynadimi (true) yoki boshlanmadi/to'xtatildimi (false).
 function runActivity(name, manual = false) {
-  if (character !== 'chibi-girl' || activityBusy || state === 'sleep' || body.classList.contains('dragging')) return;
+  if (character !== 'chibi-girl' || activityBusy || state === 'sleep' || body.classList.contains('dragging')) return Promise.resolve(false);
   activityBusy = true;
   // Kadrlar birinchi yuklanayotganda ham, sekinroq harakat tugaguncha ham yurmaydi.
   window.pet.busy(1500);
   const busyTimer = setInterval(() => window.pet.busy(1500), 750);
   // main pozani "stand" ga qaytargach boshlanadi
-  setTimeout(async () => {
+  return new Promise(resolve => setTimeout(async () => {
     const shouldTalk = name !== 'wave' && (manual || (!quiet && Math.random() < 0.6));
     if (shouldTalk) setTimeout(() => { if (!talking) say(line('activity.' + name)); }, 400);
-    try { await window.Chibi.playActivity(name); } finally {
+    let played = false;
+    try { played = await window.Chibi.playActivity(name); } finally {
       clearInterval(busyTimer);
       activityBusy = false;
+      resolve(played);
     }
-  }, 250);
+  }, 250));
 }
 window.pet.on('activity', (name) => {
   if (name === 'wave' || ACTIVITIES.includes(name)) runActivity(name, true);
 });
-// O'zi: har 45–90 soniyada (siz kursorni ustiga qo'yib turmasangiz va u gapirmayotgan bo'lsa)
-function scheduleActivity() {
-  setTimeout(() => {
-    if (state !== 'sleep' && !talking && !body.classList.contains('hover') && !document.hidden) {
-      runActivity(ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)]);
+// O'zi tanlaydigan mashg'ulot: kayfiyatga va kun vaqtiga mos, ketma-ket bir xil emas.
+// Og'irliklar — nisbiy ehtimol. Qo'l silkitish faqat quvnoq/sho'x kayfiyatda, kam.
+const ACTIVITY_WEIGHTS = {
+  cheerful: { water: 3, tea: 2, stretch: 2, read: 1, wave: 1 },
+  shy:      { read: 3, tea: 2, water: 1, stretch: 1 },
+  tsundere: { read: 3, stretch: 2, tea: 1, water: 1 },
+  playful:  { stretch: 3, water: 2, wave: 2, tea: 1, read: 1 },
+};
+let lastActivity = null;
+function pickActivity() {
+  const weights = { ...(ACTIVITY_WEIGHTS[persona] || ACTIVITY_WEIGHTS.cheerful) };
+  const h = new Date().getHours();
+  if (h >= 6 && h < 11) weights.stretch = (weights.stretch || 0) + 2;          // tong — cho'zilish
+  else if (h >= 14 && h < 18) weights.tea = (weights.tea || 0) + 2;            // tushdan keyin — choy
+  else if (h >= 21 || h < 5) weights.read = (weights.read || 0) + 2;           // kech — kitob
+  delete weights[lastActivity];
+  const entries = Object.entries(weights);
+  let roll = Math.random() * entries.reduce((sum, [, w]) => sum + w, 0);
+  for (const [name, w] of entries) if ((roll -= w) < 0) return name;
+  return entries[0][0];
+}
+// Har 45–90 soniyada — oldingi mashg'ulot tugagandan keyin hisoblanadi (13 s kitob oraliqni yemaydi).
+// Vaqt kelganda imkon bo'lmasa (gapiryapti, kursor ustida, yashirin), 15 s dan keyin yana urinadi.
+function scheduleActivity(delay = 45000 + Math.random() * 45000) {
+  setTimeout(async () => {
+    if (state === 'sleep' || talking || body.classList.contains('hover') || document.hidden || activityBusy) {
+      return scheduleActivity(15000);
     }
+    const name = pickActivity();
+    if (await runActivity(name)) lastActivity = name;
     scheduleActivity();
-  }, 45000 + Math.random() * 45000);
+  }, delay);
 }
 
 // Bosh ustidagi belgi (❗ 💢 💗 ❓ 💫) — his-tuyg'uni bir qarashda ko'rsatadi

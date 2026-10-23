@@ -6,6 +6,7 @@
 - Endi butun tana harakatlanadi: bosh egiladi, tana tebranadi, ko'z qaraydi, yuz ifodasi qo'llar bilan birga o'zgaradi. Qiyofa asl rasmdagidek qoladi.
 - Harakatlar sekinroq va ko'zga ilg'anadigan: asosiy lahza (ho'plash, o'qish, sug'orish) uzoqroq davom etadi.
 - Mashg'ulot oldidan old ko'rinishga buriladi; harakat tugaguncha o'zi yurib ketmaydi. Sudrasangiz yoki yashirsangiz — to'xtaydi.
+- O'zi tanlaydigan mashg'ulot kayfiyatga va kun vaqtiga mos: tongda ko'proq cho'ziladi, tushdan keyin choy ichadi, kechqurun kitob o'qiydi; bir xil harakat ketma-ket takrorlanmaydi. Keyingi mashg'ulotgacha 45–90 soniya oldingisi tugagach hisoblanadi.
 - AI suhbat yoki kalit o'chirilganda davom etayotgan so'rov bekor qilinadi; eski javob tarixga va bulutchaga qaytmaydi.
 - AI javobini kutish chegarasi javob to'liq o'qilguncha ishlaydi.
 
