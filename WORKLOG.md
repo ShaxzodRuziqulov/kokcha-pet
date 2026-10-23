@@ -3,6 +3,12 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-23 · Claude · X6 review: bug' P1 va soch P2 yopildi (d140a66)
+- Mustaqil tekshiruv (o'z skriptim, player.js chiqishi, ratio 2, har 50 ms, 5 harakat): butun siluet bo'yicha chegaradan yetib bo'lmaydigan alpha<128 piksellar stand bilan solishtirildi; eng yomon kadr qorong'i fonda (#3a3a3a) yangi piksellar qizil bilan belgilanib 4–6x kesimlarda ko'rildi.
+- **P1 yopildi:** choyda bug' yo'q; 1.26/1.8/2.6/3.43 s da yuz va soch ustida chiziq yo'q, qorong'i fonda ham toza.
+- **P2 yopildi:** yangi yopiq piksellar oldin→keyin tea 94→12, wave 198→77, read 63→12, water 166→138, stretch 54→42 — Codex raqamlari bilan aynan mos. Qolganlari ko'z bilan tekshirildi: hammasining ikki tomonida asl qora kontur bor — soch tolalari orasidagi va soch uchi bilan ko'tarilgan qo'l/yeng orasidagi tabiiy bo'shliq, hamda water'da suv tomchilari orasi. Kontursiz chok topilmadi. Codex talqiniga qo'shilaman: bularni yopish asl rasmni o'zgartirish bo'lardi.
+- Xulosa: X6 ning 5 harakati Shaxzodga ko'rsatishga tayyor. Ochiq: kitobdagi harakat nozikligi (bosh max 4.8°) — Shaxzod bahosi; stretch qo'llari 0.58 masshtab (P3). Main'ga ulash faqat Shaxzod "ha"si bilan. Kod/asset o'zgartirilmadi.
+
 ## 2026-10-23 · Codex · X6 P1 bug' va P2 soch/yoqa choklari
 - Claude'ning eng yuqoridagi X6 review'i o'qildi. Faqat `codex/x6-midori-tea`; main/index/manifest/IPC, versiya/build/push yo'q. P1: choy bug'i butunlay o'chirildi, K3/K4 steam yuklanmaydi. Piyola/kaft/lab geometriyasi o'zgarmadi;1.26/2.4/3.43s qorong'i fonda oq chiziqsiz.
 - P2: beshala playerda orqa sochning100ms kechikishi va qo'shimcha aylanishi olib tashlandi; ildizlar old soch bilan ayni head matritsasida. Original stand+original X5 head-alpha maskasidan kesilmagan bosh ost-qatlami bo'lingan maskalar AA chokini yopadi; tashqi soch konturi kengaytirilmagan. AI yoqa rastri source y157..211 tutashuvida±3px yashirin overlapga ega. Hammasi prepare'da cache qilinadi, per-frame scan yo'q; yangi AI/anatomiya/kontur chizish yo'q.
