@@ -3,6 +3,14 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-23 · Claude · Ko'kcha 1.12.0 chiqarildi
+- Shaxzod: "tugatib ber hammasini, avtomatik bajarishni ham moslashtir, barchasi senga topshirdim". Tarkibi: X6 butun tana harakatlari (Codex) + ilovaga ulash (Claude, cdc925e), avtomatik mashg'ulot (54f5ffc), Codex AI suhbat tuzatishlari (04014b6).
+- Avtomatik mashg'ulot (`renderer.js`): `pickActivity` — kayfiyat og'irliklari (cheerful/shy/tsundere/playful; wave faqat quvnoq/sho'xda), tong +cho'zilish, 14–18 +choy, kech +kitob; oxirgisi takrorlanmaydi. `runActivity` Promise<bool> qaytaradi; oraliq 45–90 s oldingisi tugagach, imkon bo'lmasa 15 s da qayta urinish. Sinov: har kayfiyatda 2000 tanlov — takror 0; autoWalk yoqilgan holda 3 ta ketma-ket avtomatik harakat o'ynadi; konsol xatosi 0.
+- Branch'lar main'ga fast-forward qilindi va o'chirildi: claude/x6-integration, codex/x6-midori-tea, codex/x5-midori-tea. Qolgan: claude/c1-2.5d.
+- asar: versiya 1.12.0, x6 player'lar + 45 ta key, x5/preview/README/tea-rig yo'q, index skriptlari va pickActivity bor. Setup 92.4 MB.
+- `/S` o'rnatildi (Kokcha.exe 1.12.0), ishga tushirildi. Teg v1.12.0, push, release, latest.yml 1.12.0. dist o'chirildi.
+- Tekshirilmagan: haqiqiy sichqoncha bilan sudrash, OS uyqu, uzoq muddatli (soatlab) xotira. Shaxzod ishlatib ko'radi.
+
 ## 2026-10-23 · Claude · X6 harakatlari ilovaga ulandi (branch claude/x6-integration)
 - Shaxzod X6 ni "ancha yaxshi" dedi va ulashni Claude'ga topshirdi ("sen qil"). Branch `claude/x6-integration` (codex/x6-midori-tea ustidan). Main'ga hali birlashtirilmagan.
 - Fayllar: `chibi/chibi.js` (drawX6, x6Player, playActivity: X6 → yuklanmasa eski slot; avval facing=0 ni 1.5 s gacha kutadi — `preparingActivity` endi ishlatiladi), `index.html` (2 ta player skripti), `renderer.js` (wave() → runActivity: 3 s davomida pet-busy), Codex fayllari `x6-tea/player.js` va `x6-activities/player.js` — sabab: `base` opsiyasi (keys yo'li index.html'dan), boshqa o'zgarish yo'q. `package.json build.files`: x5-*, x6 preview/README, tea-rig.js exe'ga kirmaydi (versiya/paket o'zgarmadi). CHANGELOG "Keyingi versiya" eskirgan (rad etilgan choy namunasi) yozuvlari to'g'rilandi; PROJECT.md.
@@ -582,8 +590,8 @@ Boshlash tartibi (kelishildi): Claude — C1, Codex — X1; keyin eslatmalar va 
 | C3 | 3D tajriba (Three.js) | — | keyin | Shaxzod 2.5D natijasini ko'rib baholagandan keyin alohida topshiriq (Codex taklifi, kelishildi) |
 | 3 | `dist/` ni tozalash | Claude | tayyor | faqat 1.6.0 qoldi |
 | — | AI bilan suhbat | Claude | tayyor | 1.11.0 da chiqdi (Shaxzod qarori 2026-10-21; avvalgi "kerak emas" bekor) |
-| X5 | Midori 5 harakati: masklangan inpainting + uzun asosiy poza | Codex | review | 5 tasi ham Claude review'dan o'tdi (451e9ea); Shaxzod: tana qotib turadi → X6 |
-| X6 | Butun tana bilan harakat: bosh, soch, gavda, ko'z, qo'l birga | Codex | ochiq | topshiriq: 2026-10-23 Claude yozuvi; avval faqat choy |
+| X5 | Midori 5 harakati: masklangan inpainting + uzun asosiy poza | Codex | tayyor | 5 tasi ham Claude review'dan o'tdi (451e9ea); Shaxzod: tana qotib turadi → X6 |
+| X6 | Butun tana bilan harakat: bosh, soch, gavda, ko'z, qo'l birga | Codex | tayyor | 1.12.0 da chiqdi; ulash va avtomatik tanlov — Claude |
 
 **Yo'nalish (Shaxzod, 2026-10-14):** Ko'kchani yaxshi darajaga olib chiqish, 2D dan 3D gacha. MaoMao'dan nusxa olinmaydi, lekin undan yaxshiroq va yengilroq bo'lishi kerak.
 
