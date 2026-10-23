@@ -95,6 +95,11 @@
       // patch is exposed when the overhead sleeves move out of the way.
       ctx.save(); ctx.translate(0, 398); ctx.scale(1, 1 + rise / 214); ctx.translate(0, -398);
       ctx.drawImage(im[`${name}-body`], 0, 0); ctx.restore();
+      if (name === 'read') {
+        // Complete raster sleeves move behind the collar/hair, with their
+        // natural alpha contour. No rectangular sleeve extension patches.
+        ctx.drawImage(im['read-arms'], 0, 12 * (1 - a) - rise);
+      }
       // Original collar underlap covers the seam under a tilting head.
       ctx.drawImage(im.stand, 176, 185, 49, 10, 176, 182 - rise, 49, 13);
       ctx.save(); ctx.translate(199.5, 184 - rise); ctx.rotate(radians(headAngle)); ctx.translate(-199.5, -184);
@@ -111,9 +116,6 @@
       ctx.restore();
       if (name === 'read') {
         const dy = 12 * (1 - a) - rise;
-        // Raster sleeve overlap below the hair; source pixels, no drawn anatomy.
-        for (const x of [124, 240]) ctx.drawImage(im['read-arms'], x, 232, 34, 12, x, 210 + dy, 34, 34);
-        ctx.drawImage(im['read-arms'], 0, dy);
         const turning = [3.3, 7.5].find(start => s.elapsed >= start && s.elapsed < start + .9);
         if (turning !== undefined) {
           const p = (s.elapsed - turning) / .9;

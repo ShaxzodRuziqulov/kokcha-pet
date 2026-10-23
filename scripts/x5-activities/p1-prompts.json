@@ -1,0 +1,16 @@
+{
+  "tool": "built-in image_gen, transparent_background=true; no API mask input; local feather masks applied afterwards",
+  "sources_directory": "01a166f0-92e4-7442-8b8f-f4b80086a68e",
+  "edits": [
+    {
+      "input": "scripts/x5-activities/reference.png",
+      "output": "exec-b74432a8-bb32-4185-a16d-8735b56c8143.png",
+      "prompt": "Use case: precise-object-edit. Edit target: provided transparent 399x400 Midori sprite. Remove ONLY both lowered arms, including sleeves and hands. Restore the sleeveless torso of the pale green sweater with continuous clean dark raster outlines down both sides from under hair near x171,y207 and x228,y207 to the waistband x160,y250 and x239,y250. Torso slightly flares at waist. Preserve original sweater shading, folds and black skirt waistband. NO green halo or blurry edge. Do not draw new raised arms. Keep head hair face collar skirt legs boots EXACTLY as reference, same scale, same position, transparent margins. Full character same framing. This is an underlayer for overhead stretch animation. Original black outline weight, original anime raster style. No text."
+    },
+    {
+      "input": "01a15ced-b7c7-75b3-b878-1fbc4995d032/exec-818165f3-5c80-4ad9-971c-e6a72b23aef9.png",
+      "output": "exec-d4d92554-17d2-4688-b63e-050ea608285b.png",
+      "prompt": "Use case: background-extraction. Extract ONLY the two green bent sleeves, hands, and open book as one transparent sprite component from this image. Preserve their EXACT positions, sizes and existing detail in the same square canvas. Remove head, hair, face, collar, central torso, skirt, legs and boots entirely. Complete each sleeve naturally upward under the removed hair to shoulder roots around (170,210) and (229,210) in normalized 399x400 coordinates. Rounded full green sleeves continuous to elbows and hands, original dark outlines. Do not include any green rectangular backing, torso patch, skirt fragments or hair fragments. Book unchanged, cream pages unchanged, fingers unchanged. Sleeves behind the book continuous and outlined. Truly transparent background. Do NOT reframe/center/enlarge components. Same raster anime style. No text."
+    }
+  ]
+}

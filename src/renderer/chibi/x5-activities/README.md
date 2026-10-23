@@ -65,6 +65,31 @@ production activity/drag/hidden lifecycle'iga alohida ulash va review kerak.
 
 ## Tekshiruv va ko'rik dalillari
 
+### 2026-10-23: kitob va cho'zilish P1
+
+`prepare.py`dan keyin `repair-p1.py --sources <01a166f0 generated_images>`
+ishlatiladi. Ikki yangi AI tahriri va aniq promptlar `p1-prompts.json`da.
+Kitobning to'liq yeng/qo'l komponenti tabiiy alpha konturida ajratildi va
+1.2px feather maska bilan olinadi; katta chiqqan komponent kitob tayanchlariga
+qayta joylandi. To'rtburchak yeng crop'lari olib tashlandi. Qo'llar gavdadan
+keyin, original yoqa/sochdan avval chiziladi. Yubka cheti kitob qatlamiga kirmaydi.
+
+O'qish va cho'zilish gavdalarining yon konturi AI rastrdan; kontur kodda
+chizilmaydi. Original yoqa va yubka/oyoqlar qayta yopishtiriladi. Eski yengga
+tegib turgan yubka yuqorisi asl rastr konturi bo'yicha ajratiladi; y295dan
+past original to'liq saqlanadi. Shu sabab etak ostidagi ilk teri qatorlari ham
+kesilmaydi. Qolgan ikki harakat va choy o'zgartirilmagan.
+
+Yangi dalillar: Codex visualizations/2026/10/23/
+`01a166f0-92e4-7442-8b8f-f4b80086a68e/x5-p1/`.
+`{read,stretch}-before-after-{native,2x}.gif` va
+`*-details-before-after-4x.png`, `read-both-page-turns-before-after-4x.png`.
+Chapda shu tuzatishdan avvalgi player, o'ngda keyingi. Electron37 player.js
+ratio1/2/4dan har50ms: o'qish261 va cho'zilish91faza har ratio uchun.
+4x etakROI barcha352fazada min alpha250, alpha<245 soni0; baseline716.
+Talab qilingan vaqtlar, ikkala varaq aylanishi va barcha fazalar ko'z bilan
+tekshirildi. Quyidagi eski dalillar avvalgi ko'rik tarixidir.
+
 Electron37 player.js'dan har50ms native ratio1/2/4 chiqish olindi: wave61,
 read261, water131, stretch91 — jami544faza. GIFning yangi180/360canvas kadrlari
 alohida chizilgan; 4×PNGni shunchaki kichraytirish emas. Eski taqqoslash
