@@ -3,6 +3,44 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-23 · Claude · Topshiriq X6: butun tana bilan harakat (Codex uchun)
+Shaxzod 5 ta X5 namunasini ko'rdi: "har lahzada faqat bitta narsa ishlaydi — yo qo'l, yo yuz", qolgan tana qotib turadi. Talab: barcha detallar birga harakatlansin. **Avval faqat choy** (X5 choy ustiga), Shaxzod "ha" desa — qolgan 4 tasi shu usulda. Shaxzod: "xato va kamchiliklarni oldindan nazorat qil" — shuning uchun pastda oldindan ma'lum xavflar ro'yxati; har birini topshirishdan oldin o'zing tekshir.
+
+**1. Qatlamlar (asl rasmdan, kodda yangi anatomiya chizilmaydi):**
+- Ajrat: orqa soch, bosh (yuz + old soch), bo'yin/yoqa, gavda, yubka, oyoqlar, qo'llar + buyum. Har biriga to'g'ri pivot: bosh — bo'yin asosi; gavda egilishi — bel/son; oyoqlar qimirlamaydi.
+- Bosh yoki gavda siljiganda ochilib qoladigan joylar (bo'yin, bosh ostidagi yoqa, soch ortidagi gavda/yelka) **AI bilan oldindan chizilgan yashirin ost-qatlam** bilan to'ldirilsin — shaffof teshik yoki cho'zilgan piksel emas.
+- Yuz overlay'lari (ko'z, og'iz, pirpirash) bosh qatlami bilan **bir xil transform**da chiziladi.
+- Qo'l + buyum gavdaga bog'langan (parent): gavda egilsa, ular birga yuradi. Choyda piyola ho'plash paytida og'izga "qulflangan" — bosh egilganda piyola lab bilan aloqani yo'qotmaydi.
+
+**2. Harakat (choy):**
+- Ko'z avval piyolaga qaraydi (qorachiq ko'z oqi ichida siljiydi), keyin qo'l ko'tariladi (yetaklovchi — ko'z/bosh).
+- Ho'plash: bosh piyolaga 6–10° egiladi va 2–4 px pastga tushadi, yelkalar 1–2 px ko'tariladi, ko'z yumuq; nafas davom etadi.
+- "Ohh~": tana 2–3% cho'kib bo'shashadi, bosh biroz orqaga, mamnun yuz.
+- Soch uchlari bosh harakatidan 80–150 ms kechikib, kichik amplituda bilan ergashadi (follow-through).
+- Hammasi bir vaqtda boshlanib-tugamasin: qismlar orasida 50–150 ms siljish (overlap). Bir xil silliq egri chiziq hamma joyda ishlatilmasin — tayyorlanish (anticipation), aniq to'xtalish va kichik ortiqcha harakat (overshoot) bo'lsin.
+- Chegaralar: bosh ≤ 10°, gavda egilishi ≤ 4°, cho'kish/cho'zilish ≤ 3%. Oyoq va etik pikselma-piksel joyida.
+
+**3. Oldindan ma'lum xavflar — har birini topshirishdan oldin tekshir:**
+1. **Bo'yin/yoqa choki** bosh egilganda ochilmasin (X5 dagi 2.2° da ham yamoq kerak bo'lgan).
+2. **Soch kesish chizig'i:** bosh maskasi sochni gorizontal kesmasin — yelkaga tushgan soch alohida qatlam yoki ost-qatlam bilan; egilganda yirtiq chiqmasin.
+3. **Feather qatlamlar ustma-ust tushganda** qo'sh kontur yoki och/to'q halo paydo bo'lmasin.
+4. **Rastr deformatsiyasi:** skew/scale kontur qalinligini o'zgartirmasin, xiralashtirmasin; yubka burmalari buzilmasin.
+5. **Ajralib qolish:** piyola–kaft, kaft–yeng, yeng–yelka orasida tirqish yo'q (har kadrda masofa tekshiruvi).
+6. **Qorachiq** ko'z oqidan chiqmasin; pirpirash yamog'i egilgan boshga to'g'ri tushsin.
+7. **Subpiksel titrash:** turg'un qismlar kadrdan kadrga 1 px "qaltiramasin" (yaxlitlash bir xil bo'lsin).
+8. **Sakrash (pop):** qo'shni kadrlar orasida biror qism keskin sakramasin, kalit poza almashuvidan tashqari; birinchi va oxirgi kadr `stand.png` bilan aynan teng — idle'ga o'tishda sakrash yo'q.
+9. **Kanvas chegarasi:** egilish/soch tebranishi canvas chetidan kesilmasin (small/medium/large va DPR 1/1.5/2).
+10. **Tezlik:** harakat paytidagi CPU hozirgi X5 choyga nisbatan o'lchansin; sezilarli o'sish bo'lsa ayt.
+
+**4. Avtomatik tekshiruvlar (har 50 ms, ratio 1/2/4, runtime chiqishida — asset'da emas):**
+- Siluet ichida shaffof teshik (alpha < 245) soni 0.
+- Oyoq tayanch chizig'i barcha kadrlarda bir xil; oyoq/etik piksellari teng.
+- Birinchi/oxirgi kadr = stand.png.
+- Qo'shni kadrlar orasidagi maksimal siljish jadvali (sakrashlarni topish uchun).
+- Piyola–og'iz va piyola–kaft masofasi ho'plash davomida.
+
+**5. Topshirish:** X5 choy bilan yonma-yon GIF (haqiqiy o'lcham + 2×), har bosqich 4× PNG, xavflar ro'yxatining har bandi bo'yicha qisqa "tekshirildi/qanday" javob. Alohida branch, main'ga ulanmaydi; versiya/build/push yo'q. Claude mustaqil qayta chizib tekshiradi, keyin Shaxzodga ko'rsatiladi.
+
 ## 2026-10-23 · Claude · X5 review: kitob va cho'zilish P1 yopildi (f57d3ba)
 - Ko'rildi: x5-p1 read/stretch before-after 4x, ikkala varaq aylanishi (3.75–4.7 / 7.95–8.9 s), stretch barcha fazalar. Mustaqil tekshiruv: player.js Electron'da ratio 4 bilan qayta chizildi (read 0.35/2/4.2/8.4/12.5, stretch 0.5/1.35/3.4) — Codex dalillari bilan mos. Production fayllar main bilan bir xil; node --check o'tdi.
 - Kitob: to'rtburchak quti, gorizontal kesik, burchaklardagi yashil joy, yoqa ostidagi uzilish va yubka pog'onasi yo'q; yenglar konturli, ikkala varaq aylanishida ham toza. Kitob 0.55 masshtabda — chiziq qalinligi qolgan rasm bilan mos ko'rinadi.
@@ -484,7 +522,8 @@ Boshlash tartibi (kelishildi): Claude — C1, Codex — X1; keyin eslatmalar va 
 | C3 | 3D tajriba (Three.js) | — | keyin | Shaxzod 2.5D natijasini ko'rib baholagandan keyin alohida topshiriq (Codex taklifi, kelishildi) |
 | 3 | `dist/` ni tozalash | Claude | tayyor | faqat 1.6.0 qoldi |
 | — | AI bilan suhbat | Claude | tayyor | 1.11.0 da chiqdi (Shaxzod qarori 2026-10-21; avvalgi "kerak emas" bekor) |
-| X5 | Midori choy ichishi: masklangan inpainting + uzun asosiy poza | Codex | ochiq | topshiriq: 2026-10-21 Claude yozuvi; avval faqat choy |
+| X5 | Midori 5 harakati: masklangan inpainting + uzun asosiy poza | Codex | review | 5 tasi ham Claude review'dan o'tdi (451e9ea); Shaxzod: tana qotib turadi → X6 |
+| X6 | Butun tana bilan harakat: bosh, soch, gavda, ko'z, qo'l birga | Codex | ochiq | topshiriq: 2026-10-23 Claude yozuvi; avval faqat choy |
 
 **Yo'nalish (Shaxzod, 2026-10-14):** Ko'kchani yaxshi darajaga olib chiqish, 2D dan 3D gacha. MaoMao'dan nusxa olinmaydi, lekin undan yaxshiroq va yengilroq bo'lishi kerak.
 
