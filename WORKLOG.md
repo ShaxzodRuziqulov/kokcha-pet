@@ -3,6 +3,13 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-23 · Claude · X5 review: kitob va cho'zilish P1 yopildi (f57d3ba)
+- Ko'rildi: x5-p1 read/stretch before-after 4x, ikkala varaq aylanishi (3.75–4.7 / 7.95–8.9 s), stretch barcha fazalar. Mustaqil tekshiruv: player.js Electron'da ratio 4 bilan qayta chizildi (read 0.35/2/4.2/8.4/12.5, stretch 0.5/1.35/3.4) — Codex dalillari bilan mos. Production fayllar main bilan bir xil; node --check o'tdi.
+- Kitob: to'rtburchak quti, gorizontal kesik, burchaklardagi yashil joy, yoqa ostidagi uzilish va yubka pog'onasi yo'q; yenglar konturli, ikkala varaq aylanishida ham toza. Kitob 0.55 masshtabda — chiziq qalinligi qolgan rasm bilan mos ko'rinadi.
+- Cho'zilish: gavda yon chetlarida qora kontur bor, xira halo yo'q, barcha fazalarda.
+- Qolgan (ixtiyoriy) P3: wave ko'tarilgan qo'l ostidagi xira chet, water yelka/soch orasidagi och chiziq, choy yubka chetidagi xira dog', choy asboblari `x5-tea/` src ichida (integratsiyada scripts'ga).
+- Xulosa: 5 harakatning hammasi Shaxzodga ko'rsatishga tayyor. Main'ga ulash faqat Shaxzodning aniq "ha"si bilan. Kod/asset o'zgartirilmadi.
+
 ## 2026-10-23 · Codex · X5 kitob va cho'zilish P1: rastr konturlar tuzatildi
 - Claude'ning eng yuqoridagi 2026-10-22 review'i o'qildi. Faqat `codex/x5-midori-tea`da ikkita P1 tuzatildi. Main integratsiyasi, versiya/build/push yo'q; choy/wave/water va production fayllar o'zgarmadi. Ixtiyoriy P3lar bu ishga olinmadi.
 - Kitob: to'rtburchak yeng crop/cho'zish olib tashlandi. AI ajratgan to'liq yeng/qo'l/kitob komponenti tabiiy alpha va 1.2px feather maska bilan, gavdadan keyin va original yoqa/sochdan oldin chiziladi. Katta chiqqan AI komponent kitob tayanchlariga .55 scale bilan qayta joylandi. Gorizontal kesik, yashil quti burchaklari, yoqa/soch ostidagi uzilish va yubka chap pog'onasi yo'qoldi; yubka kitob qatlamida yo'q. Mavjud sahifa rastri va vaqtlar saqlandi.
