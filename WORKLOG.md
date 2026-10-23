@@ -3,6 +3,15 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-23 · Claude · X6 harakatlari ilovaga ulandi (branch claude/x6-integration)
+- Shaxzod X6 ni "ancha yaxshi" dedi va ulashni Claude'ga topshirdi ("sen qil"). Branch `claude/x6-integration` (codex/x6-midori-tea ustidan). Main'ga hali birlashtirilmagan.
+- Fayllar: `chibi/chibi.js` (drawX6, x6Player, playActivity: X6 → yuklanmasa eski slot; avval facing=0 ni 1.5 s gacha kutadi — `preparingActivity` endi ishlatiladi), `index.html` (2 ta player skripti), `renderer.js` (wave() → runActivity: 3 s davomida pet-busy), Codex fayllari `x6-tea/player.js` va `x6-activities/player.js` — sabab: `base` opsiyasi (keys yo'li index.html'dan), boshqa o'zgarish yo'q. `package.json build.files`: x5-*, x6 preview/README, tea-rig.js exe'ga kirmaydi (versiya/paket o'zgarmadi). CHANGELOG "Keyingi versiya" eskirgan (rad etilgan choy namunasi) yozuvlari to'g'rilandi; PROJECT.md.
+- Commit: cdc925e
+- Tekshirildi (Electron, Temp profil, small/medium/large, DPR 1.125/1.5/1.95): 5 harakat ok=true, davomiylik 3.1/6.6/13.1/6.6/4.6 s, o'rtada slot=X, frame=x6; tugagach stand/idle. setActive(false) va sudrash → false (bekor). runActivity orqali ham ishladi. Konsol xatosi 0. Ilova ichidagi kadrlar 3 o'lchamda ko'z bilan ko'rildi. Stand joylashuvi chibi va player'da aynan teng (x 37.42, y 4) — o'tishda sakrash yo'q.
+- O'lchov (medium, bir martalik): CPU jami tinch 1.7%, kitob paytida 0.66%. Xotira 384 → 576 MB (5 player birinchi yuklanganda), takrorlarda 540 MB — o'smaydi. Eski kadrli usulda +116 MB edi; X6 +190 MB.
+- Tekshirilmadi: haqiqiy sichqoncha bilan sudrash, OS uyqu, o'rnatilgan exe. Shaxzod `npm start` bilan sinaydi.
+- Keyingi: Shaxzod "ha" desa — main'ga birlashtirish va 1.12.0.
+
 ## 2026-10-23 · Claude · X6 review: bug' P1 va soch P2 yopildi (d140a66)
 - Mustaqil tekshiruv (o'z skriptim, player.js chiqishi, ratio 2, har 50 ms, 5 harakat): butun siluet bo'yicha chegaradan yetib bo'lmaydigan alpha<128 piksellar stand bilan solishtirildi; eng yomon kadr qorong'i fonda (#3a3a3a) yangi piksellar qizil bilan belgilanib 4–6x kesimlarda ko'rildi.
 - **P1 yopildi:** choyda bug' yo'q; 1.26/1.8/2.6/3.43 s da yuz va soch ustida chiziq yo'q, qorong'i fonda ham toza.
