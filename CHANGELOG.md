@@ -1,6 +1,6 @@
 # O'zgarishlar
 
-## Keyingi versiya
+## 1.12.0
 ### 🎬 Midori'ning yangi harakatlari
 - Beshala harakat butunlay qayta ishlandi: qo'l silkitish (3 s), choy ichish (6.5 s), kitob o'qish (13 s), gul sug'orish (6.5 s), cho'zilish (4.5 s).
 - Endi butun tana harakatlanadi: bosh egiladi, tana tebranadi, ko'z qaraydi, yuz ifodasi qo'llar bilan birga o'zgaradi. Qiyofa asl rasmdagidek qoladi.
