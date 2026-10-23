@@ -8,7 +8,8 @@ personaj bo'yi176px. Bosish, Stop va yashirish cancel qiladi.
 `new X6Tea.TeaPreview(canvas,{ratio:1,size:1,onBusy})`; ratio1..4, size.75/1/1.3.
 
 Rastr manbalari: original stand/bosh/soch/yuz/iris/yubka/oyoqlar, X5 yeng
-pozalari va bug'i. Yashirin bo'yin/yoqa/yelka, bo'sh sclera va toza piyola/kaft/
+pozalari. P1 review'dan so'ng bug' o'chirilgan; steam assetlari yuklanmaydi.
+Yashirin bo'yin/yoqa/yelka, bo'sh sclera va toza piyola/kaft/
 manjet uchun3ta built-in image_gen tahriri ishlatilgan. Kod yangi anatomiya yoki
 kontur chizmaydi. Tayyorlash: `scripts/x6-tea/prepare.py --sources <generated_images>`;
 aniq promptlar va tayanchlarni qayta joylash `scripts/x6-tea/prompts.json`da.
@@ -16,17 +17,20 @@ Asbob/maskalar `src`dan tashqarida.
 
 Bosh markazi bo'yin119.5/184da, gavda bel119.5/251da. Yuz ifodasi bosh bitmapiga
 oldindan birlashtiriladi; alohida yuz transformi yo'q. Qorachiq asl rastrdan,
-13ta sclera ichida clip qilingan nigoh keshi. Orqa sochlar100ms kechikadi;
-diagonal ildiz chegaralari8px overlap bilan asl old soch ortida yashirinadi.
-Bo'yin va yelkadagi ochilishlar AI ost-qatlam bilan to'ldiriladi.
+13ta sclera ichida clip qilingan nigoh keshi. P2 review'dan so'ng orqa sochlar
+bosh bilan bir xil matritsada (kechikish0); ildizlarda8px original overlap bor.
+Asl stand va X5ning head-alpha maskasidan kesilmagan bosh ost-qatlami cache qilinadi;
+bu AA choklarini yopadi, tashqi konturni kengaytirmaydi. AI yoqa rastri faqat
+bo'yin/soch tutashuvi y157..211da3sourcepx kengaytirilgan yashirin ost-qatlamga ega.
 
 Gavda va yenglar parent-child matritsada. Ho'plashda cup-rim y167 manba nuqtasi
 asl pastki lab y164ga inverse-parent orqali qulflanadi. Piyola/kaft/manjet bitta
 rastr komponenti, qo'shimcha chizilgan patch yoki cho'zilgan yeng yo'q.
 Ko'z.035sdan, bosh/gavda tayyorlanishi.07sdan, qo'l.15sdan; ho'plashga bosh1.1s,
 yelka1.2s, yangi qo'l kaliti1.22sda ergashadi. Gavda va bosh turli egri chiziqda;
-nafas, oldindan tayyorlanish, boshning mayda ortiqcha harakati va soch follow-through
-birga ishlaydi. Oyoq va yubka son/bel tayanchida qoladi, yubka burmalari buzilmaydi.
+nafas, oldindan tayyorlanish va boshning mayda ortiqcha harakati birga ishlaydi.
+Butun orqa sochga berilgan follow-through tirqish sababli olib tashlangan.
+Oyoq va yubka son/bel tayanchida qoladi, yubka burmalari buzilmaydi.
 
 Stand bir marta maqsad o'lchamidagi bitmapga chiziladi. Shu bitmap har kadrda1:1
 ko'chiriladi; yuqori qatlamlar oyoqdan yuqoridagi butun device-piksel qatorida clip
@@ -35,6 +39,12 @@ ranglari qaltirashini va ikki alpha kesigi orasida tirqish chiqishini oldini ola
 PNG stand asl nusxaning baytma-bayt ko'chirmasi. Alpha testida antialias chegaralari,
 bug' va sochdagi tabiiy bo'sh joylar shaffof teshik deb hisoblanmaydi; manba alpha>=245
 material yadrosi4sourcepx ichkariga olinadi, bo'yin/gavdada alohida uzluksiz probalar bor.
+Bu dastlabki tekshiruv. P1/P2 uchun qo'shimcha **butun canvas flood-fill**, alpha<128,
+4-neighbor tashqi chegaradan yetib bo'lmaydigan barcha nuqtalar har50ms ratio1/2/4da
+stand bilan solishtirildi; 4px erosion yo'q. Asl kesilmagan bosh maskasi bilan
+manba solishtiruvida yangi soch material choki0. Tabiiy manba bo'shliqlari saqlangan;
+xom count farqlari ham yashirilmaydi. Dalil: yuqoridagi visualization root ichidagi
+`x6-p1-p2/REPORT.md`, oldin/keyin JSON va barcha yomon fazalarning4x dark screenshotlari.
 
 Dalillar: Codex visualizations/2026/10/23/
 `01a166f0-92e4-7442-8b8f-f4b80086a68e/x6-tea/`:

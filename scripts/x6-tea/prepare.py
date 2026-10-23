@@ -40,6 +40,7 @@ def main():
     # Preserve the immutable source PNG byte-for-byte, including its palette.
     shutil.copyfile(X5/'keys/K1.png',OUT/'stand.png')
     head_mask=Image.open(X5/'masks/head.png').convert('L')
+    shutil.copyfile(X5/'masks/head-alpha.png',OUT/'head-alpha.png')
     h=np.asarray(head_mask)
     # Roots follow diagonal strand boundaries; the back has an 8px hidden
     # overlap inside solid green hair. There is no horizontal head crop.

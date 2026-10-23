@@ -16,7 +16,7 @@ OUT=ROOT/'src/renderer/chibi/x6-activities/keys'
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
     shutil.copyfile(X5/'stand.png',OUT/'stand.png')
-    for name in ['head','back-hair','collar','torso','lower','irises','sclera-alpha','face-happy','face-sleeping','arms-K1']:
+    for name in ['head','head-alpha','back-hair','collar','torso','lower','irises','sclera-alpha','face-happy','face-sleeping','arms-K1']:
         original=Image.open(TEA/f'{name}.png').convert('RGBA')
         expanded=Image.new('RGBA',(399,400));expanded.alpha_composite(original,(80,0))
         expanded.save(OUT/f'{name}.png')

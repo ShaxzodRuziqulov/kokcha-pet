@@ -1,9 +1,9 @@
 // Isolated X6 tea preview. No production imports or runtime pixel scans.
 (() => {
   const W = 239, H = 400, DURATION = 6.5;
-  const KEYS = ['stand','head','back-hair','collar','torso','skirt','legs','lower','irises','sclera-alpha',
+  const KEYS = ['stand','head','head-alpha','back-hair','collar','torso','skirt','legs','lower','irises','sclera-alpha',
     'arms-K1','arms-side','arms-K2','arms-K3','arms-K5','sip-front',
-    'face-sleeping','face-happy','K3-steam','K4-steam'];
+    'face-sleeping','face-happy'];
   const clamp = x => Math.max(0, Math.min(1, x));
   const smooth = (a,b,t) => { const x=clamp((t-a)/(b-a)); return x*x*(3-2*x); };
   const pulse = (a,b,c,d,t) => smooth(a,b,t)*(1-smooth(c,d,t));
@@ -45,6 +45,16 @@
       this.images=Object.fromEntries(await Promise.all(KEYS.map(async name=>{
         const im=new Image();im.src=`keys/${name}.png`;await im.decode();return [name,im];
       })));
+      // Extend the existing hidden collar by three source pixels, using only
+      // its own raster. Cache once; the unshifted artwork is drawn over it.
+      this.collarUnder=canvas();const uc=this.collarUnder.getContext('2d');
+      uc.beginPath();uc.rect(62,157,115,54);uc.clip();
+      for(let y=-3;y<=3;y++)for(let x=-3;x<=3;x++)uc.drawImage(this.images.collar,x,y);
+      uc.drawImage(this.images.collar,0,0);
+      // A complete source-head underlay covers the split masks' AA seam.
+      // It uses the original alpha, without expanding exposed hair contours.
+      this.headUnder=canvas();const hu=this.headUnder.getContext('2d');hu.drawImage(this.images.stand,0,0);
+      hu.globalCompositeOperation='destination-in';hu.drawImage(this.images['head-alpha'],0,0);
       // Rasterize stand once at the exact target resolution. Copying this
       // bitmap 1:1 avoids repeated downsampling and readback/backend rounding
       // changes in stationary feet and in the first/last frames.
@@ -77,8 +87,9 @@
       }
       ctx.save();ctx.translate((css-W*scale)/2,css-H*scale);ctx.scale(scale,scale);
       const draw=(image,m=new DOMMatrix())=>{ctx.save();ctx.transform(m.a,m.b,m.c,m.d,m.e,m.f);ctx.drawImage(image,0,0);ctx.restore();};
-      const delayed=pose(Math.max(0,t-.1));
-      const hair=delayed.head.multiply(pivot(119.5,165,.32*Math.sin((t-.1)*5)*p.envelope));
+      // Keep the strand roots registered with the front hair. Delaying the
+      // whole raster separated the outer contours and opened enclosed slits.
+      const hair=p.head;
       const collar=p.body.multiply(new DOMMatrix().translate(0,-p.shoulder));
       let arms=p.body.multiply(new DOMMatrix().translate(0,-p.shoulder));
       // Measured source pixels: lower lip y164, clean cup's rim y167.
@@ -99,8 +110,9 @@
       ctx.clearRect(0,0,this.canvas.width,fixedLegRow);
       ctx.beginPath();ctx.rect(0,0,this.canvas.width,fixedLegRow);ctx.clip();
       ctx.setTransform(sourceTransform);draw(im.lower);
-      draw(im['back-hair'],hair);
+      draw(this.headUnder,hair);draw(im['back-hair'],hair);
       draw(im.torso,p.body);
+      draw(this.collarUnder,collar);
       draw(im.collar,collar);
       draw(im[`arms-${key}`],arms);
       // All face pixels (including lids/mouth) share the exact head matrix.
@@ -109,16 +121,13 @@
       draw(face?this.faces[face]:this.heads[gaze],p.head);
       if(key==='K3'){
         draw(im['sip-front'],arms);
-        const steam=Math.floor(Math.max(0,t-1.5)/.6)%2?'K4-steam':'K3-steam';
-        // Re-anchor existing painted curls at the new cup's right rim and
-        // drift outward as they rise, clear of the turning cheek/closed eye.
-        draw(im[steam],arms.multiply(new DOMMatrix([1.15,0,-1.5,.6,238.6,67.2])));
+        // Steam omitted: the old sheared raster crossed the face and hair.
       }
       ctx.restore();ctx.restore();
       const cup=key==='K3'?point(arms,119.5,167):null;
       const phase=t<.3?'entry':t<1.1?'anticipation':t<1.5?'raise':t<3.9?'sip':t<4.3?'lower':t<5?'satisfied':t<5.6?'return':'settle';
       this.state={t,key,phase,bodyAngle:p.bodyAngle,headAngle:p.bodyAngle+p.headAngle,bodyScale:p.bodyScale,
-        headDown:p.headDown,shoulderLift:p.shoulder,hairDelayMs:100,gaze,face,
+        headDown:p.headDown,shoulderLift:p.shoulder,hairDelayMs:0,gaze,face,
         mouth,cup,cupMouthDistance:cup?distance(cup,mouth):null,
         landmarks:{neck:point(collar,119.5,184),headBase:point(p.head,119.5,184),
           leftSleeve:point(arms,80,211),rightSleeve:point(arms,159,211),

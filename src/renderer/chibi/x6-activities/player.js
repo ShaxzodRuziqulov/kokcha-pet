@@ -63,9 +63,17 @@
       this.ready=this.prepare().then(()=>{this.loaded=true;this.renderAt(0);});
     }
     async prepare(){
-      const common=['stand','head','back-hair','torso','collar','lower','irises','sclera-alpha','face-sleeping','face-happy','arms-K1','neutral-left','neutral-right'];
+      const common=['stand','head','head-alpha','back-hair','torso','collar','lower','irises','sclera-alpha','face-sleeping','face-happy','arms-K1','neutral-left','neutral-right'];
       const extra=this.name==='stretch'?['stretch-left','stretch-right']:this.name==='water'?['water-arms','water-stream','water-drops','water-pot','water-flower']:this.name==='read'?['read-arms','read-page']:['wave-arms'];
       this.images=Object.fromEntries(await Promise.all([...common,...extra].map(async n=>{const im=new Image();im.src=`keys/${n}.png`;await im.decode();return [n,im];})));
+      // Three-pixel hidden overlap from the existing collar raster, cached
+      // once. Original collar and head cover the expanded inner join.
+      this.collarUnder=canvas();const uc=this.collarUnder.getContext('2d');
+      uc.beginPath();uc.rect(142,157,115,54);uc.clip();
+      for(let y=-3;y<=3;y++)for(let x=-3;x<=3;x++)uc.drawImage(this.images.collar,x,y);
+      uc.drawImage(this.images.collar,0,0);
+      this.headUnder=canvas();const hu=this.headUnder.getContext('2d');hu.drawImage(this.images.stand,0,0);
+      hu.globalCompositeOperation='destination-in';hu.drawImage(this.images['head-alpha'],0,0);
       this.standCanvas=Object.assign(document.createElement('canvas'),{width:this.canvas.width,height:this.canvas.height});
       const sc=this.standCanvas.getContext('2d'),r=this.canvas.width/this.cssSize,scale=.44*this.size;
       sc.setTransform(r,0,0,r,0,0);sc.drawImage(this.images.stand,(this.cssSize-W*scale)/2,this.cssSize-H*scale,W*scale,H*scale);
@@ -97,11 +105,12 @@
       ctx.rect(0,fixedRow,fixedLeft,this.canvas.height-fixedRow);
       ctx.rect(fixedRight,fixedRow,this.canvas.width-fixedRight,this.canvas.height-fixedRow);
       ctx.clip();ctx.setTransform(source);
-      const delayed=pose(name,Math.max(0,t-.1));
-      const hair=delayed.head.multiply(pivot(199.5,165,.3*Math.sin((t-.1)*4.7)*p.env));
+      // Strand roots share the front-hair matrix; delaying the entire raster
+      // opened one-pixel enclosed slits along their outer join.
+      const hair=p.head;
       const collar=p.body.multiply(new DOMMatrix().translate(0,-p.shoulder));
       let arms=p.body,left=null,right=null,armAngle=0,pageTurn=false,page=null,flowMatrix=null;
-      draw(im.lower);draw(im['back-hair'],hair);
+      draw(im.lower);draw(this.headUnder,hair);draw(im['back-hair'],hair);
       if(!p.active){draw(im['arms-K1'],p.body);}
       else if(name==='wave'){
         armAngle=-65*(1-a)+(p.phase==='main'?7*Math.sin(p.elapsed*Math.PI*3):0);
@@ -114,7 +123,7 @@
         right=p.body.multiply(pivot(229,215,armAngle,.58+.42*a,.58+.42*a,0,-p.shoulder));
         draw(im['stretch-left'],left);draw(im['stretch-right'],right);
       }else if(name==='water'){draw(im['neutral-left'],p.body);}
-      draw(im.torso,p.body);draw(im.collar,collar);
+      draw(im.torso,p.body);draw(this.collarUnder,collar);draw(im.collar,collar);
       if(p.active&&name==='read'){
         arms=p.body.multiply(new DOMMatrix().translate(0,12*(1-a)-p.shoulder));draw(im['read-arms'],arms);
       }else if(p.active&&name==='water'){
@@ -154,7 +163,7 @@
       if(left){m.left=flat(left);m.right=flat(right);}if(page)m.page=flat(page);if(flowMatrix)m.flow=flat(flowMatrix);
       this.state={t,name,phase:p.phase,active:p.active,amount:a,pageTurn,face,gaze,armAngle,
         inheritedArmScale:p.active?(name==='stretch'?.58+.42*a:name==='wave'?.85+.15*a:1):1,
-        bodyAngle:p.bodyAngle,headAngle:p.bodyAngle+p.headAngle,bodyScale:p.bodyScale,headDown:p.headDown,shoulderLift:p.shoulder,hairDelayMs:100,
+        bodyAngle:p.bodyAngle,headAngle:p.bodyAngle+p.headAngle,bodyScale:p.bodyScale,headDown:p.headDown,shoulderLift:p.shoulder,hairDelayMs:0,
         matrices:m,nozzle,flowTop,soil,
         landmarks:{headBase:point(p.head,199.5,184),neck:point(collar,199.5,184),
           leftShoulder:point(collar,170,215),rightShoulder:point(collar,229,215),

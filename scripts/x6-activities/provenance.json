@@ -8,7 +8,7 @@
   },
   "preparation": "239x400 tea layers are composited at x80 into transparent399x400. Original hanging arms are split into left/right neutral raster components. All new preparation tools stay outside src.",
   "motion": {
-    "body": "New pelvis-pivot body/head hierarchy, maximum3% torso scale,100ms back-hair lag, clipped original iris gaze, expression baked into head",
+    "body": "New pelvis-pivot body/head hierarchy, maximum3% torso scale, clipped original iris gaze, expression baked into head. P2 fix: back-hair roots share head transform (delay0), original stand/head-alpha form a complete hidden source head, collar overlap3sourcepx at neck/hair only; no expanded outer hair contour",
     "hands": "X5 approved gesture geometry retained: wave arm scale0.85..1, stretch arm scale0.58..1; these pre-existing arm extensions are separate from the new torso<=3% limit",
     "book": "Sleeves/hands/book and turning page share the same parent body transform; both original page turns retained",
     "water": "Can follows body; existing painted stream is transformed between the moving source nozzle and fixed soil. Plant entry offset reduced62to20sourcepx to stay inside the review canvas",

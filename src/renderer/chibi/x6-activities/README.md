@@ -20,8 +20,11 @@ chap/o'ngga ajratadi. Manbalar `scripts/x6-activities/provenance.json`da.
 
 Gavda bel199.5/251dan, bosh bo'yin199.5/184dan aylanadi. Qo'l/buyum gavdaning
 child matritsasida. Bosh/ko'z/yuz bitta transform;20ta asl iris gaze keshi sclera
-ichida clip qilinadi. Orqa soch diagonal original maska/8px overlap bilan100ms
-kechikadi. Ko'z/head anticipation, tana nafas/sway, shoulder va qo'lning boshlanishi
+ichida clip qilinadi. Orqa soch diagonal original maska/8px overlap bilan boshning
+bir xil matritsasida yuradi (P2 tuzatish: kechikish0). Asl stand+head-alpha maskadan
+kesilmagan bosh ost-qatlami AA choklarini yopadi, tashqi soch konturi kengaytirilmaydi.
+Yoqa/soch tutashuvida3sourcepx yashirin overlap bor; ko'z/head anticipation,
+tana nafas/sway, shoulder va qo'lning boshlanishi
 bir necha bosqichga surilgan; curve hammasida bir xil emas. Yubka va oyoqlar
 son tayanchida qoladi. Yangi torso scale<=3%, head<=10°, body<=4°.
 
@@ -60,3 +63,9 @@ sclera tashqarisida iris0. Cancel/hidden/duplicate/play/heartbeat sinovlari o'td
 CPU X5ga nisbatan+0.035..0.325foizpunkt (+0.91..8.92%nisbiy), bir yadroga;
 har activity uchun bitta yakuniy paired round. Har10xavfning qanday tekshirilgani,
 aniq natijalar va o'lchov chegaralari dalillardagi X6-CHECKS.md hisobotida.
+
+P1/P2 review'dan keyingi qo'shimcha tekshiruv: `x6-p1-p2/REPORT.md` shu visualization
+rootida. Har50ms ratio1/2/4, butun canvasdagi alpha<128 flood-fill; eroded core emas.
+Xom stand-count farqlari va tabiiy soch/idish/suv bo'shliqlari alohida ochiq qayd
+qilingan. Asl kesilmagan bosh maskasi bo'yicha yangi soch material choki to'rttasida0.
+Eng yomon oldin/keyin fazalar haqiqiy oyna screenshotlari4x, fon#3a3a3a.
