@@ -36,6 +36,8 @@ src/renderer/           ko'rinish                       — Claude egaligida
   style.css             barcha animatsiya, pozalar, ranglar (CSS o'zgaruvchilari)
   renderer.js           gap bulutchasi (harfma-harf, tugmalar), sudrash/tebranish, emote, main xabarlariga javob
   phrases.js            barcha gaplar (ovozlar) va gap → yuz ifodasi (faceOf)
+  chibi/x6-tea, chibi/x6-activities  Midori'ning 5 harakati (X6, Codex): asl rasm qatlamlari + DOMMatrix; chibi.js `playActivity` ularni
+                        har 50 ms o'z canvas'iga chizib ko'chiradi. Yuklanmasa — manifest'dagi eski kadrli slot. Preview/README exe'ga kirmaydi.
   panel.html/css/js     o'ng tugma paneli ko'rinishi
 scripts/release.mjs     GitHub Release yaratish (CHANGELOG'dan tavsif oladi)
 ```

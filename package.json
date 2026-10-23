@@ -20,6 +20,10 @@
     "files": [
       "main.js",
       "src/**/*",
+      "!src/renderer/chibi/x5-*/**",
+      "!src/renderer/chibi/x6-*/preview.*",
+      "!src/renderer/chibi/x6-*/README.md",
+      "!src/renderer/chibi/tea-rig.js",
       "assets/icon.png",
       "assets/tray.png",
       "!**/node_modules/koffi/build/koffi/{darwin_*,freebsd_*,linux_*,musl_*,openbsd_*,win32_arm64,win32_ia32}/**",

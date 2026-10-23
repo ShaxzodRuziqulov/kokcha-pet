@@ -1,9 +1,11 @@
 # O'zgarishlar
 
 ## Keyingi versiya
-- Choy ichish uchun 8.4 soniyalik yangi harakat namunasi: barqaror bosh/gavda va uzluksiz qo'l/piyola harakati.
-- Mashg'ulot oldidan old ko'rinishga buriladi, oxirida kursor tomonga bosqichma-bosqich qaytadi.
-- Midori'ning beshta maxsus harakati ikki baravar sekinlashtirildi: qo'l silkitish 2.67 s, kitob/choy/gul/cho'zilish 4 s; mashg'ulot tugaguncha o'zi yurib ketmaydi.
+### 🎬 Midori'ning yangi harakatlari
+- Beshala harakat butunlay qayta ishlandi: qo'l silkitish (3 s), choy ichish (6.5 s), kitob o'qish (13 s), gul sug'orish (6.5 s), cho'zilish (4.5 s).
+- Endi butun tana harakatlanadi: bosh egiladi, tana tebranadi, ko'z qaraydi, yuz ifodasi qo'llar bilan birga o'zgaradi. Qiyofa asl rasmdagidek qoladi.
+- Harakatlar sekinroq va ko'zga ilg'anadigan: asosiy lahza (ho'plash, o'qish, sug'orish) uzoqroq davom etadi.
+- Mashg'ulot oldidan old ko'rinishga buriladi; harakat tugaguncha o'zi yurib ketmaydi. Sudrasangiz yoki yashirsangiz — to'xtaydi.
 - AI suhbat yoki kalit o'chirilganda davom etayotgan so'rov bekor qilinadi; eski javob tarixga va bulutchaga qaytmaydi.
 - AI javobini kutish chegarasi javob to'liq o'qilguncha ishlaydi.
 

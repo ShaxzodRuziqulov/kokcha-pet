@@ -167,10 +167,11 @@ function mood(cls, ms) {
   render();
 }
 
-// Qo'l silkitish: Ko'kchada CSS qo'l, Midori'da kadrli harakat (faqat tinch turganda)
+// Qo'l silkitish: Ko'kchada CSS qo'l, Midori'da kadrli harakat (faqat tinch turganda).
+// X6 qo'l silkitish 3 s — runActivity orqali, shu vaqt ichida main yurishni boshlamaydi.
 function wave() {
   mood('wave', 1600);
-  if (character === 'chibi-girl') window.Chibi.playActivity('wave');
+  if (character === 'chibi-girl') runActivity('wave');
 }
 
 // Midori'ning o'z mashg'ulotlari (MaoMao'dagi kabi). Main'ga "bandman" deyiladi: yurmaydi,

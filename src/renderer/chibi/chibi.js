@@ -20,6 +20,11 @@
   const rigs = {};   // procedural slotlar: idle (idle-rig.js), walk (walk-rig.js)
   const blinkPatches = {};
   const disabledSlots = new Set();
+  // X6 harakatlari (butun tana: bosh, soch, gavda, yuz birga). Player o'z canvas'iga chizadi,
+  // biz uni har 50 ms da shu canvas'ga ko'chiramiz. Yuklanmasa — eski kadrli slot ishlaydi.
+  const X6_NAMES = ['tea', 'wave', 'read', 'water', 'stretch'];
+  const x6Players = {}, x6Failed = new Set();
+  const X6_TICK_MS = 50;
 
   // Faqat ko'z hududi: original bosh/soch/og'iz va siluet almashtirilmaydi.
   // Original stand/walk-a koordinatalari; patch ishga tushishda bir marta tayyorlanadi.
@@ -108,6 +113,7 @@
     const { state, pose, side, expression = 'neutral' } = latest;
     let name = 'stand', mirrored = false;
     if (activity && !(state === 'idle' && pose === 'stand' && !latest.dragging)) finishActivity(false);
+    if (activity?.x6) return drawX6();
     if (latest.dragging) name = 'hang';                 // ko'tarib olinganda — qo'llari tepada osilib turadi
     else if (state === 'sleep' || pose === 'lie') name = 'lie';
     else if (pose === 'sit') name = 'sit';
@@ -221,6 +227,37 @@
     ]);
     loaded = true; paint();
   });
+  // X6 player kadrini vaqt bo'yicha chizadi; tugasa oddiy holatga qaytadi.
+  function drawX6() {
+    const { x6: player, started } = activity;
+    const seconds = (performance.now() - started) / 1000;
+    clearTimeout(animationTimer); animationTimer = null;
+    if (seconds >= player.duration) { finishActivity(true); return paint(); }
+    player.renderAt(seconds);
+    context.clearRect(0, 0, SIZE, SIZE);
+    context.drawImage(player.canvas, 0, 0, SIZE, SIZE);
+    previous = '';   // tugagach oddiy kadr qayta chizilsin
+    canvas.dataset.frame = 'x6';   // tabiiy pirpirash qo'yilmaydi: yuzni player boshqaradi
+    canvas.dataset.expression = 'neutral';
+    canvas.dataset.facing = '0';
+    canvas.dataset.slot = activity.name;
+    canvas.dataset.animated = 'true';
+    canvas.dataset.blink = 'false';
+    animationTimer = setTimeout(() => paint(), X6_TICK_MS);
+  }
+
+  async function x6Player(name) {
+    if (x6Players[name]) return x6Players[name];
+    // Player 1..4 ratio qabul qiladi; kichik o'lchamda (DPR < 1) kattaroq chizib, kichraytiramiz.
+    const target = document.createElement('canvas'), options = { ratio: Math.max(1, ratio) };
+    const player = name === 'tea'
+      ? window.X6Tea && new window.X6Tea.TeaPreview(target, { ...options, base: 'chibi/x6-tea/' })
+      : window.X6Activities && new window.X6Activities.ActivityPreview(target, name, { ...options, base: 'chibi/x6-activities/' });
+    if (!player) throw new Error('X6 player yuklanmadi');
+    await player.ready;
+    return (x6Players[name] = player);
+  }
+
   function finishActivity(completed) {
     if (!activity) return;
     const { resolve } = activity;
@@ -232,11 +269,34 @@
   }
 
   // Bir martalik harakat. Faqat tinch turganda (old ko'rinishga buriladi). Natija: tugadimi (true) yoki to'xtatildimi.
+  const canStart = () => active && latest.state === 'idle' && latest.pose === 'stand' && !latest.dragging;
+
   async function playActivity(name) {
     await ready;
     const slot = slots[name];
-    if (!slot || disabledSlots.has(name) || activity || preparingActivity || !active) return false;
-    if (!(latest.state === 'idle' && latest.pose === 'stand' && !latest.dragging)) return false;
+    if (activity || preparingActivity || !canStart()) return false;
+    let player = null;
+    if (X6_NAMES.includes(name) && !x6Failed.has(name)) {
+      try { player = await x6Player(name); }
+      catch (error) { x6Failed.add(name); console.warn(`"${name}" X6 harakati yuklanmadi, eski kadrlar ishlatiladi:`, error); }
+    }
+    if (player) {
+      if (activity || preparingActivity || !canStart()) return false;
+      // Avval old ko'rinishga buriladi (yon tomonga qarab turgan bo'lsa), keyin boshlaydi.
+      preparingActivity = true; turn();
+      const until = performance.now() + 1500;
+      while (facing !== 0 && performance.now() < until) await new Promise(r => setTimeout(r, X6_TICK_MS));
+      preparingActivity = false;
+      if (activity || facing !== 0 || !canStart()) { turn(); return false; }
+      return new Promise(resolve => {
+        activity = { name, resolve, x6: player, started: performance.now() };
+        clock.request(null);
+        clock.current = null;
+        previous = '';
+        paint();
+      });
+    }
+    if (!slot || disabledSlots.has(name)) return false;
     try {
       const ids = [...slot.frames, ...(slot.assets || [])].filter(id => frames[id]?.sequenceOnly);
       await cache.prepare([...new Set(ids)]);

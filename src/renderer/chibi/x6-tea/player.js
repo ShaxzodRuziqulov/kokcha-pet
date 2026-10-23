@@ -32,10 +32,10 @@
     if(t<5.45)return 'side'; return 'K1';
   }
   class TeaPreview {
-    constructor(target,{ratio=1,size=1,onBusy=()=>{}}={}) {
+    constructor(target,{ratio=1,size=1,onBusy=()=>{},base=''}={}) {
       if(!Number.isFinite(ratio)||ratio<1||ratio>4)throw new Error('Invalid ratio');
       if(![.75,1,1.3].includes(size))throw new Error('Invalid pet size');
-      this.canvas=target;this.ctx=target.getContext('2d');this.size=size;this.ratio=ratio;
+      this.base=base;this.canvas=target;this.ctx=target.getContext('2d');this.size=size;this.ratio=ratio;
       this.cssSize=180*size;target.width=target.height=Math.round(this.cssSize*ratio);
       target.style.width=target.style.height=`${this.cssSize}px`;
       this.duration=DURATION;this.onBusy=onBusy;this.visible=true;this.run=null;
@@ -43,7 +43,7 @@
     }
     async prepare() {
       this.images=Object.fromEntries(await Promise.all(KEYS.map(async name=>{
-        const im=new Image();im.src=`keys/${name}.png`;await im.decode();return [name,im];
+        const im=new Image();im.src=`${this.base}keys/${name}.png`;await im.decode();return [name,im];
       })));
       // Extend the existing hidden collar by three source pixels, using only
       // its own raster. Cache once; the unshifted artwork is drawn over it.

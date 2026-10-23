@@ -52,12 +52,12 @@
     return {...s,env,body,head,bodyAngle,headAngle,headDown,shoulder,bodyScale:scale};
   }
   class ActivityPreview{
-    constructor(target,name,{ratio=1,size=1,onBusy=()=>{}}={}){
+    constructor(target,name,{ratio=1,size=1,onBusy=()=>{},base=''}={}){
       if(!Object.hasOwn(CONFIG,name))throw new Error('Unknown X6 activity');
       if(!Number.isFinite(ratio)||ratio<1||ratio>4)throw new Error('Invalid ratio');
       if(![.75,1,1.3].includes(size))throw new Error('Invalid pet size');
       this.name=name;this.config=CONFIG[name];this.duration=this.config.duration;
-      this.canvas=target;this.ctx=target.getContext('2d');this.size=size;this.cssSize=180*size;
+      this.base=base;this.canvas=target;this.ctx=target.getContext('2d');this.size=size;this.cssSize=180*size;
       target.width=target.height=Math.round(this.cssSize*ratio);target.style.width=target.style.height=`${this.cssSize}px`;
       this.visible=true;this.run=null;this.onBusy=onBusy;
       this.ready=this.prepare().then(()=>{this.loaded=true;this.renderAt(0);});
@@ -65,7 +65,7 @@
     async prepare(){
       const common=['stand','head','head-alpha','back-hair','torso','collar','lower','irises','sclera-alpha','face-sleeping','face-happy','arms-K1','neutral-left','neutral-right'];
       const extra=this.name==='stretch'?['stretch-left','stretch-right']:this.name==='water'?['water-arms','water-stream','water-drops','water-pot','water-flower']:this.name==='read'?['read-arms','read-page']:['wave-arms'];
-      this.images=Object.fromEntries(await Promise.all([...common,...extra].map(async n=>{const im=new Image();im.src=`keys/${n}.png`;await im.decode();return [n,im];})));
+      this.images=Object.fromEntries(await Promise.all([...common,...extra].map(async n=>{const im=new Image();im.src=`${this.base}keys/${n}.png`;await im.decode();return [n,im];})));
       // Three-pixel hidden overlap from the existing collar raster, cached
       // once. Original collar and head cover the expanded inner join.
       this.collarUnder=canvas();const uc=this.collarUnder.getContext('2d');
