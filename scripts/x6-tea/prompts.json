@@ -1,0 +1,24 @@
+{
+  "tool": "built-in image_gen; transparent_background=true; local masks after generation, not API masked inpainting",
+  "source_directory": "01a166f0-92e4-7442-8b8f-f4b80086a68e",
+  "edits": [
+    {
+      "input": "src/renderer/chibi/frames/stand.png",
+      "output": "exec-e6151213-b703-4323-86e6-d2de54198f58.png",
+      "prompt": "Use case: precise-object-edit. Edit target original 239x400 transparent Midori sprite. Create an animation HIDDEN UNDERLAYER. Remove the entire head including face and ALL hair and remove BOTH hanging arms/sleeves/hands. Reveal underneath a short natural peach neck rising to y162, continuous pale green ribbed turtleneck collar y181..212, complete rounded shoulder caps at x78,y202 and x160,y202, torso pale green sweater down to original waist y252. Fill previously occluded collar and shoulders fully; clean dark original-weight outlines, same hand-painted anime shading/folds. Shoulder roots must extend slightly outward to x67 andx172 under hidden hair, rounded smooth silhouette. No ghost hair, no holes. KEEP original black skirt, bare legs, green socks and black boots EXACTLY same size and position as reference. Same239x400 proportions and framing, sprite centerx119.5, solesy398. Truly transparent background. No arms, no head. This layer will be behind the ORIGINAL moving head; do not include any replacement face or hair. No text.",
+      "registration": "AI sweater raised24px; translate hidden upper layer down24px to original collar/waist. Generated skirt/legs never used."
+    },
+    {
+      "input": "src/renderer/chibi/frames/stand.png",
+      "output": "exec-93ed6d13-941c-4aa9-b3b5-624a4620d090.png",
+      "prompt": "Use case: precise-object-edit. Exact original Midori full-body sprite is edit target. Change ONLY the contents of BOTH eye whites: remove the two green iris/pupil shapes entirely leaving clean pale ivory-white empty sclera inside the original black eyelid outlines. This is an animation underlayer to be behind original moving iris sprites. Preserve exact eye outline, eyelashes, eye shape, eyebrows, face skin, hair, mouth, head position, clothing, full body framing and size. No closed eyes, no new pupils, no added face features. Same239x400 source proportions. Transparent background, identical character, no text.",
+      "transfer": "Only masked sclera interiors; original iris raster clipped to same sclera, original head/hair retained."
+    },
+    {
+      "input": "src/renderer/chibi/x5-tea/keys/sip-without-steam.png",
+      "output": "exec-abb04abd-b04f-487e-882e-97f573f7d46e.png",
+      "prompt": "Use case: background-extraction. Extract the ivory teacup held by BOTH hands and the ribbed green sleeve cuffs from this exact sprite as a transparent animation component. Retain exact cup shape, size, hands, fingers, cuff detail, original positions and framing. Remove ALL head, face, skin of the chin/cheeks, hair, collar, central torso, lower sleeves below cuffs, skirt, legs and boots. Keep ONLY cup + both hands + the two cuffs touching the wrists, no background patches. Need pristine natural transparent silhouette around the cup rim and fingers with NO face/skin/hair fragments above or beside them. No steam. Same original239x400 framing, cup centerx120,y182, rimy169, cuffbottomy211. Do not center or enlarge. One component, no text.",
+      "registration": "Tool enlarged component: uniform scale0.52, translate57.36,87.5; measured final cup rim y167, source lower lip y164."
+    }
+  ]
+}
