@@ -3,6 +3,15 @@
 Claude va Codex shu yerga yozadi. Yangi yozuv **eng yuqoriga** qo'shiladi.
 Qoidalar: [AGENTS.md](AGENTS.md).
 
+## 2026-10-23 · Claude · X6 review: 5 harakat butun tana bilan (ccb16e1, 04674fb)
+- Ko'rildi: Codex X6-CHECKS.md, x6-tea bosqich 4x va all-phases. **Mustaqil tekshiruv** (o'z skriptim, player.js chiqishi, ratio 2, har 50 ms, 5 harakat): siluet ichida chegaradan yetib bo'lmaydigan shaffof piksel (alpha<128) soni stand'ga nisbatan; oyoq sohasi (pastki 22%); yuqori/yon chetga tegish; qo'shni kadr alfa farqi; oxirgi kadr = stand. Kontakt varaqlar va 4x kesimlar ko'z bilan ko'rildi. Production fayllar main bilan bir xil; node --check o'tdi.
+- Yo'nalish bajarilgan: choyda bosh piyolaga ~9° egiladi, yelka/tana birga; qo'l silkitishda tana tebranadi, bosh qiyshayadi, yuz o'zgaradi; cho'zilishda yuz/bosh/qo'l birga. Kitobda harakat sezilarli darajada nozik (bosh max 4.8°) — Shaxzod ko'zi bilan baholasin.
+- O'tdi: chetga tegish 0 (5 harakat); oyoq sohasi o'zgarmaydi (water'dagi farq — gul tuvagi, kutilgan); oxirgi kadr stand bilan farq faqat 1/255 yaxlitlash (Codex "aynan teng" degan, amalda ±1 — ko'rinmaydi). Eng katta qo'shni farqlar kalit poza almashuvlari va katta qo'l harakatlarida.
+- **P1 — choy bug'i: piyola chetidan o'ngga gorizontal oq chiziq**, yuz va soch ustidan o'tadi (1.26–3.43 s, ho'plashning butun 2.4 s'i). Qorong'i fonda tirnalgan chiziqdek ko'rinadi. Bug' piyoladan yuqoriga, ingichka va qisqa bo'lsin yoki olib tashlansin.
+- **P2 — soch tirqishlari:** bosh harakatlanganda old soch/orqa soch va soch/yoqa tutashuvida 1 px li ochiq tirqishlar (yangi ichki shaffof piksel: tea +94…109 @4.25 s, wave +198 @2.6, water +166 @2.85, read +63, stretch +54; ratio 2). Joylari: o'ng va chap soch chetlari, yoqa yonida soch tushgan joy. Codex teshik tekshiruvi 4 px ichkaridagi "material yadrosi"ni o'lchagan, shuning uchun chetdagi tirqishlarni ushlamagan. Tuzatish: orqa soch/yoqa ost-qatlamini tutashuvdan 2–3 px kengroq qilish yoki orqa soch kechikishini kamaytirish.
+- P3: stretch qo'llari X5'dan 0.58 masshtab bilan qolgan (Codex ochiq aytgan) — kontur qalinligi biroz ingichka; hozircha qabul qilinadi.
+- Xulosa: P1 (bug') va P2 (soch tirqishlari) tuzatilgach Shaxzodga ko'rsatilsin. Kod/asset o'zgartirilmadi.
+
 ## 2026-10-23 · Codex · X6 qolgan to'rtta harakat yakunlandi
 - Shaxzodning "qolganlarini ham yakunlab ber" ruxsati asosida wave/read/water/stretch bajarildi. Branch `codex/x6-midori-tea`; choy va X5 o'zgarmadi. Main/index/manifest/IPC, versiya/build/push yo'q. Claude product kodi tahrirlanmadi.
 - Fayllar: `src/renderer/chibi/x6-activities/` player/preview/keys/README, `scripts/x6-activities/` prepare/provenance. X6 choyning tekshirilgan AI bo'yin/yoqa/yelka/torso/sclera ost-qatlamlari qayta ishlatildi; yangi AI generatsiyasi yo'q. Bosh/soch/yuz/iris original rastr; X5 qo'l/buyumlari, jumladan P1 tuzatilgan kitob yenglari saqlandi. Kodda anatomiya/kontur chizilmadi.
